@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ontzi 3D</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#0e1a1a;display:grid;place-items:center}
+  canvas{display:block}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+
+const LOOP = 10;                       // segundos del bucle
+const TAU = Math.PI * 2;
+const C = { yellow:0xf5c542, blue:0x3b82f6, green:0x34c759, ground:0xe9efe6, dark:0x2b3a3a, brand:0x16a085 };
+
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0xdff3ea);
+scene.fog = new THREE.Fog(0xdff3ea, 25, 55);
+
+// luz suave
+scene.add(new THREE.HemisphereLight(0xffffff, 0xa8c8b8, 1.1));
+const sun = new THREE.DirectionalLight(0xfff3dd, 1.6);
+sun.position.set(8, 14, 6); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left:-14, right:14, top:14, bottom:-14 });
+scene.add(sun);
+
+const cam = new THREE.OrthographicCamera();       // vista isométrica
+function resize() {
+  const h = Math.min(innerHeight, innerWidth * 16 / 9), w = h * 9 / 16;   // 9:16
+  renderer.setSize(w, h); renderer.setPixelRatio(devicePixelRatio);
+  const a = w / h, s = 8.5 / a;   // ancho fijo de 17 unidades
+  Object.assign(cam, { left:-8.5, right:8.5, top:s, bottom:-s, near:-50, far:100 });
+  cam.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+const mat = c => new THREE.MeshStandardMaterial({ color:c, roughness:.6 });
+function box(w, h, d, c, x=0, y=0, z=0, parent=scene) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), mat(c));
+  m.position.set(x, y + h/2, z); m.castShadow = m.receiveShadow = true; parent.add(m); return m;
+}
+function cyl(r, h, c, x=0, y=0, z=0, parent=scene) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 20), mat(c));
+  m.position.set(x, y + h/2, z); m.castShadow = true; parent.add(m); return m;
+}
+
+// suelo + calle
+box(26, .4, 26, C.ground, 0, -.4, 0).receiveShadow = true;
+box(26, .02, 3, C.dark, 0, 0, 7);
+
+// contenedores
+[[C.yellow,-6],[C.blue,-4.2],[C.green,-2.4]].forEach(([c,x]) => {
+  box(1.4, 1.8, 1.4, c, x, 0, -6);
+  box(1.5, .2, 1.5, c, x, 1.8, -6);
+});
+
+// cinta transportadora
+box(12, .5, 1.6, C.dark, 1, 0, -1);
+box(1, .3, 1.8, 0x555f5f, -4.6, .5, -1);
+
+// máquina de reciclaje con engranaje
+const machine = box(3, 3, 3, C.brand, 8.2, 0, -1);
+box(3.1, .3, 3.1, 0x0e6655, 8.2, 3, -1);
+const gear = new THREE.Mesh(new THREE.TorusGeometry(.7, .22, 8, 6), mat(C.yellow));
+gear.position.set(6.65, 1.7, -1); gear.rotation.y = Math.PI / 2; scene.add(gear);
+
+// envases en la cinta (bucle exacto: cada uno recorre 11 unidades en LOOP s)
+const items = [];
+const colors = [C.yellow, C.blue, C.green];
+for (let i = 0; i < 6; i++) {
+  const bottle = new THREE.Group();
+  cyl(.28, .8, colors[i % 3], 0, 0, 0, bottle);
+  cyl(.12, .3, 0xffffff, 0, .8, 0, bottle);
+  bottle.userData.phase = i / 6;
+  scene.add(bottle); items.push(bottle);
+}
+
+// camión que da la vuelta por la calle (entra y sale en bucle)
+const truck = new THREE.Group();
+box(2.6, 1.3, 1.3, 0xffffff, 0, .5, 0, truck);
+box(1, 1, 1.3, C.brand, 1.8, .5, 0, truck);
+[-.9, .9, 1.9].forEach(x => [-.7, .7].forEach(z => {
+  const w = cyl(.35, .2, 0x222222, x, .15, z, truck); w.rotation.x = Math.PI / 2;
+}));
+scene.add(truck);
+
+// personas que caminan hacia los contenedores y vuelven
+const people = [];
+[[C.blue,-6],[C.yellow,-4.2],[C.green,-2.4]].forEach(([c,x], i) => {
+  const p = new THREE.Group();
+  cyl(.25, .8, c, 0, 0, 0, p);
+  const head = new THREE.Mesh(new THREE.SphereGeometry(.22, 16, 16), mat(0xf1c27d));
+  head.position.y = 1.05; head.castShadow = true; p.add(head);
+  p.userData = { x, off: i / 3 };
+  scene.add(p); people.push(p);
+});
+
+// ponytail: sin textos ni modelos externos; todo son primitivas. Añade GLTF si quieres más detalle.
+function draw(sec) {
+  const t = sec % LOOP, u = t / LOOP;
+
+  items.forEach(b => {
+    const k = (u + b.userData.phase) % 1;
+    b.position.set(-4.6 + k * 11, .5, -1);
+    b.rotation.y = k * TAU * 2;
+  });
+
+  gear.rotation.x = -u * TAU * 3;
+  machine.scale.y = 1 + Math.sin(u * TAU * 6) * .012;
+
+  truck.position.set(-15 + u * 30, 0, 7);        // cruza la pantalla de lado a lado
+  truck.rotation.y = 0;
+
+  people.forEach(p => {
+    const { x, off } = p.userData, s = Math.sin((u + off) * TAU);
+    p.position.set(x + .9, Math.abs(Math.sin((u + off) * TAU * 8)) * .08, -1.4 + (s * .5 + .5) * 6);
+    p.rotation.y = Math.cos((u + off) * TAU) > 0 ? 0 : Math.PI;
+  });
+
+  // órbita lenta: vaivén de ±20° que cierra el bucle sin saltos
+  const ang = Math.PI / 4 + Math.sin(u * TAU) * .35, r = 20;
+  cam.position.set(Math.cos(ang) * r, 14, Math.sin(ang) * r);
+  cam.lookAt(2, 0, 1.5);
+
+  renderer.render(scene, cam);
+}
+window.draw = draw;   // usado para exportar MP4 fotograma a fotograma
+const loop = ms => { draw(ms / 1000); requestAnimationFrame(loop); };
+if (!location.hash.includes('export')) requestAnimationFrame(loop);
+</script>
+</body></html>

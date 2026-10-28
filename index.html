@@ -1,0 +1,1003 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Vídeo Club Alain · Tienda de proyectos hechos con IA</title>
+<meta name="description" content="Portfolio de Alain Garzón Pérez: vídeos hechos con código, agentes, automatizaciones, apps y dashboards. Todo está en el catálogo, se puede ver y la guía en PDF es gratis.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0b1f3a; --navy-2:#13335c; --blue:#1f5fbf; --blue-d:#174a96; --blue-l:#e9f0fb; --sky:#8fb4ec;
+  --bg:#f3f5f9; --surface:#fff; --line:#dde3ec; --ink:#142033; --mut:#5b6678;
+  --amber:#8a5200; --amber-l:#fff4dc;
+  --ease-out:cubic-bezier(.23,1,.32,1);
+  --f-display:'Inter','Segoe UI',system-ui,sans-serif;
+  --f-label:'Inter','Segoe UI',system-ui,sans-serif;
+  --f-body:'Inter','Segoe UI',system-ui,sans-serif;
+  --f-osd:'JetBrains Mono',Consolas,'Courier New',monospace;
+  --gutter:clamp(16px,4vw,48px);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:88px;-webkit-text-size-adjust:100%}
+body{margin:0;color:var(--ink);font:400 16px/1.55 var(--f-body);background:var(--bg);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.lede{max-width:58ch;font-size:clamp(16px,1.3vw,18px);color:var(--mut);margin:0}
+.lede strong{font-weight:600}
+
+/* ---------- tienda: cabecera ---------- */
+.promo{background:var(--navy);color:#cfe0f8;font:500 13px/1.3 var(--f-label);text-align:center;padding:9px var(--gutter)}
+.promo b{color:#fff;font-weight:600}
+.head{position:sticky;top:0;z-index:20;background:rgba(255,255,255,.94);backdrop-filter:saturate(1.4) blur(10px);border-bottom:1px solid var(--line)}
+.head__in{max-width:1500px;margin:0 auto;padding:12px var(--gutter);display:grid;grid-template-columns:auto minmax(220px,520px) 1fr;gap:14px clamp(16px,3vw,40px);align-items:center}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--navy);font:800 19px/1 var(--f-display);letter-spacing:-.02em;white-space:nowrap}
+.brand__mark{width:34px;height:34px;border-radius:9px;background:var(--blue);display:grid;place-items:center;color:#fff}
+.brand small{display:block;font:500 11.5px/1 var(--f-label);letter-spacing:0;color:var(--mut);margin-top:4px}
+.search{position:relative;display:block}
+.search svg{position:absolute;left:13px;top:50%;transform:translateY(-50%);color:var(--mut);pointer-events:none}
+.search input{width:100%;height:44px;border:1px solid var(--line);border-radius:10px;background:var(--bg);padding:0 14px 0 40px;font:500 15px/1 var(--f-body);color:var(--ink);transition:border-color .15s ease,background-color .15s ease,box-shadow .15s ease}
+.search input::placeholder{color:#6b7587}
+.search input:focus{outline:0;background:#fff;border-color:var(--blue);box-shadow:0 0 0 3px rgba(31,95,191,.16)}
+.head nav{display:flex;gap:2px;justify-content:flex-end;align-items:center;flex-wrap:wrap}
+.head nav a{font:600 14px/1 var(--f-label);text-decoration:none;padding:11px 12px;border-radius:8px;color:var(--ink);transition:background-color .15s ease}
+@media (hover:hover) and (pointer:fine){.head nav a:hover{background:var(--blue-l)}}
+.head nav a.btn{color:#fff;margin-left:6px;padding:12px 16px}
+
+/* ---------- escaparate ---------- */
+.window{max-width:1500px;margin:0 auto;padding:clamp(16px,2.4vw,28px) var(--gutter) 0}
+.hero{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);gap:clamp(20px,4vw,56px);align-items:center;background:linear-gradient(135deg,var(--navy) 0%,#10315a 100%);color:#fff;border-radius:20px;padding:clamp(24px,4.4vw,56px);overflow:hidden}
+.hero h1{font:800 clamp(32px,4.2vw,56px)/1.04 var(--f-display);letter-spacing:-.03em;margin:0 0 16px;color:#fff;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--sky)}
+.hero .lede{color:#cfe0f8;max-width:52ch}
+.hero .lede strong{color:#fff}
+.hero .btn-row{margin-top:24px}
+.hero .btn{background:#fff;color:var(--navy)}
+@media (hover:hover) and (pointer:fine){.hero .btn:hover{background:var(--blue-l)}}
+.hero .btn--ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px rgba(207,224,248,.55)}
+@media (hover:hover) and (pointer:fine){.hero .btn--ghost:hover{background:rgba(143,180,236,.16)}}
+.perks{display:flex;flex-wrap:wrap;gap:10px 22px;list-style:none;margin:26px 0 0;padding:0;font:500 14px/1.3 var(--f-label);color:#cfe0f8}
+.perks li{display:flex;align-items:center;gap:8px}
+.perks svg{flex:none;color:var(--sky)}
+.feature{position:relative;justify-self:center;width:min(100%,300px);border:0;padding:0;background:#050608;border-radius:16px;overflow:hidden;text-align:left;color:#fff;aspect-ratio:9/16;box-shadow:0 30px 60px -24px rgba(0,0,0,.6),0 0 0 1px rgba(143,180,236,.25);transition:transform .22s var(--ease-out)}
+.feature video,.feature img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.feature__tag{position:absolute;left:12px;top:12px;z-index:2;background:#fff;color:var(--navy);font:700 12px/1 var(--f-label);padding:7px 10px;border-radius:7px}
+.feature__bar{position:absolute;left:0;right:0;bottom:0;z-index:2;padding:46px 16px 16px;background:linear-gradient(180deg,transparent,rgba(5,6,8,.88));display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
+.feature__bar b{display:block;font:700 18px/1.2 var(--f-display);letter-spacing:-.01em}
+.feature__bar small{display:block;font:500 13px/1.3 var(--f-label);color:#cfe0f8;margin-top:3px}
+.feature__go{flex:none;font:700 13px/1 var(--f-label);background:#fff;color:var(--navy);padding:10px 12px;border-radius:8px}
+@media (hover:hover) and (pointer:fine){.feature:hover{transform:translateY(-4px)}}
+.feature:active{transform:scale(.98)}
+
+/* ---------- catálogo ---------- */
+.shop{max-width:1500px;margin:0 auto;padding:clamp(32px,5vw,56px) var(--gutter) 24px}
+.shop__top{display:flex;align-items:end;justify-content:space-between;gap:12px 24px;flex-wrap:wrap;margin:0 0 18px}
+.shop__top h2{font:800 clamp(26px,3vw,36px)/1.1 var(--f-display);letter-spacing:-.02em;margin:0;color:var(--navy)}
+.count{font:500 14px/1.2 var(--f-label);color:var(--mut);margin:0}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 22px;padding:0;list-style:none}
+.tab{display:inline-flex;align-items:center;gap:8px;height:42px;padding:0 16px;border-radius:999px;border:1px solid var(--line);background:#fff;font:600 14px/1 var(--f-label);color:var(--navy);transition:background-color .15s ease,border-color .15s ease,color .15s ease,transform .16s var(--ease-out)}
+.tab span{font:600 12px/1 var(--f-osd);color:var(--mut)}
+@media (hover:hover) and (pointer:fine){.tab:hover{border-color:var(--blue)}}
+.tab:active{transform:scale(.97)}
+.tab[aria-pressed="true"]{background:var(--navy);border-color:var(--navy);color:#fff}
+.tab[aria-pressed="true"] span{color:var(--sky)}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(236px,1fr));gap:clamp(14px,1.6vw,22px)}
+.pcard{position:relative;display:flex;flex-direction:column;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:0;overflow:hidden;color:var(--ink);transition:transform .22s var(--ease-out),box-shadow .22s var(--ease-out),border-color .15s ease}
+@media (hover:hover) and (pointer:fine){.pcard:hover{transform:translateY(-4px);border-color:#b9c8e0;box-shadow:0 18px 30px -18px rgba(11,31,58,.35)}}
+.pcard:active{transform:scale(.985)}
+.pcard__img{position:relative;aspect-ratio:4/5;background:#0b1f3a;overflow:hidden}
+.pcard__img>img,.pcard__img>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.pcard__img>div{position:absolute!important;inset:0}
+.tv__card{display:flex;flex-direction:column;justify-content:space-between;width:100%;height:100%;padding:28px 20px;background:var(--bg,#13335c);color:var(--fg,#fff)}
+.tv__card b{font:800 var(--fs,30cqw)/.95 var(--f-display);letter-spacing:-.03em;overflow-wrap:normal}
+.tv__card span{font:600 12px/1.3 var(--f-label);letter-spacing:.14em;text-transform:uppercase}
+.pcard__img .tv__card{padding:48px 16px 20px}
+.pcard__img .tv__card span{font-size:10px}
+.badge{position:absolute;left:10px;top:10px;z-index:2;background:#fff;color:var(--navy);font:700 12px/1 var(--f-label);padding:6px 9px;border-radius:7px;box-shadow:0 2px 6px rgba(11,31,58,.18)}
+.badge--vid{background:var(--navy);color:#fff}
+.pcard__body{display:flex;flex-direction:column;gap:6px;padding:14px 16px 16px;flex:1}
+.pcard__kind{font:500 13px/1.3 var(--f-label);color:var(--mut)}
+.pcard__body b{font:700 17px/1.25 var(--f-display);letter-spacing:-.01em;color:var(--navy);text-wrap:balance}
+.pcard__tools{font:500 13px/1.4 var(--f-label);color:#2b3649;margin:0}
+.pcard__cta{margin-top:auto;padding-top:10px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pcard__go{font:700 14px/1 var(--f-label);color:var(--blue-d);display:inline-flex;align-items:center;gap:6px}
+.pcard__go svg{transition:transform .2s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.pcard:hover .pcard__go svg{transform:translateX(3px)}}
+.pcard__free{font:700 12px/1 var(--f-label);color:#0b6b47;background:#e3f5ec;padding:6px 8px;border-radius:6px}
+.empty{grid-column:1/-1;text-align:center;padding:56px 16px;background:#fff;border:1px dashed #b9c8e0;border-radius:14px;color:var(--mut)}
+.empty b{display:block;color:var(--navy);font:700 18px/1.2 var(--f-display);margin-bottom:6px}
+.empty button{margin-top:14px}
+
+/* ---------- producto estrella: la guía en PDF ---------- */
+.pdfband{display:grid;grid-template-columns:minmax(0,260px) minmax(0,1fr);gap:clamp(20px,4vw,56px);align-items:center;background:#fff;border:1px solid var(--line);border-radius:20px;padding:clamp(22px,4vw,48px);box-shadow:0 1px 2px rgba(11,31,58,.04),0 20px 40px -26px rgba(11,31,58,.3)}
+.cover{position:relative;aspect-ratio:3/4;border-radius:6px 12px 12px 6px;background:linear-gradient(135deg,var(--navy),#16407a);color:#fff;padding:22px 20px;display:flex;flex-direction:column;justify-content:space-between;box-shadow:-6px 0 0 -2px #06142a inset,0 26px 40px -20px rgba(11,31,58,.6);justify-self:center;width:min(100%,260px)}
+.cover small{font:600 12px/1.3 var(--f-label);color:var(--sky)}
+.cover b{font:800 26px/1.05 var(--f-display);letter-spacing:-.02em}
+.cover span{font:500 13px/1.3 var(--f-label);color:#cfe0f8}
+.pdfband h2{font:800 clamp(24px,2.8vw,34px)/1.1 var(--f-display);letter-spacing:-.02em;margin:0 0 10px;color:var(--navy);text-wrap:balance}
+.pdfband p{margin:0 0 14px;color:var(--mut);max-width:60ch}
+.pdfband .free{display:inline-block;font:700 13px/1 var(--f-label);color:#0b6b47;background:#e3f5ec;padding:7px 10px;border-radius:7px;margin:0 0 14px}
+.pdfband ol{margin:0 0 22px;padding-left:1.2em;columns:2;column-gap:28px;font-size:15px;color:#2b3649}
+.pdfband li{break-inside:avoid;margin-bottom:6px}
+.pdfband .btn-row{margin:0}
+.pdfband .more{display:flex;flex-wrap:wrap;align-items:center;gap:8px 18px;margin:22px 0 0;padding-top:18px;border-top:1px solid var(--line);font-size:14.5px}
+.pdfband .more b{color:var(--navy)}
+.pdfband .more a{color:var(--blue-d);font-weight:600;text-underline-offset:3px}
+
+/* ---------- ficha de producto ---------- */
+.btn-row{display:flex;flex-wrap:wrap;gap:10px;margin:18px 0 0}
+dialog{border:0;padding:0;background:transparent;color:var(--ink);max-width:none;max-height:none;margin:auto}
+dialog::backdrop{background:rgba(11,31,58,.72);backdrop-filter:blur(3px)}
+.dlg{background:var(--surface);border-radius:16px;width:min(1100px,94vw);max-height:92vh;overflow:auto;box-shadow:0 30px 80px -20px rgba(0,0,0,.6)}
+.dlg__bar{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 20px;background:var(--surface);border-bottom:1px solid var(--line)}
+.dlg__bar h2{font:800 20px/1.1 var(--f-display);letter-spacing:-.02em;margin:0;color:var(--navy)}
+.dlg__x{border:0;background:var(--blue-l);color:var(--blue-d);width:38px;height:38px;border-radius:9px;display:grid;place-items:center;transition:transform .16s var(--ease-out),background-color .15s ease}
+.dlg__x:active{transform:scale(.95)}
+.viewer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,340px);gap:22px;padding:22px}
+.viewer__media{background:#050608;border-radius:12px;overflow:hidden;min-height:320px;display:grid;place-items:center}
+.viewer__media video,.viewer__media img,.viewer__media iframe{width:100%;max-height:78vh;display:block;border:0;background:#fff}
+.viewer__media video{background:#050608}
+.viewer__media iframe{height:min(78vh,720px)}
+.viewer__media .tv__card{position:relative;inset:auto;aspect-ratio:9/16;max-height:78vh;width:auto;max-width:100%}
+.viewer__info h3{font:700 22px/1.15 var(--f-display);letter-spacing:-.015em;margin:0 0 10px;color:var(--navy)}
+.viewer__info p{margin:0 0 10px;font-size:15px;color:#2b3649}
+.ojo{font-size:13.5px;color:var(--amber);background:var(--amber-l);padding:10px 12px;border-radius:8px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 2px;padding:0;list-style:none}
+.chips li{font:600 12px/1 var(--f-label);color:var(--blue-d);background:var(--blue-l);padding:6px 8px;border-radius:6px}
+.links{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.btn{display:inline-block;text-decoration:none;font:600 14px/1 var(--f-label);padding:13px 16px;border-radius:9px;background:var(--blue);color:#fff;border:0;transition:background-color .15s ease,transform .16s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.btn:hover{background:var(--blue-d)}}
+.btn:active{transform:scale(.97)}
+.btn--ghost{background:transparent;color:var(--blue-d);box-shadow:inset 0 0 0 1.5px var(--blue)}
+@media (hover:hover) and (pointer:fine){.btn--ghost:hover{background:var(--blue-l)}}
+
+/* ---------- responsive ---------- */
+@media (max-width:980px){
+  .head__in{grid-template-columns:1fr auto;grid-template-areas:"b n" "s s"}
+  .brand{grid-area:b}.head nav{grid-area:n}.search{grid-area:s}
+  .head nav a:not(.btn){display:none}
+  .hero{grid-template-columns:1fr}
+  .feature{width:min(100%,240px);aspect-ratio:9/13}
+  .pdfband{grid-template-columns:1fr}
+  .pdfband ol{columns:1}
+}
+@media (max-width:860px){.viewer{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .pgrid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .pcard__body{padding:10px 11px 12px}.pcard__body b{font-size:15px}.pcard__tools{display:none}.pcard__kind{font-size:12px}
+  .tabs{flex-wrap:nowrap;overflow-x:auto;margin-inline:calc(var(--gutter) * -1);padding:0 var(--gutter) 6px;scrollbar-width:none}
+  .tab{flex:none}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .btn,.tab,.pcard,.pcard__go svg,.feature,.mail,.copy,.dlg__x,.gc,.guide-item,.search input{transition:none}
+}
+
+/* ---------- secciones ---------- */
+.section{max-width:1500px;margin:0 auto;padding:56px var(--gutter)}
+.section__head{margin:0 0 28px;max-width:62ch}
+.section__head h2{font:800 clamp(26px,3vw,36px)/1.1 var(--f-display);letter-spacing:-.02em;margin:0 0 12px;text-wrap:balance;color:var(--navy)}
+.section__head p{margin:0;color:var(--mut)}
+.tools{display:flex;flex-wrap:wrap;gap:8px;list-style:none;margin:0;padding:0}
+.tools li{font:600 14px/1 var(--f-label);padding:10px 14px;background:var(--surface);border:1px solid var(--line);border-radius:8px;color:var(--navy)}
+
+.contact{text-align:center;padding:72px var(--gutter) 64px;background:var(--navy);color:#fff;border-top:3px solid var(--blue)}
+.contact h2{font:800 clamp(28px,4.2vw,48px)/1.1 var(--f-display);letter-spacing:-.025em;margin:0 0 14px;color:#fff}
+.contact p{margin:0 auto 26px;max-width:48ch;color:#cfe0f8}
+.mail{display:inline-block;font:700 clamp(18px,2.6vw,28px)/1.2 var(--f-display);color:var(--navy);background:#fff;padding:16px 24px;border-radius:12px;text-decoration:none;word-break:break-all;transition:transform .16s var(--ease-out),background-color .15s ease}
+@media (hover:hover) and (pointer:fine){.mail:hover{background:var(--blue-l)}}
+.mail:active{transform:scale(.98)}
+footer{padding:24px var(--gutter) 40px;text-align:center;font-size:13px;color:var(--mut);max-width:70ch;margin:0 auto}
+footer p{margin:6px 0}
+
+/* ---------- guías ---------- */
+.catalog{display:flex;flex-direction:column;gap:10px;max-width:1100px}
+.guide-item{background:var(--surface);border:1px solid var(--line);border-radius:12px;transition:border-color .2s ease,box-shadow .2s ease}
+.guide-item[open]{border-color:var(--blue);box-shadow:0 14px 30px -18px rgba(31,95,191,.45)}
+.guide-item summary{list-style:none;display:flex;align-items:center;gap:clamp(12px,2vw,22px);padding:16px clamp(14px,2.4vw,24px);cursor:pointer;min-height:68px;border-radius:12px}
+.guide-item summary::-webkit-details-marker{display:none}
+@media (hover:hover) and (pointer:fine){.guide-item summary:hover{background:#f7f9fc}}
+.gn{font:700 clamp(22px,2.4vw,28px)/1 var(--f-display);color:var(--blue);min-width:2.1ch;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.gt{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px}
+.gt b{font:700 clamp(16px,1.6vw,19px)/1.25 var(--f-label);letter-spacing:-.01em;color:var(--navy)}
+.gt small{font-size:14px;color:var(--mut);line-height:1.4}
+.gc{width:10px;height:10px;border-right:2px solid var(--navy);border-bottom:2px solid var(--navy);transform:rotate(45deg);margin:0 8px 4px 0;transition:transform .2s var(--ease-out)}
+.guide-item[open] .gc{transform:rotate(-135deg);margin:6px 8px 0 0}
+.guide-body{padding:4px clamp(14px,2.4vw,24px) 24px;display:grid;gap:18px}
+.need{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center}
+.need h3{font:700 11px/1 var(--f-label);letter-spacing:.16em;text-transform:uppercase;color:var(--blue);margin:0}
+.need ul{display:flex;flex-wrap:wrap;gap:6px;list-style:none;margin:0;padding:0}
+.need li{font-size:13.5px;background:var(--blue-l);color:var(--blue-d);border-radius:5px;padding:5px 9px}
+.gsteps{list-style:none;counter-reset:s;margin:0;padding:0;display:grid;gap:14px}
+.gsteps>li{counter-increment:s;position:relative;padding-left:46px}
+.gsteps>li::before{content:counter(s);position:absolute;left:0;top:-2px;width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:grid;place-items:center;font:700 14px/1 var(--f-label)}
+.gsteps p{margin:0 0 8px;font-size:15.5px;line-height:1.55;color:#2b3649}
+.code{background:#0f1b2d;border-radius:8px;overflow:hidden}
+.code__head{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:6px 8px 6px 14px;background:#16263f}
+.code__head span{font:700 11px/1 var(--f-label);letter-spacing:.14em;text-transform:uppercase;color:var(--sky)}
+.code pre{margin:0;padding:12px 14px;overflow-x:auto;font:400 13.5px/1.55 var(--f-osd);color:#dce6f5;white-space:pre-wrap;word-break:break-word}
+.copy{border:0;background:rgba(143,180,236,.18);color:#fff;font:600 12px/1 var(--f-label);padding:8px 11px;border-radius:6px;transition:background-color .15s ease,transform .16s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.copy:hover{background:rgba(143,180,236,.32)}}
+.copy:active{transform:scale(.96)}
+.care{margin:0;background:var(--amber-l);color:var(--amber);padding:10px 14px;border-radius:8px;font-size:14.5px}
+.guide-body .links{margin-top:0}
+@media (max-width:640px){.gsteps>li{padding-left:40px}.gt small{display:none}}
+
+/* ---------- tema streaming oscuro (solo estilo; HTML y JS intactos) ---------- */
+:root{
+  --navy:#fff; --navy-2:#222; --blue:#e50914; --blue-d:#ff4d57; --blue-l:rgba(255,255,255,.1); --sky:#e50914;
+  --bg:#141414; --surface:#181818; --line:#333; --ink:#fff; --mut:#b3b3b3;
+  --amber:#f5c26b; --amber-l:rgba(245,194,107,.12);
+  --f-display:'Inter','Helvetica Neue',Arial,sans-serif;
+}
+body{background:var(--bg)}
+.promo{background:#e50914;color:#fff}
+.promo b{color:#fff}
+.head{background:linear-gradient(180deg,rgba(0,0,0,.9),rgba(20,20,20,.75));border-bottom:0;backdrop-filter:blur(8px)}
+.brand{color:#e50914;font-weight:900;letter-spacing:.01em;text-transform:uppercase}
+.brand__mark{background:#e50914;border-radius:3px}
+.brand small{color:var(--mut);text-transform:none;font-weight:500}
+.search input{background:rgba(0,0,0,.6);border:1px solid #555;border-radius:4px;color:#fff}
+.search input::placeholder{color:#8c8c8c}
+.search input:focus{background:#000;border-color:#fff;box-shadow:none}
+.head nav a{color:#e5e5e5;font-weight:500}
+@media (hover:hover) and (pointer:fine){.head nav a:hover{background:transparent;color:#b3b3b3}}
+.head nav a.btn{background:#e50914;color:#fff;border-radius:4px}
+.window{max-width:none;padding:0}
+.hero{border-radius:0;min-height:min(78vh,720px);padding:clamp(28px,6vw,88px) var(--gutter);background:radial-gradient(120% 120% at 85% 20%,#3a0b10 0%,#141414 62%),#141414;position:relative}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:140px;background:linear-gradient(180deg,transparent,#141414);pointer-events:none}
+.hero h1{font-weight:900;letter-spacing:-.02em}
+.hero h1 em{color:#e50914}
+.hero .lede{color:#e5e5e5}
+.hero .btn{background:#fff;color:#000;border-radius:4px;font-weight:700;padding:14px 22px}
+@media (hover:hover) and (pointer:fine){.hero .btn:hover{background:rgba(255,255,255,.75)}}
+.hero .btn--ghost{background:rgba(109,109,110,.7);color:#fff;box-shadow:none}
+@media (hover:hover) and (pointer:fine){.hero .btn--ghost:hover{background:rgba(109,109,110,.45)}}
+.perks{color:#b3b3b3}.perks svg{color:#e50914}
+.feature{border-radius:6px;box-shadow:0 30px 60px -24px #000;z-index:1}
+.feature__tag{background:#e50914;color:#fff;border-radius:3px}
+.feature__go{background:#fff;color:#000;border-radius:4px}
+.shop__top h2,.section__head h2{color:#fff;font-weight:700;letter-spacing:-.01em}
+.tab{background:transparent;border:1px solid #555;color:#e5e5e5;border-radius:999px}
+@media (hover:hover) and (pointer:fine){.tab:hover{border-color:#fff}}
+.tab[aria-pressed="true"]{background:#fff;border-color:#fff;color:#000}
+.tab[aria-pressed="true"] span{color:#555}
+.pcard{background:#181818;border:0;border-radius:6px;transition:transform .25s var(--ease-out),box-shadow .25s var(--ease-out)}
+@media (hover:hover) and (pointer:fine){.pcard:hover{transform:scale(1.06);z-index:3;border:0;box-shadow:0 18px 40px rgba(0,0,0,.8)}}
+.pcard__img{background:#000}
+.badge{background:#e50914;color:#fff;border-radius:3px;box-shadow:none}
+.badge--vid{background:#000;color:#fff}
+.pcard__kind{color:#b3b3b3}
+.pcard__body b{color:#fff}
+.pcard__tools{color:#a3a3a3}
+.pcard__go{color:#fff}
+.pcard__free{background:rgba(70,211,105,.16);color:#46d369}
+.empty{background:#181818;border-color:#444;color:#b3b3b3}
+.empty b{color:#fff}
+.pdfband{background:#181818;border:0;border-radius:8px;box-shadow:none}
+.pdfband h2,.pdfband .more b{color:#fff}
+.pdfband ol{color:#d2d2d2}
+.pdfband .free{background:rgba(70,211,105,.16);color:#46d369}
+.pdfband .more a{color:#fff}
+.cover{background:linear-gradient(135deg,#e50914,#6b0a10);border-radius:4px}
+.cover small,.cover span{color:#fff}
+dialog::backdrop{background:rgba(0,0,0,.85)}
+.dlg{background:#181818;border-radius:8px}
+.dlg__bar{background:#181818;border-bottom:1px solid #333}
+.dlg__bar h2,.viewer__info h3{color:#fff}
+.dlg__x{background:#333;color:#fff;border-radius:50%}
+.viewer__info p{color:#d2d2d2}
+.chips li{background:#333;color:#e5e5e5;border-radius:3px}
+.btn{background:#e50914;border-radius:4px}
+@media (hover:hover) and (pointer:fine){.btn:hover{background:#b20710}}
+.btn--ghost{background:transparent;color:#fff;box-shadow:inset 0 0 0 1.5px #777}
+@media (hover:hover) and (pointer:fine){.btn--ghost:hover{background:rgba(255,255,255,.1)}}
+.tools li{background:#181818;border:1px solid #333;color:#e5e5e5;border-radius:3px}
+.contact{background:#000;border-top:3px solid #e50914}
+.contact p{color:#b3b3b3}
+.mail{background:#e50914;color:#fff;border-radius:4px}
+@media (hover:hover) and (pointer:fine){.mail:hover{background:#b20710}}
+footer{color:#808080}
+.guide-item{background:#181818;border:0;border-radius:6px}
+.guide-item[open]{box-shadow:inset 3px 0 0 #e50914}
+@media (hover:hover) and (pointer:fine){.guide-item summary:hover{background:#222}}
+.gn{color:#e50914}
+.gt b{color:#fff}
+.gc{border-color:#fff}
+.need h3{color:#e50914}
+.need li{background:#333;color:#e5e5e5}
+.gsteps>li::before{background:#e50914}
+.gsteps p{color:#d2d2d2}
+.code{background:#000}.code__head{background:#222}.code__head span{color:#b3b3b3}
+:focus-visible{outline-color:#fff}
+
+/* ---------- tema vídeo oscuro estilo plataforma de vídeo ---------- */
+:root{--bg:#0f0f0f;--surface:#1a1a1a;--line:#303030;--ink:#f1f1f1;--mut:#aaa;--blue:#3ea6ff;--blue-d:#3ea6ff;--blue-l:rgba(255,255,255,.1);--navy:#f1f1f1;--sky:#3ea6ff;--yt:#f00;--chip:#272727;--f-display:'Inter','Roboto',Arial,sans-serif}
+body{background:var(--bg);color:var(--ink)}
+.promo{background:#272727;color:#f1f1f1;font-weight:500}.promo b{color:#fff}
+.head{background:rgba(15,15,15,.95);border-bottom:1px solid var(--line);backdrop-filter:blur(10px)}
+.brand{color:#fff;text-transform:none;letter-spacing:-.04em;font-weight:700;text-shadow:none}
+.brand__mark{background:var(--yt);border-radius:8px;width:36px;height:26px;box-shadow:none}
+.brand small{color:var(--mut)}
+.search input{background:#121212;border:1px solid var(--line);border-radius:40px;color:#fff;height:40px;padding-left:44px}
+.search input:focus{border-color:#1c62b9;background:#121212;box-shadow:none}
+.search svg{color:#fff}
+.head nav a{color:#f1f1f1;border-radius:18px;font-weight:500}
+@media (hover:hover) and (pointer:fine){.head nav a:hover{background:rgba(255,255,255,.1);color:#fff}}
+.head nav a.btn{background:transparent;color:var(--blue);border:1px solid var(--line);border-radius:18px;padding:9px 14px}
+@media (hover:hover) and (pointer:fine){.head nav a.btn:hover{background:rgba(62,166,255,.15)}}
+.window{max-width:1500px;margin:0 auto;padding:clamp(16px,2.4vw,28px) var(--gutter) 0}
+.hero{background:var(--surface);border-radius:16px;min-height:0;padding:clamp(20px,3vw,40px)}
+.hero::after{display:none}
+.hero h1{font-weight:700;letter-spacing:-.02em;text-shadow:none}
+.hero h1 em{color:var(--yt);text-shadow:none}
+.hero .lede{color:#cfcfcf}.hero .lede strong{color:#fff}
+.hero .btn{background:#f1f1f1;color:#0f0f0f;border-radius:18px;font-weight:600}
+@media (hover:hover) and (pointer:fine){.hero .btn:hover{background:#d9d9d9}}
+.hero .btn--ghost{background:#272727;color:#f1f1f1;box-shadow:none}
+@media (hover:hover) and (pointer:fine){.hero .btn--ghost:hover{background:#3f3f3f}}
+.perks{color:var(--mut)}.perks svg{color:var(--yt)}
+.feature{width:min(100%,300px);border-radius:12px;box-shadow:none;background:#000}
+.feature__tag{background:var(--yt);color:#fff;border-radius:6px;text-transform:none;letter-spacing:0;font-weight:600}
+.shop__top h2,.section__head h2{color:#fff;text-transform:none;letter-spacing:-.01em;text-shadow:none;font-weight:700}
+.count{color:var(--mut)}
+/* chips de categoría */
+.tabs{position:sticky;top:73px;z-index:10;background:var(--bg);padding:10px 0;margin:0 0 14px}
+.tab{background:var(--chip);border:0;color:#f1f1f1;border-radius:8px;text-transform:none;letter-spacing:0;font-weight:500;font-size:14px;height:34px;padding:0 12px}
+@media (hover:hover) and (pointer:fine){.tab:hover{background:#3f3f3f;border:0}}
+.tab span{color:var(--mut)}
+.tab[aria-pressed="true"]{background:#f1f1f1;color:#0f0f0f}
+.tab[aria-pressed="true"] span{color:#555}
+/* parrilla de vídeos */
+.pgrid{grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:28px 16px;row-gap:28px}
+.pcard{background:transparent;border:0;border-radius:0;padding:0;box-shadow:none;overflow:visible}
+.pcard::before{display:none}
+@media (hover:hover) and (pointer:fine){.pcard:hover{transform:none;box-shadow:none;border:0}.pcard:hover .pcard__img{border-radius:0}}
+.pcard__img{aspect-ratio:4/5;border-radius:12px;border:0;background:#000;transition:border-radius .2s ease}
+.pcard__img>img,.pcard__img>video{object-fit:contain}
+.badge{left:auto;top:auto;right:8px;bottom:8px;background:rgba(0,0,0,.85);color:#fff;border-radius:4px;text-transform:none;letter-spacing:0;font-weight:600;font-size:12px;padding:3px 5px}
+.badge--vid{background:rgba(0,0,0,.85)}
+.pcard__body{background:transparent;margin:0;padding:12px 0 0;gap:4px}
+.pcard__body b{color:#f1f1f1;font:600 16px/22px var(--f-display);letter-spacing:0}
+.pcard__kind{color:var(--mut);font-size:14px;order:2}
+.pcard__tools{color:var(--mut);font-size:13px;order:3}
+.pcard__cta{padding-top:6px;order:4}
+.pcard__go{color:var(--blue);font-size:13px}
+.pcard__free{background:#272727;color:#f1f1f1;border-radius:4px}
+.empty{background:var(--surface);border-color:var(--line);color:var(--mut)}
+.pdfband{background:var(--surface);border:0;border-radius:16px;box-shadow:none}
+.pdfband h2{color:#fff}
+.pdfband p,.pdfband ol{color:#cfcfcf}
+.pdfband .free{background:#272727;color:#f1f1f1}
+.pdfband .more a{color:var(--blue)}
+.cover{background:linear-gradient(135deg,#cc0000,#590000);box-shadow:inset 12px 0 0 rgba(0,0,0,.35)}
+.btn{background:#f1f1f1;color:#0f0f0f;border-radius:18px;font-weight:600}
+@media (hover:hover) and (pointer:fine){.btn:hover{background:#d9d9d9}}
+.btn--ghost{background:#272727;color:#f1f1f1;box-shadow:none}
+@media (hover:hover) and (pointer:fine){.btn--ghost:hover{background:#3f3f3f}}
+.tools li{background:#272727;border:0;color:#f1f1f1;border-radius:8px}
+.guide-item{background:var(--surface);border:0;border-radius:12px}
+.guide-item[open]{box-shadow:none}
+@media (hover:hover) and (pointer:fine){.guide-item summary:hover{background:#272727}}
+.gn{color:var(--yt)}.gt b{color:#f1f1f1}.gt small{color:var(--mut)}.gc{border-color:#f1f1f1}
+.need h3{color:var(--mut)}.need li{background:#272727;color:#f1f1f1}
+.gsteps>li::before{background:var(--yt);color:#fff}.gsteps p{color:#cfcfcf}
+.contact{background:var(--surface);border-top:0}
+.contact p{color:var(--mut)}
+.mail{background:#f1f1f1;color:#0f0f0f;border-radius:24px}
+@media (hover:hover) and (pointer:fine){.mail:hover{background:#d9d9d9}}
+.dlg,.dlg__bar{background:var(--surface)}
+.dlg{border-radius:16px}
+.dlg__x{background:#272727;color:#fff}
+.chips li{background:#272727;color:#f1f1f1;border-radius:8px}
+@media (max-width:640px){.pgrid{grid-template-columns:1fr;gap:22px}.pcard__tools{display:block}.tabs{top:120px}}
+
+/* ---------- movimiento ----------
+   Foco: el plano vertical del escaparate se revela como un corte de cámara (cortina de abajo a arriba)
+   y el texto entra detrás. Continuidad: la ficha sube desde el catálogo y se va más rápido de lo que llega;
+   al cambiar de pestaña las carátulas entran en cascada corta. Todo con el contenido visible por defecto. */
+@keyframes rise{from{opacity:0;transform:translateY(14px)}}
+@keyframes reveal{from{clip-path:inset(100% 0 0 0);opacity:.4}to{clip-path:inset(0);opacity:1}}
+.hero>div:first-child>*{animation:rise .6s var(--ease-out) backwards}
+.hero h1{animation-delay:.05s}.hero .lede{animation-delay:.13s}.hero .btn-row{animation-delay:.21s}.hero .perks{animation-delay:.29s}
+.feature{animation:reveal .75s cubic-bezier(.16,1,.3,1) .1s backwards}
+.feature__tag{animation:rise .4s var(--ease-out) .65s backwards}
+.pgrid--in .pcard{animation:rise .38s var(--ease-out) calc(min(var(--i,0),9) * 28ms) backwards}
+
+dialog{opacity:0;transform:translateY(10px) scale(.985);transition:opacity .15s ease-in,transform .15s ease-in,overlay .15s allow-discrete,display .15s allow-discrete}
+dialog[open]{opacity:1;transform:none;transition:opacity .28s var(--ease-out),transform .34s cubic-bezier(.16,1,.3,1),overlay .3s allow-discrete,display .3s allow-discrete}
+dialog::backdrop{opacity:0;transition:opacity .18s ease-in,overlay .18s allow-discrete,display .18s allow-discrete}
+dialog[open]::backdrop{opacity:1;transition-duration:.28s,.3s,.3s}
+@starting-style{dialog[open]{opacity:0;transform:translateY(18px) scale(.985)}dialog[open]::backdrop{opacity:0}}
+
+.guide-item{interpolate-size:allow-keywords}
+.guide-item::details-content{block-size:0;overflow:clip;transition:block-size .3s var(--ease-out),content-visibility .3s allow-discrete}
+.guide-item[open]::details-content{block-size:auto}
+
+@media (prefers-reduced-motion:reduce){
+  .hero>div:first-child>*,.feature,.feature__tag,.pgrid--in .pcard{animation:none}
+  dialog,dialog::backdrop,.guide-item::details-content{transition:none}
+}
+</style>
+</head>
+<body>
+<!--
+THESIS: Un portfolio con formato de tienda online. Cada proyecto es un producto con carátula, etiqueta (Vídeo, Demo en vivo, Descarga), ficha y botón; el catálogo se filtra y se busca. No se vende nada: la "compra" es ver, probar o descargar, y la guía en PDF es el producto estrella, gratuito. El original retro está en index-retro.html.
+STORY: El visitante entiende en segundos que Alain hace vídeos, agentes y apps con IA, hojea el catálogo, abre una ficha con el vídeo o la demo real, se descarga la guía y escribe por correo.
+FIRST VIEWPORT: Barra de aviso, cabecera con marca, buscador y menú; escaparate navy con el titular, los accesos "Ver el catálogo" y "Descargar la guía", y a la derecha el producto destacado en vídeo 9:16.
+FORM: Escaparate + catálogo en rejilla de carátulas 4:5 con pestañas por categoría; ficha en diálogo.
+-->
+
+<p class="promo"><b>Todo lo del catálogo existe y se puede probar.</b> Demos en vivo, descargas gratuitas y la guía en PDF.</p>
+
+<header class="head">
+  <div class="head__in">
+    <a class="brand" href="#top" aria-label="Vídeo Club Alain, inicio">
+      <span class="brand__mark" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5z"/></svg></span>
+      <span>Vídeo Club Alain<small>Proyectos hechos con IA</small></span>
+    </a>
+    <label class="search">
+      <span class="sr">Buscar en el catálogo</span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input id="q" type="search" placeholder="Busca un proyecto, una herramienta…" autocomplete="off">
+    </label>
+    <nav aria-label="Secciones">
+      <a href="#catalogo">Catálogo</a><a href="#guia">Guía PDF</a><a href="#guias">Recetas</a><a class="btn" href="#contacto">Contacto</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+<section class="window" aria-labelledby="h1">
+  <div class="hero">
+    <div>
+      <h1 id="h1">Vídeos, agentes y apps hechos con <em>IA</em>. Entra y pruébalos.</h1>
+      <p class="lede">Vídeos escritos como código, agentes que se manejan desde Telegram, automatizaciones, apps y un dashboard. <strong>Todo existe en mi ordenador</strong>, con sus límites anotados en cada ficha.</p>
+      <div class="btn-row">
+        <a class="btn" href="#catalogo">Ver el catálogo</a>
+        <a class="btn btn--ghost" href="guia/guia-claude-video-y-power-automate-corporativo.pdf" download>Descargar la guía (PDF)</a>
+      </div>
+      <ul class="perks">
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Demos que se abren en el navegador</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Descargas gratuitas</li>
+        <li><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12 5 5 9-10"/></svg>Recetas paso a paso</li>
+      </ul>
+    </div>
+    <div class="feature" id="feature">
+      <span class="feature__tag">Destacado</span>
+      <video controls playsinline preload="metadata" poster="media/presentacion.jpg" src="media/presentacion.mp4" aria-label="Presentación del portfolio en vídeo, 30 segundos"></video>
+    </div>
+  </div>
+</section>
+
+<section class="shop" id="catalogo" aria-labelledby="h-cat">
+  <div class="shop__top">
+    <h2 id="h-cat">Catálogo</h2>
+    <p class="count" id="count" aria-live="polite"></p>
+  </div>
+  <ul class="tabs" id="tabs" aria-label="Categorías"></ul>
+  <div class="pgrid" id="grid"></div>
+</section>
+
+<section class="section" id="guia" aria-labelledby="h-guia">
+  <div class="pdfband">
+    <div class="cover" aria-hidden="true"><small>Guía para Claude · PDF</small><b>Vídeo con IA y Power Automate</b><span>49 páginas · vídeo con IA, agentes, n8n y automatización</span></div>
+    <div>
+      <p class="free">Descarga gratuita</p>
+      <h2 id="h-guia">La guía completa en PDF</h2>
+      <p>Todo este trabajo está documentado, paso a paso y con los comandos, en una guía pensada para subirla a Claude y construir encima.</p>
+      <ol>
+        <li>Anatomía de un agente de IA</li><li>Vídeo gratis con HyperFrames</li><li>Power Automate con el servidor MCP</li><li>La Fábrica de agentes</li><li>Automatizaciones propias (n8n)</li><li>Prompts de innovación y marketing</li><li>Caso FitBattle Gym</li><li>Dashboard Inditex en Power BI</li><li>Cómo hacer vídeos 3D (Three.js a MP4)</li><li>Guía de herramientas de vídeo de El Telar</li>
+      </ol>
+      <div class="btn-row">
+        <a class="btn" href="guia/guia-claude-video-y-power-automate-corporativo.pdf" download>Descargar PDF</a>
+        <a class="btn btn--ghost" href="guia/guia-claude-video-y-power-automate-corporativo.pdf" target="_blank" rel="noopener">Abrir en el navegador</a>
+      </div>
+      <p class="more"><b>Más documentación en PDF</b>
+        <a href="guia/agente-ia-n8n-atencion-al-cliente.pdf" target="_blank" rel="noopener">Agente de IA en n8n para atención al cliente</a>
+        <a href="guia/ia-al-servicio-de-la-neurologia.pdf" target="_blank" rel="noopener">La IA al servicio de la neurología (M. Alonso de Leciñana)</a>
+        <a href="guia/de-0-a-tu-primer-agente.pdf" target="_blank" rel="noopener">De 0 a tu primer agente</a>
+        <a href="descargas/equipo-de-agentes-coordinados.zip" download>Kit: equipo de agentes coordinados</a>
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="guias" aria-labelledby="h-guias">
+  <div class="section__head">
+    <h2 id="h-guias">Recetas: cómo se hace cada cosa</h2>
+    <p>Trece recetas paso a paso, con los comandos y los prompts para copiar. Son las mismas que usé para hacer lo del catálogo. Elige una.</p>
+  </div>
+  <div class="catalog" id="guias-list"></div>
+</section>
+
+<section class="section" aria-labelledby="h-tools">
+  <div class="section__head"><h2 id="h-tools">Con qué lo hago</h2></div>
+  <ul class="tools">
+    <li>Claude Code</li><li>Three.js</li><li>HyperFrames</li><li>p5.js + p5.brush</li><li>Remotion</li><li>ffmpeg</li><li>Playwright</li>
+    <li>Telegram (plugin MCP)</li><li>Power Automate (MCP)</li><li>n8n</li><li>Supabase</li><li>Next.js</li><li>React Three Fiber</li><li>Power BI + DAX</li><li>Python + Streamlit</li>
+  </ul>
+</section>
+
+<section class="contact" id="contacto" aria-labelledby="h-contacto">
+  <h2 id="h-contacto">¿Te sirve algo del catálogo?<br>Escríbeme</h2>
+  <p>Si algo de lo que has visto te vale para tu empresa o tu canal, cuéntame qué necesitas.</p>
+  <a class="mail" href="mailto:guisaalain@gmail.com">guisaalain@gmail.com</a>
+</section>
+</main>
+
+<footer>
+  <p>Alain Garzón Pérez · 2026</p>
+  <p>Los productos con tarjeta de color en vez de captura no tienen vídeo ni imagen propia: son fichas diseñadas para este portfolio. Algunos vídeos usan herramientas y kits de terceros, citados en cada ficha.</p>
+</footer>
+
+<dialog id="viewer" aria-labelledby="v-t"><div class="dlg"><div class="dlg__bar"><h2 id="v-t"></h2><button type="button" class="dlg__x" data-close aria-label="Cerrar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button></div><div class="viewer"><div class="viewer__media" id="v-media"></div><div class="viewer__info" id="v-info"></div></div></div></dialog>
+<noscript><p style="padding:24px;text-align:center">Este portfolio necesita JavaScript para mostrar el catálogo. Escríbeme a guisaalain@gmail.com.</p></noscript>
+
+<script>
+/* Catálogo: cada producto es un proyecto real que existe en el ordenador de Alain.
+   v = vídeo (media/NAME.mp4), p = póster/captura, card = ficha diseñada cuando no hay imagen. */
+const AISLES = [
+  { id:'codigo', title:'Vídeo con código' },
+  { id:'agentes', title:'Agentes y automatización' },
+  { id:'apps', title:'Apps y juegos' },
+  { id:'datos', title:'Datos y dashboards' },
+  { id:'libros', title:'Libros' },
+  { id:'estudio', title:'Documentación' },
+];
+const T = [
+  /* ---- pasillo 1 ---- */
+  { a:'codigo', c:'#0b6b47', ink:'#fff', spine:'Fábrica Jaguar', guide:'g-3d', title:'Fábrica de coches', year:'2026', kind:'Vídeo 3D · 30 s', v:'jaguar',
+    what:'Dos líneas de montaje con coches que se arman y se pintan, doce brazos robot con chispas, una grúa y una cámara que da una vuelta entera. Todo en un HTML con Three.js, exportado a MP4 vertical.',
+    tools:['Three.js','Claude','Playwright','ffmpeg'], links:[{t:'Abrir en vivo',h:'demos/fabrica-coches-jaguar.html'}],
+    ojo:'La demo en vivo carga Three.js desde internet.' },
+  { a:'codigo', c:'#16a79c', ink:'#fff', spine:'Ontzi 3D', guide:'g-3d', title:'Ontzi en 3D', year:'2026', kind:'Vídeo 3D · 10 s', v:'ontzi',
+    what:'Animación isométrica de reciclaje de envases: botellas en una cinta, máquina con engranaje, un camión que cruza la calle y personas que van a los contenedores.',
+    tools:['Three.js','Claude','ffmpeg'], links:[{t:'Abrir en vivo',h:'demos/animacion-ontzi.html'}] },
+  { a:'codigo', c:'#1b1e2e', ink:'#ffc933', spine:'Claude revenge', guide:'g-hf', title:'Claude revenge', year:'2026', kind:'Sketch · 25 s', v:'revenge',
+    what:'Una conversación de chat dibujada en pantalla: un monigote le dice a la IA lo que piensa y una mascota pixelada encaja los golpes. Texto y animación escritos como código.',
+    tools:['HyperFrames','HTML'], links:[] },
+  { a:'codigo', c:'#ffc933', ink:'#141a3a', spine:'Clawd oficina', guide:'g-clawd', title:'Clawd en la oficina', year:'2026', kind:'Animación · 24 s', v:'oficina',
+    what:'Segundo corto con el mismo kit: Clawd con auriculares delante de un monitor con gráficas, en una oficina dibujada a mano.',
+    tools:['Claude Animation Base','p5.js'], links:[],
+    ojo:'Kit de John Heibel (MIT).' },
+  { a:'codigo', c:'#6a2fb0', ink:'#fff', spine:'Anime fútbol', title:'Anime de fútbol', year:'2026', kind:'Short con sonido · 27 s', v:'anime',
+    what:'Short vertical en estilo anime con sonido, montado desde la carpeta de trabajo de Codex y Remotion.',
+    tools:['ffmpeg','IA de imagen'], links:[] },
+  { a:'codigo', c:'#1a2236', ink:'#e9d9b0', spine:'Sauvage edit', title:'Sauvage: anuncio de perfume (edit)', year:'2026', kind:'Anuncio con IA · 15 s', v:'sauvage',
+    what:'Edit de 15 s al estilo de un anuncio de perfume: un hombre frente al mar al atardecer, lobos a su lado, un corte con glitch de colores, una guitarra en un cañón del desierto y el frasco en el plano final, con textos animados.',
+    tools:['Clips con IA','Montaje','Efectos de glitch'], links:[],
+    ojo:'Edit de fan hecho con IA. No es un anuncio oficial: la marca y el producto son de sus propietarios.' },
+  { a:'codigo', c:'#8e1b1b', ink:'#fff', spine:'Stranger Things', title:'Stranger Things (montaje de fan)', year:'2026', kind:'Vídeo con IA · 18 s', v:'stranger',
+    what:'Montaje de fan de 18 s inspirado en Stranger Things: una joven con poderes entre chispas, un medallón con un XI y una criatura en llamas sobre una ciudad en ruinas, con música y sonido.',
+    tools:['Clips con IA','Montaje'], links:[],
+    ojo:'Contenido de fans, no oficial. La serie, sus personajes y marcas son de sus propietarios. Hecho con IA.' },
+  { a:'codigo', c:'#efe6d2', ink:'#141a3a', spine:'Anuncio camiseta', title:'Anuncio de camiseta', year:'2026', kind:'Anuncio con IA · 17 s', v:'camiseta',
+    what:'Anuncio vertical de 17 s para una camiseta de fútbol color crema: primeros planos del tejido y del escudo, un estadio desenfocado y la prenda colgada como plano final, con textos que aparecen palabra a palabra.',
+    tools:['Clips con IA','Montaje'], links:[],
+    ojo:'Generado con IA. No es un anuncio oficial de ninguna marca ni club.' },
+  { a:'codigo', c:'#c9d6ff', ink:'#141a3a', spine:'Historia Internet', title:'Historia de Internet', year:'2026', kind:'Explicador · 45 s', v:'internet',
+    what:'Explicador animado de 45 s, "de conectar máquinas a conectar vidas", con línea de tiempo y títulos animados.',
+    tools:['OpenMontage','Remotion'], links:[] },
+
+  /* ---- pasillo 2 ---- */
+  { a:'agentes', c:'#1c8f6e', ink:'#fff', spine:'Power Automate', guide:'g-pa', title:'Flujos con Power Automate', year:'2026', kind:'Automatización · MCP', card:{bg:'#0f6cbd',fg:'#fff',big:'PA',small:'Flujos creados y depurados con Claude'},
+    what:'Un servidor MCP conecta Claude Code con Power Automate: se describe el flujo en lenguaje natural y el agente lo crea, lo explica, lo optimiza y depura sus fallos. En la guía hay tres demos.',
+    tools:['Power Automate','Flow Agent MCP','Claude Code'], links:[{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=9'}] },
+  { a:'agentes', c:'#1c8f6e', ink:'#fff', spine:'Prompts innovación', title:'Prompts de innovación con IA', year:'2025', kind:'Material de estudio', card:{bg:'#0b1f3a',fg:'#8fb4ec',big:'IDEO\n+ IA',small:'Tendencias, problem framing, producto'},
+    what:'Resumen en castellano de una Master Class sobre acelerar la innovación con IA: cadena de prompts de tendencias a concepto y diseño de producto, problem framing, analogías y seis sombreros. En la guía está reorganizado para automatizarlo en n8n o como skill.',
+    tools:['Claude','n8n','Prompts'], links:[{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=25'}],
+    ojo:'La Master Class es del Dr. Juan Vicente García Manjón (2 abril 2025), con el proceso de IDEO como base. Es material de estudio, no un proyecto propio.' },
+  { a:'agentes', c:'#229ed9', ink:'#fff', spine:'Bot Telegram', title:'Bot de Telegram', year:'2026', kind:'Bot · Telegram · demo privada', guide:'g-tg', card:{bg:'#229ed9',fg:'#fff',big:'BOT',small:'@GARZONOLABOT · demo'},
+    what:'Bot de Telegram propio: se abre desde el móvil o el navegador y se le habla como a cualquier contacto.',
+    tools:['Telegram','Bot API'], links:[{t:'Ver el bot en Telegram',h:'https://t.me/GARZONOLABOT'},{t:'Cómo funciona (guía)',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=53'}],
+    ojo:'Demo privada: el bot solo contesta a usuarios aprobados y mientras mi sesión de Claude Code está abierta en mi PC (puede controlarlo, por eso no está abierto a todos). Si escribes y no responde, es normal. ¿Quieres verlo en directo? Escríbeme a guisaalain@gmail.com.' },
+  { a:'agentes', c:'#ea4b71', ink:'#fff', spine:'n8n formulario', guide:'g-n8n', title:'Formulario → IA → email', year:'2026', kind:'Automatización · n8n', card:{bg:'#ea4b71',fg:'#fff',big:'n8n',small:'Formulario, IA y correo'},
+    what:'Sistema completo en n8n: un formulario de Google lanza un flujo que consulta a una IA y envía el resultado por correo. El workflow se importa directamente y trae guía de instalación.',
+    tools:['n8n','Google Forms','IA','Email'], links:[] },
+  { a:'agentes', c:'#8fb4ec', ink:'#0b1f3a', spine:'Alain Corporative', title:'Alain Corporative: oficina de agentes', year:'2026', kind:'Agentes · Telegram · 3D', p:'shot-oficina',
+    what:'Una oficina con once agentes de Claude Code repartidos en seis departamentos. Hablas con la recepción (Marina) por Telegram, ella reparte el encargo al agente que toca y te avisa al terminar o si necesita tu aprobación. La oficina está modelada en 3D con Blender y se puede girar.',
+    tools:['Claude Code','Telegram','Blender','Three.js'], links:[{t:'Abrir la oficina 3D',h:'demos/oficina-agentes/index.html'},{t:'Ver el bot en Telegram',h:'https://t.me/GARZONOLABOT'}],
+    ojo:'Demo privada: el bot solo contesta a usuarios aprobados y mientras mi sesión de Claude Code está abierta en mi PC (puede controlarlo, por eso no está abierto a todos). Si escribes y no responde, es normal. ¿Quieres verlo en directo? Escríbeme a guisaalain@gmail.com. La animación de encargos de la web es una demostración: no refleja lo que hacen los agentes en ese momento. Carga Three.js desde internet.' },
+
+  /* ---- pasillo 3 ---- */
+  { a:'apps', c:'#1c1c24', ink:'#ff8a1a', spine:'Basket Legend', title:'Basket Legend', year:'2026', kind:'Juego · simulador', v:'basket',
+    what:'Simulador de carrera NBA: creas un jugador, decides por eventos y vives toda su carrera. 30 equipos, liga completa, traspasos y minijuegos de tiro en 3D.',
+    tools:['React','React Three Fiber','Rapier'], links:[{t:'Jugar',h:'demos/basket-legend/index.html'}],
+    ojo:'Pesa unos 34 MB y usa 3D: puede tardar en cargar.' },
+  { a:'apps', c:'#3858c8', ink:'#fff', spine:'Pokémon Lumier', title:'Pokémon Lumier', year:'2026', kind:'Fangame · navegador y móvil', p:'shot-pokemon-lumier',
+    what:'Fangame de Pokémon que se juega en el navegador, también en el móvil con mandos táctiles. Recrea Ciudad Plateada con los mapas reales de Pokémon Añil (leídos de sus archivos de RPG Maker): Centro Pokémon, tienda, casas, museo, gimnasio y Claro Secreto. Combates por turnos a nivel 100, jefes con su historia (ROLDAN, el Team Rocket de LETE, GIOVANNI) y el evento de Celebi. La partida se guarda en el navegador.',
+    tools:['JavaScript','Canvas 2D','Mapas de RPG Maker XP','GitHub Pages'], links:[{t:'Jugar',h:'https://guisaalain-web.github.io/pokemon-lumier/'},{t:'Código en GitHub',h:'https://github.com/guisaalain-web/pokemon-lumier'}],
+    ojo:'Fangame sin ánimo de lucro: usa gráficos y música de Pokémon y de Pokémon Añil (© Nintendo / Game Freak / sus autores).' },
+  { a:'apps', c:'#6f4e37', ink:'#fff', spine:'CoffeeLog', title:'CoffeeLog', year:'2025', kind:'App Android', p:'coffeelog',
+    what:'App Android para llevar el diario de tus cafés: añades cada café con su foto, ves estadísticas y recibes una recomendación. Los datos se guardan en el propio móvil.',
+    tools:['Kotlin','Jetpack Compose','Room','Material 3'], links:[{t:'Descargar APK',h:'descargas/coffeelog.apk'}],
+    ojo:'El APK es una versión de pruebas: se instala fuera de Google Play (activa «instalar apps desconocidas»). Aún no está publicada en Play Store.' },
+  { a:'apps', c:'#e8352a', ink:'#fff', spine:'Party Challenge', title:'Party Challenge', year:'2026', kind:'App · eventos', card:{bg:'#7a1fa2',fg:'#fff',big:'PARTY',small:'Retos para eventos'},
+    what:'App web gamificada para eventos: los invitados se unen a un evento activo y juegan. Next.js, escenas 3D y Supabase con acceso anónimo.',
+    tools:['Next.js','Supabase','Three.js','GSAP'], links:[] },
+  { a:'apps', c:'#2c4f86', ink:'#fff', spine:'Ontzi', title:'Ontzi (antes EnvaseYa)', year:'2026', kind:'Web · envases', p:'shot-ontzi-web',
+    what:'Web que conecta a quien tiene envases con depósito con vecinos y bares que los recogen, en castellano y euskera. Base de datos en Supabase.',
+    tools:['HTML','Supabase','ES / EU'], links:[{t:'Abrir web',h:'demos/ontzi-web/index.html'}],
+    ojo:'En desarrollo: faltan los pagos reales con Stripe.' },
+  { a:'apps', c:'#00b3a4', ink:'#0a2a30', spine:'FitBattle Gym', title:'FitBattle Gym', year:'2025', kind:'App · gamificada', p:'shot-fitbattle',
+    what:'Aplicación web gamificada de entrenamiento: puntos, niveles y logros para convertir el gimnasio en una aventura. Es el caso de base de datos de la guía.',
+    tools:['HTML','CSS','JavaScript'], links:[{t:'Abrir app',h:'demos/fitbattle/index.html'}] },
+  { a:'apps', c:'#f1e9d2', ink:'#141a3a', spine:'Amianto', title:'Formación en amianto', year:'2026', kind:'Plataforma formativa', p:'shot-amianto',
+    what:'Plataforma de formación para operarios de obra: seis módulos de unos 30 minutos, ejercicios interactivos, escena 3D y certificado al terminar.',
+    tools:['React','Three.js','GSAP'], links:[{t:'Abrir formación',h:'demos/amianto/index.html'}] },
+  { a:'apps', c:'#a4101a', ink:'#fff', spine:'F1 Strategy', title:'F1 Strategy Simulator', year:'2026', kind:'App offline', p:'shot-f1',
+    what:'Simulador de estrategia de carrera de Fórmula 1 que funciona sin conexión: hasta 3 paradas, 8 circuitos, 8 pilotos y condiciones de lluvia o sol.',
+    tools:['HTML','JavaScript'], links:[{t:'Abrir simulador',h:'demos/f1/index.html'}] },
+  { a:'apps', c:'#6a2fb0', ink:'#fff', spine:'GastroAI PRO', title:'GastroAI PRO', year:'2026', kind:'App · IA', p:'shot-gastroai',
+    what:'Guía gastronómica con IA: encuentra restaurantes cerca de ti y te deja preguntar como a un local.',
+    tools:['HTML','IA'], links:[{t:'Abrir app',h:'demos/gastroai/index.html'}],
+    ojo:'Necesita internet. En esta demo el chat con IA está desactivado; la búsqueda de restaurantes funciona.' },
+
+  /* ---- pasillo 4 ---- */
+  { a:'datos', c:'#141414', ink:'#fff', spine:'Inditex Power BI', guide:'g-bi', title:'Dashboard financiero de Inditex', year:'2026', kind:'Power BI · PBIP', card:{bg:'#111',fg:'#fff',big:'INDITEX',small:'6 páginas · 60+ medidas DAX'},
+    what:'De 85 páginas de memoria anual a un cuadro de mando que se lee en minutos: modelo con más de 60 medidas DAX y un informe de 6 páginas en blanco y negro con acento rojo. Hecho con Claude Code y el servidor MCP de modelado de Power BI.',
+    tools:['Power BI','DAX','Power Query','MCP'], links:[{t:'Descargar proyecto .pbip',h:'descargas/inditex-powerbi.zip'},{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=31'}],
+    ojo:'El informe se validó contra el esquema oficial (0 errores) pero no se llegó a abrir en Desktop: puede necesitar retoques.' },
+  { a:'datos', c:'#ffc933', ink:'#141a3a', spine:'Fábrica agentes', guide:'g-fab', title:'Fábrica de agentes', year:'2026', kind:'Agentes · Telegram', p:'shot-fabrica-panel',
+    what:'Escribes "ideas" al bot de Telegram y tres agentes (Ideas, Guion, Vídeo) trabajan en paralelo. Un panel en localhost:3000 muestra en vivo qué línea trabaja y en qué paso, y el resultado vuelve al chat. Tus comentarios mejoran la siguiente tanda.',
+    tools:['Claude Code','Plugin Telegram','Skills propias','Node.js'], links:[{t:'Probar el panel',h:'demos/fabrica/index.html'},{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=13'}],
+    ojo:'Demo: el panel está simulado (sin agentes reales). El capataz real solo existe mientras mi sesión de Claude Code está abierta y solo atiende a usuarios aprobados. Para verlo en directo, escríbeme a guisaalain@gmail.com.' },
+  { a:'libros', c:'#c9972b', ink:'#0a0705', spine:'Todavía la luz', title:'Venezuela, todavía la luz', year:'2026', kind:'Libro · 40 relatos', card:{bg:'#0a0705',fg:'#c9972b',big:'TODAVÍA\nLA LUZ',small:'40 relatos de dignidad, memoria y reconstrucción'},
+    what:'Libro de 40 relatos sobre Venezuela, en cuatro partes: «La tierra que insiste», «Casas prestadas», «Oficios de la ternura» y «El país que viene». Mira el país más allá de la escasez, desde el trabajo de cuidar, enseñar, cocinar, reparar y volver a empezar. Publicado como web en Vercel.',
+    tools:['Escritura','Web (Vercel)'], links:[{t:'Abrir el libro',h:'https://venezuela-todavia-la-luz.vercel.app/'}] },
+
+  /* ---- material de estudio ---- */
+  { a:'estudio', c:'#ea4b71', ink:'#fff', spine:'Agente n8n soporte', title:'Agente de IA en n8n para atención al cliente', year:'2026', kind:'Documentación · PDF', card:{bg:'#ea4b71',fg:'#fff',big:'n8n',small:'Agente de soporte: Gmail, clasificador y modelo de lenguaje'},
+    what:'Basada en la masterclass n8n de Pere Rovira. Documentación paso a paso de un agente de atención al cliente para una inmobiliaria: un trigger de Gmail, un clasificador de texto que separa a quien quiere vender o alquilar de quien quiere comprar, y un modelo de lenguaje que redacta la respuesta. Incluye las descripciones de cada categoría para copiar.',
+    tools:['n8n','Gmail','Text Classifier','OpenAI / Gemini'], links:[{t:'Abrir la guía (PDF)',h:'guia/agente-ia-n8n-atencion-al-cliente.pdf'}] },
+  { a:'estudio', c:'#13335c', ink:'#fff', spine:'IA neurología', title:'La IA al servicio de la neurología', year:'2026', kind:'Documentación · PDF', card:{bg:'#13335c',fg:'#8fb4ec',big:'IA +\nNEURO',small:'Masterclass sobre IA aplicada a la neurología'},
+    what:'Material de estudio de María Alonso de Leciñana (no es un proyecto propio). Presentación de una masterclass sobre cómo se aplica la inteligencia artificial en neurología: neurosonología, enfermedades cerebrovasculares e imagen médica.',
+    tools:['IA en salud','Neurología','Formación'], links:[{t:'Abrir el PDF',h:'guia/ia-al-servicio-de-la-neurologia.pdf'}] },
+  { a:'estudio', c:'#1c8f6e', ink:'#fff', spine:'Equipo de agentes', title:'Crea tu equipo de agentes coordinados', year:'2026', kind:'Documentación · Kit', card:{bg:'#0b1f3a',fg:'#8fb4ec',big:'EQUIPO\nDE AGENTES',small:'Kit con Claude Code: 5 agentes coordinados'},
+    what:'Kit para montar con Claude Code un equipo de cinco agentes especializados que trabajan coordinados (precios, reseñas, tendencias, informe y exportación a CSV). Trae el proyecto listo para adaptar a tu marca, la guía «De 0 a tu primer agente» y los esquemas explicados.',
+    tools:['Claude Code','Agentes','Skills'], links:[{t:'Descargar el kit (.zip)',h:'descargas/equipo-de-agentes-coordinados.zip'},{t:'Guía: de 0 a tu primer agente',h:'guia/de-0-a-tu-primer-agente.pdf'}] },
+];
+const $ = s => document.querySelector(s);
+const mq = matchMedia('(prefers-reduced-motion:reduce)');
+const canHover = matchMedia('(hover:hover) and (pointer:fine)');
+const dView = $('#viewer');
+
+/* ---------- Guías: cómo se hace cada cosa ----------
+   Contenido sacado de la guía en PDF (páginas indicadas) y de los proyectos reales.
+   s = pasos; cada paso: {t: texto, code?: comando o texto para copiar, label?: etiqueta del bloque} */
+const GUIDES = [
+  { id:'g-3d', n:'01', title:'Un vídeo 3D en bucle con Three.js', out:'Un HTML que se ve en el navegador y un MP4 vertical', page:37, ex:'jaguar',
+    need:['Claude (mejor Claude Code, para que guarde el archivo)','Un navegador'],
+    s:[
+      {t:'Rellena la plantilla con tu negocio, la duración, los colores y lo que se mueve.', label:'Plantilla de prompt', code:'Crea una animación 3D en bucle de [segundos] s de [tu negocio], en un solo archivo HTML con Three.js. Vista isométrica, luz suave, colores [tu marca]. Que todo se mueva: [coches, gente, máquinas…]. Cámara en órbita lenta. Sin texto en 3D. Formato vertical, sin barras de desplazamiento.'},
+      {t:'Pégala en Claude Code. Te guarda un único archivo .html.'},
+      {t:'Ábrelo en el navegador y mira un ciclo entero. Pide los retoques con frases normales.', label:'Frases que funcionan', code:'Haz que la cámara dé una vuelta completa en todo el bucle.\nAñade más robots y una segunda línea que vaya al revés.\nLa escena se corta por los lados en vertical: aleja la cámara.\nEl bucle da un salto en el segundo 12: escóndelo dentro de una nave.'},
+      {t:'Comprueba que el bucle cierra: todo debe ser función del tiempo (draw(segundos)), los brazos y engranajes dan un número entero de vueltas y lo que reaparece lo hace dentro de una nave opaca.'},
+      {t:'Cuando te guste, pasa a la guía 02 para sacar el MP4.'}],
+    care:'La demo carga Three.js desde internet, así que necesita conexión.' },
+
+  { id:'g-mp4', n:'02', title:'Exportar el HTML a MP4 vertical', out:'Un MP4 de 1080×1920 a 30 fps, sin tirones', page:38, ex:'ontzi',
+    need:['Node.js 20 o superior','Google Chrome','ffmpeg','playwright-core'],
+    s:[
+      {t:'Instala ffmpeg y el paquete que maneja Chrome.', label:'Windows', code:'winget install Gyan.FFmpeg\nnpm i playwright-core'},
+      {t:'En el HTML deja una función draw(segundos) y que no arranque sola si la dirección acaba en #export.', label:'Final del script del HTML', code:"window.draw = draw;\nconst loop = ms => { draw(ms / 1000); requestAnimationFrame(loop); };\nif (!location.hash.includes('export')) requestAnimationFrame(loop);"},
+      {t:'Crea rec.mjs: abre la página a 1080×1920, avanza 1/30 s por fotograma y captura cada uno. 300 fotogramas son 10 s; 900 son 30 s.', label:'rec.mjs', code:"import { chromium } from 'playwright-core';\nimport { mkdirSync } from 'fs';\nmkdirSync('frames', { recursive: true });\nconst b = await chromium.launch({ channel: 'chrome', args: ['--use-gl=angle', '--enable-unsafe-swiftshader'] });\nconst pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });\nawait pg.goto('file:///RUTA/animacion.html#export');\nawait pg.waitForFunction(() => window.draw, null, { timeout: 30000 });\nfor (let i = 0; i < 900; i++) {\n  await pg.evaluate(t => window.draw(t), i / 30);\n  await pg.screenshot({ path: `frames/f${String(i).padStart(4, '0')}.png` });\n}\nawait b.close();"},
+      {t:'Ejecuta el script y junta los fotogramas en un vídeo.', label:'Terminal', code:'node rec.mjs\nffmpeg -framerate 30 -i frames/f%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 animacion.mp4'}],
+    care:'900 capturas llevan varios minutos. Para probar, baja a 720×1280 o a 24 fps. Si pesa mucho, sube crf a 23.' },
+
+  { id:'g-hf', n:'03', title:'Un vídeo con HyperFrames (HTML a MP4)', out:'Un MP4 con títulos, gráficos y música, hecho en tu ordenador', page:5, ex:'revenge',
+    need:['Node.js 22 o superior','ffmpeg','Claude Code (o Cursor, Codex)'],
+    s:[
+      {t:'Instala el plugin en Claude Code.', label:'Terminal', code:'claude plugin marketplace add heygen-com/hyperframes\nclaude plugin install hyperframes@hyperframes'},
+      {t:'Arráncalo con /hyperframes:hyperframes. Sin plugin, también se puede empezar un proyecto a mano.', label:'Alternativa sin plugin', code:'npx hyperframes init mi-video\ncd mi-video\nnpx hyperframes preview\nnpx hyperframes render'},
+      {t:'Pide el vídeo describiéndolo. Este es el prompt de explicador vertical de la guía.', label:'Prompt', code:'Make a 30-second vertical (1080x1920) explainer for [product]. Hook in the first 2 seconds, then 3 benefits with animated UI mockups, then a call to action: "[CTA]". Clean editorial style, word-by-word captions synced to the voiceover. Render at 30 fps.'},
+      {t:'Pide cambios en lenguaje natural y vuelve a renderizar: "escena 12 de noche", "títulos más lentos en la escena 2", "cambia la música por algo más calmado".'}],
+    care:'HyperFrames no genera metraje: monta gráficos y títulos alrededor del material que le des (carpeta /media). Los vídeos largos tardan en portátiles viejos.' },
+
+  { id:'g-clawd', n:'04', title:'Un dibujo animado con Clawd', out:'Un corto de dibujos pintados a mano en MP4', page:44, ex:'oficina',
+    need:['Node.js','Google Chrome','ffmpeg','Claude Code'],
+    s:[
+      {t:'Clona el kit Claude Animation Base (de John Heibel, licencia MIT), instala y comprueba que renderiza la demo.', label:'Terminal', code:'git clone https://github.com/JohnHeibel/ClaudeAnimationBase.git\ncd ClaudeAnimationBase && npm install\nnode render.mjs --clip --out=out/video.mp4'},
+      {t:'Abre la carpeta en Claude Code.'},
+      {t:'Pide el corto. Claude hace primero el storyboard, luego construye plano a plano y revisa con hojas de contacto.', label:'Prompt', code:'Lee ANIMATION_GUIDE.md y haz un vídeo de 15 segundos de Clawd intentando cazar una mariposa'},
+      {t:'El resultado queda en out/video.mp4.'}],
+    care:'Sin tarjeta gráfica dedicada, los rellenos de acuarela tardan segundos por fotograma: pide al modelo que los evite.' },
+
+  { id:'g-fab', n:'05', title:'Una fábrica de agentes con Telegram', out:'Un bot de Telegram que lanza agentes y un panel que muestra el avance', page:13, ex:'fabrica-agentes',
+    need:['Claude Code','Bun (npm i -g bun)','Node.js 20 o superior','Cuenta de Telegram'],
+    s:[
+      {t:'Crea el bot: en Telegram abre @BotFather y envía /newbot. Te da un token. Es una contraseña: no lo pegues en chats ni en repositorios.'},
+      {t:'Instala el plugin de Telegram y guarda el token en un archivo .env.', label:'Terminal', code:'claude plugin install telegram@claude-plugins-official\nmkdir -p ~/.claude/channels/telegram\necho "TELEGRAM_BOT_TOKEN=123456789:AA..." > ~/.claude/channels/telegram/.env'},
+      {t:'Di quién puede hablar con el bot: escríbele, busca tu ID numérico y guárdalo en la lista de permitidos.', label:'~/.claude/channels/telegram/access.json', code:'{ "dmPolicy": "allowlist", "allowFrom": ["TU_ID_NUMERICO"], "groups": {} }'},
+      {t:'Crea la carpeta fabrica con un CLAUDE.md de capataz (responde solo por la tool reply de Telegram y lanza un subagente por fábrica) y una carpeta app con el servidor del panel.'},
+      {t:'Crea las skills fabrica-ideas, fabrica-guion y fabrica-video: cada una tiene entrada, pasos y una rúbrica, y al final pide nota y guarda comentarios en feedback.md.'},
+      {t:'Arranca el panel y el capataz en dos terminales. Lanza siempre claude desde la carpeta fabrica.', label:'Dos terminales', code:'cd ~/fabrica/app && node server.js\ncd ~/fabrica && claude --channels plugin:telegram@claude-plugins-official'},
+      {t:'Desde el móvil: "ideas sobre ahorro", luego "la 3" y luego "monta". Mira el panel en localhost:3000 y comenta lo que no te guste.'},
+      {t:'Si prefieres que Claude lo genere todo, empieza con este prompt en una carpeta vacía.', label:'Prompt para empezar', code:'Crea en ./fabrica un CLAUDE.md de capataz: solo responde por Telegram con la tool reply, lanza un subagente por fábrica (ideas, guion, video) y cada agente informa al panel con curl POST a localhost:3000/api/event en cada paso.'}],
+    care:'El capataz solo existe mientras la sesión está abierta. Telegram solo admite una sesión por bot. Si dice "Connection closed", crea el .env antes de lanzar claude.' },
+
+  { id:'g-pa', n:'06', title:'Un flujo de Power Automate con Claude', out:'Un flujo creado, explicado, optimizado o depurado desde el chat', page:9, ex:'power-automate',
+    need:['Claude Code','Cuenta de Microsoft con Power Automate'],
+    s:[
+      {t:'Instala el plugin oficial de Microsoft.', label:'Terminal', code:'claude plugin marketplace add microsoft/power-platform-skills\nclaude plugin install power-automate@power-platform-skills'},
+      {t:'Reinicia Claude Code y ejecuta el skill setup una vez: inicia sesión y fija el entorno de trabajo.'},
+      {t:'Pide el flujo en lenguaje natural.', label:'Ejemplo de la guía', code:'Cuando se envíe un formulario, guarda las respuestas en SharePoint y mándame un resumen por correo'},
+      {t:'El agente comprueba las conexiones, pregunta dónde guardar y a quién enviar, mapea las preguntas con las columnas y crea el flujo. Siempre lo crea apagado para que lo revises: luego pídele que lo active.'},
+      {t:'Para explicar u optimizar uno que ya existe, pásale su URL. Para depurar, pregunta "por qué falla este flujo".'}],
+    care:'Cada flujo nuevo se crea apagado. En el ejemplo de la guía, sustituir un bucle y una espera por una sola escritura exportó más de 10.000 filas en 21 segundos.' },
+
+  { id:'g-n8n', n:'07', title:'Una automatización con n8n', out:'Un flujo que corre en tu ordenador y se exporta como JSON', page:22, ex:'n8n-formulario',
+    need:['Docker Desktop abierto, con el engine en "Running"'],
+    s:[
+      {t:'Crea una carpeta y dentro un archivo docker-compose.yml.', label:'docker-compose.yml', code:'services:\n  n8n:\n    image: docker.n8n.io/n8nio/n8n\n    restart: unless-stopped\n    ports:\n      - "5678:5678"\n    environment:\n      - GENERIC_TIMEZONE=Europe/Madrid\n      - TZ=Europe/Madrid\n    volumes:\n      - n8n_data:/home/node/.n8n\nvolumes:\n  n8n_data:'},
+      {t:'Arráncalo y abre http://localhost:5678. La primera vez crea la cuenta de propietario.', label:'Terminal', code:'docker compose up -d\ndocker compose logs -f n8n\ndocker compose down'},
+      {t:'Define el flujo en una frase: "cuando pase X, haz Y y avísame en Z". Lista los nodos antes de construir.'},
+      {t:'Prepara una credencial por servicio en Credentials. Nunca pegues claves dentro de los nodos ni en chats.'},
+      {t:'Prueba con Execute workflow y datos de ejemplo. Después activa el interruptor Active y revisa Executions los primeros días.'},
+      {t:'Si quieres que la IA te lo genere, pídele solo el JSON e impórtalo desde el menú del lienzo (Import from file).', label:'Prompt', code:'Con estas plantillas como ejemplo, crea un flujo de n8n que [disparador] y [acción]. Devuelve solo el JSON e incluye una nota en cada nodo.'}],
+    care:'No borres el volumen: docker compose down -v elimina tus flujos. Revisa siempre el JSON generado antes de activarlo.' },
+
+  { id:'g-bi', n:'08', title:'Un dashboard de Power BI con Claude', out:'Un modelo con medidas DAX y un informe de varias páginas en un proyecto PBIP', page:31, ex:'inditex-power-bi',
+    need:['Power BI Desktop (versión de la tienda de Microsoft)','Claude Code con la extensión Power BI Modeling MCP','Python 3 con pypdf, reportlab y Pillow'],
+    s:[
+      {t:'Pasa los datos del PDF a un CSV largo (estado, concepto, ejercicio, importe y página del PDF), para poder rastrear cada cifra hasta su página.'},
+      {t:'Configura el servidor MCP de modelado en el archivo de configuración de Claude Code (nombre powerbi-modeling, argumento --start) y acepta el EULA de Microsoft.'},
+      {t:'Abre Power BI Desktop con un archivo y conecta con data source=localhost:<puerto>. El puerto cambia cada vez que abres Desktop.'},
+      {t:'Pide el modelo: tablas de datos y de dimensiones y las medidas DAX (cuenta de resultados, balance, liquidez, rentabilidad).'},
+      {t:'Escribe las páginas del informe en formato PBIR dentro del proyecto PBIP y valídalas contra el esquema oficial.'},
+      {t:'Abre el informe en Desktop y retoca lo que salga vacío o desplazado.'}],
+    care:'Tras actualizar la extensión, revisa el número de versión de la ruta: si no, el servidor da "Connection closed". El informe de Inditex se validó (0 errores) pero no se llegó a ver renderizado en Desktop.' },
+
+  { id:'g-clips', n:'09', title:'Clips verticales de un vídeo largo', out:'Varios clips 9:16 con subtítulos listos para Shorts, Reels y TikTok', page:42, ex:null,
+    need:['OBS Studio (para grabar)','HandBrake (para comprimir)','SupoClip y Shotcut'],
+    s:[
+      {t:'Graba con OBS Studio. Para vertical, pon 1080×1920 en los ajustes de vídeo.'},
+      {t:'Si pesa demasiado para subirlo, comprímelo con HandBrake con el preset Fast 1080p30.'},
+      {t:'Sube el vídeo a SupoClip (supoclip.com, o auto-alojado con Docker). Una IA elige de 3 a 7 fragmentos y puntúa gancho, interés, valor y facilidad para compartir.'},
+      {t:'Exporta los clips en 9:16: recorta siguiendo la cara de quien habla y pone subtítulos palabra a palabra.'},
+      {t:'Para montar o unir clips, crea en Shotcut un proyecto de 1080×1920, arrastra los clips a la línea de tiempo, corta, añade transiciones y exporta.'}],
+    care:'Auto-alojar SupoClip es gratis pero necesita Docker, una clave de AssemblyAI y una clave de IA (o Ollama). Esas claves pueden costar dinero.' },
+
+  { id:'g-voz', n:'10', title:'Clonar tu voz y doblar un vídeo', out:'Tu voz clonada y un vídeo doblado a otro idioma, en tu ordenador', page:46, ex:null,
+    need:['VoiceStudio (gratis, AGPL-3.0)','Unos 5 GB libres; va más rápido con gráfica NVIDIA o Mac de Apple Silicon'],
+    s:[
+      {t:'Instálalo.', label:'Mac y Linux', code:'curl -fsSL https://voicestudio.sh/install | sh'},
+      {t:'En Windows, desde PowerShell.', label:'Windows', code:'irm https://voicestudio.sh/install | iex'},
+      {t:'Abre Voice cloning e instala el modelo de voz (se descarga una sola vez). Graba entre 30 y 60 segundos de tu voz leyendo un texto con frases variadas.', label:'Prompt para preparar el texto', code:'Necesito grabar entre 30 y 60 segundos de mi voz para clonarla con VoiceStudio. Escríbeme un texto en español natural, con frases de distinta longitud, preguntas y exclamaciones, y números y nombres propios, para que la grabación recoja bien mi entonación. Tema: [tu tema]. Tono: [cercano / profesional / divertido].'},
+      {t:'Para doblar, traduce primero el guion de forma que suene hablado y que cada frase dure parecido.', label:'Prompt de traducción', code:'Traduce este guion de [idioma] a español de España para doblar un vídeo. Reglas: que suene hablado, no literal; que cada frase dure parecido a la original; sin tecnicismos innecesarios; y conserva los nombres de marcas y productos. Devuélvelo frase a frase, con el original al lado.'},
+      {t:'Revisa el doblaje antes de publicar: frases que cambian el sentido, demasiado largas o que suenan raras.'}],
+    care:'Clona solo tu voz o la de alguien que te haya dado permiso. Suplantar a otra persona es un abuso y, según el caso, puede ser delito.' },
+
+  { id:'g-pub', n:'11', title:'Antes de publicar: lista de comprobación', out:'Un vídeo que puedes subir sin sorpresas', page:8, ex:null,
+    need:[],
+    s:[
+      {t:'Avisa de que es contenido hecho con IA. El artículo 50 del Reglamento europeo de IA (desde el 2 de agosto de 2026) exige avisar si publicas un deepfake; la marca técnica del modelo no sustituye ese aviso.'},
+      {t:'No generes a personas reales diciendo lo que no dijeron ni clones voces sin consentimiento.'},
+      {t:'Revisa la licencia de cada herramienta antes de monetizar: onetake, por ejemplo, es solo para uso no comercial.'},
+      {t:'Comprueba precios y límites en la web oficial: cambian cada pocas semanas.'},
+      {t:'Mira el vídeo entero con sonido y en el móvil antes de subirlo. Subir el vídeo lo haces tú.'}],
+    care:'' },
+
+  { id:'g-lumier', n:'12', title:'Un juego de navegador y móvil, publicado gratis', out:'Un RPG estilo Pokémon que se abre con un enlace, sin instalar nada', page:50, ex:'pokemon-lumier',
+    need:['Claude Code','Node.js 20 o superior','Git y una cuenta de GitHub','Mapas o gráficos propios (o de un fangame, citando autores)'],
+    s:[
+      {t:'Pide a Claude el motor: un index.html con un canvas y un src/juego.js con mapa por casillas, jugador, NPC, diálogos, combates por turnos y guardado en localStorage.'},
+      {t:'Convierte los mapas a datos: Claude lee los archivos del editor (en Lumier, los .rxdata de RPG Maker XP) y saca casillas, paredes, puertas y NPC a JSON.'},
+      {t:'Empaqueta el código en un solo archivo. Cada vez que cambies algo, vuelve a empaquetar.', label:'Terminal', code:'npx -y esbuild@0.28.2 src/juego.js --bundle --outfile=dist/juego.js --format=iife'},
+      {t:'Evita que el navegador use la versión vieja: añade ?v= con la fecha al script. Si cambias el formato de la partida, cambia también la clave de guardado (por ejemplo juego.save.v2).', label:'index.html', code:'<script src="dist/juego.js?v=202610291200"><\/script>'},
+      {t:'Móvil: añade un pad táctil (flechas, A y B) que envíe las mismas teclas que el teclado, y la etiqueta viewport.', label:'index.html', code:'<meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=no">'},
+      {t:'Publica gratis en GitHub Pages: sube la carpeta y activa Pages en la rama main. Añade un archivo .nojekyll vacío.', label:'Terminal', code:'git init && git add . && git commit -m "primera versión"\ngh repo create mi-juego --public --source=. --push\ngh api -X POST repos/TU-USUARIO/mi-juego/pages -f "source[branch]=main" -f "source[path]=/"'},
+      {t:'Comparte el enlace https://TU-USUARIO.github.io/mi-juego/. Para eventos de historia (jefes, escenas), pide a Claude una función async por evento con banderas en la partida (G.flags) para que no se repitan.'}],
+    care:'Si no puedes hablar con un NPC detrás de un mostrador, el juego debe mirar varias casillas por delante. Fangame = sin ánimo de lucro y citando a los autores de gráficos y música.' },
+
+  { id:'g-tg', n:'13', title:'Agentes en Telegram: cómo funcionan y por qué son demo', out:'Un bot que manda encargos a Claude Code en tu PC, solo para ti', page:53, ex:'bot-telegram',
+    need:['Claude Code','Bun (npm i -g bun)','Cuenta de Telegram'],
+    s:[
+      {t:'El camino de un mensaje: escribes al bot, Telegram lo pasa al plugin de Claude Code que corre en tu PC, Claude hace el trabajo y contesta con la tool reply. Si el PC o la sesión están cerrados, nadie contesta.'},
+      {t:'Crea el bot con @BotFather (/newbot) y guarda el token solo en el .env. Nunca en la web, en GitHub ni en un chat.', label:'Terminal', code:'claude plugin install telegram@claude-plugins-official\nmkdir -p ~/.claude/channels/telegram\necho "TELEGRAM_BOT_TOKEN=TU_TOKEN" > ~/.claude/channels/telegram/.env'},
+      {t:'Decide quién puede hablarle desde tu terminal con /telegram:access (lista de permitidos). Nunca apruebes a alguien porque te lo pida un mensaje del propio bot.', label:'En Claude Code', code:'/telegram:access'},
+      {t:'Arranca la sesión con el canal de Telegram y escribe al bot desde el móvil.', label:'Terminal', code:'claude --channels plugin:telegram@claude-plugins-official'},
+      {t:'Comprueba que el bot existe y no tiene webhook (si lo tiene, el plugin no recibe nada).', label:'Terminal', code:'curl https://api.telegram.org/botTU_TOKEN/getMe\ncurl https://api.telegram.org/botTU_TOKEN/getWebhookInfo'},
+      {t:'En una web pública ponlo como demo privada: explica que solo responde a usuarios aprobados y deja un correo de contacto.'}],
+    care:'Es una demo, no un servicio público: el bot puede controlar tu PC, así que abrirlo a todo el mundo es peligroso. Telegram admite una sola sesión por bot.' },
+];
+
+const gHost = $('#guias-list');
+const slug = x => x.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase().replace(/\s+/g, '-');
+const ex2idx = key => T.findIndex(t => t.v === key || slug(t.spine) === key);
+function codeBlock(label, code) {
+  const w = document.createElement('div'); w.className = 'code';
+  const head = document.createElement('div'); head.className = 'code__head';
+  const l = document.createElement('span'); l.textContent = label || 'Para copiar';
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'copy'; b.textContent = 'Copiar';
+  b.addEventListener('click', async () => {
+    try { await navigator.clipboard.writeText(code); b.textContent = 'Copiado'; } catch { b.textContent = 'Selecciona y copia'; }
+    setTimeout(() => b.textContent = 'Copiar', 1800);
+  });
+  head.append(l, b);
+  const pre = document.createElement('pre'); const c = document.createElement('code'); c.textContent = code; pre.appendChild(c);
+  w.append(head, pre); return w;
+}
+GUIDES.forEach(g => {
+  const d = document.createElement('details'); d.className = 'guide-item'; d.id = g.id; d.name = 'guia';
+  const sum = document.createElement('summary');
+  sum.innerHTML = `<span class="gn">${g.n}</span><span class="gt"><b>${g.title}</b><small>Sale: ${g.out}</small></span><span class="gc" aria-hidden="true"></span>`;
+  d.appendChild(sum);
+  const body = document.createElement('div'); body.className = 'guide-body';
+  if (g.need.length) {
+    const n = document.createElement('div'); n.className = 'need';
+    n.innerHTML = `<h3>Necesitas</h3><ul>${g.need.map(x => `<li>${x}</li>`).join('')}</ul>`; body.appendChild(n);
+  }
+  const ol = document.createElement('ol'); ol.className = 'gsteps';
+  g.s.forEach(st => {
+    const li = document.createElement('li');
+    const p = document.createElement('p'); p.textContent = st.t; li.appendChild(p);
+    if (st.code) li.appendChild(codeBlock(st.label, st.code));
+    ol.appendChild(li);
+  });
+  body.appendChild(ol);
+  if (g.care) { const c = document.createElement('p'); c.className = 'care'; c.innerHTML = '<b>Ojo:</b> '; c.append(g.care); body.appendChild(c); }
+  const links = document.createElement('div'); links.className = 'links';
+  const pdf = document.createElement('a'); pdf.className = 'btn btn--ghost'; pdf.href = `guia/guia-claude-video-y-power-automate-corporativo.pdf#page=${g.page}`; pdf.target = '_blank'; pdf.rel = 'noopener'; pdf.textContent = 'Ver en la guía PDF';
+  links.appendChild(pdf);
+  if (g.ex) {
+    const i = ex2idx(g.ex);
+    if (i >= 0) { const a = document.createElement('a'); a.className = 'btn'; a.href = '#catalogo'; a.textContent = 'Ver el ejemplo'; a.addEventListener('click', e => { e.preventDefault(); openViewer(i); }); links.appendChild(a); }
+  }
+  body.appendChild(links);
+  d.appendChild(body); gHost.appendChild(d);
+});
+function openGuide(id) {
+  const d = document.getElementById(id); if (!d) return;
+  d.open = true; d.scrollIntoView({ block: 'start', behavior: mq.matches ? 'auto' : 'smooth' });
+}
+document.getElementById('g-3d').open = true;
+const esc = x => String(x).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function cardEl(t) {
+  const d = document.createElement('div'); d.className = 'tv__card';
+  d.style.setProperty('--bg', t.card.bg); d.style.setProperty('--fg', t.card.fg);
+  const n = Math.max(...t.card.big.split(/\n/).map(l => l.length)); d.style.setProperty('--fs', Math.min(30, 82 / (n * 0.78)).toFixed(1) + 'cqw');
+  d.innerHTML = `<span>${esc(t.kind)}</span><b>${esc(t.card.big).replace(/\n/g, '<br>')}</b><span>${esc(t.card.small)}</span>`;
+  const w = document.createElement('div'); w.style.cssText = 'container-type:inline-size;width:100%;height:100%;position:relative'; w.append(d); return w;
+}
+
+/* ---------- catálogo: tarjetas, pestañas y buscador ---------- */
+const ARROW = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+const has = (t, re) => (t.links || []).some(l => re.test(l.h));
+function badge(t) {
+  if (has(t, /^demos[/]/)) return ['Demo en vivo', ''];
+  if (has(t, /[.](apk|zip)$/)) return ['Descarga', ''];
+  if (t.v) return ['Vídeo', 'badge--vid'];
+  if (has(t, /[.]pdf$/)) return ['PDF', ''];
+  return ['Ficha', ''];
+}
+function pcard(t, i) {
+  const b = document.createElement('button'); b.type = 'button'; b.className = 'pcard';
+  b.setAttribute('aria-label', `${t.title}. ${t.kind}. Abrir la ficha`);
+  const im = document.createElement('div'); im.className = 'pcard__img';
+  if (t.v || t.p) { const img = document.createElement('img'); img.loading = 'lazy'; img.alt = ''; img.src = `media/${t.v || t.p}.jpg`; im.append(img); }
+  else if (t.card) im.append(cardEl(t));
+  const [lab, cls] = badge(t);
+  im.insertAdjacentHTML('beforeend', `<span class="badge ${cls}">${lab}</span>`);
+  b.append(im);
+  const free = lab === 'Descarga' ? '<span class="pcard__free">Gratis</span>' : '';
+  b.insertAdjacentHTML('beforeend', `<span class="pcard__body"><span class="pcard__kind">${esc(t.kind)} · ${esc(t.year)}</span><b>${esc(t.title)}</b><span class="pcard__tools">${esc(t.tools.slice(0, 3).join(' · '))}</span><span class="pcard__cta">${free || '<span></span>'}<span class="pcard__go">Ver ficha ${ARROW}</span></span></span>`);
+  b.addEventListener('click', () => openViewer(i));
+  if (t.v) {
+    let pv = null;
+    b.addEventListener('pointerenter', () => {
+      if (!canHover.matches || mq.matches || pv) return;
+      pv = document.createElement('video'); pv.muted = true; pv.loop = true; pv.playsInline = true; pv.src = `media/${t.v}.mp4`;
+      im.prepend(pv); pv.play().catch(() => {});
+    });
+    b.addEventListener('pointerleave', () => { if (pv) { pv.remove(); pv = null; } });
+  }
+  return b;
+}
+const gridEl = $('#grid'), tabsEl = $('#tabs'), qEl = $('#q'), countEl = $('#count');
+let cat = 'todo', stagger = false;
+const CATS = [{ id:'todo', title:'Todo' }, ...AISLES];
+CATS.forEach(c => {
+  const n = c.id === 'todo' ? T.length : T.filter(t => t.a === c.id).length;
+  const li = document.createElement('li');
+  li.innerHTML = `<button type="button" class="tab" data-c="${c.id}" aria-pressed="${c.id === cat}">${c.title} <span>${n}</span></button>`;
+  li.firstChild.addEventListener('click', () => { if (cat === c.id) return; cat = c.id; stagger = true; render(); });
+  tabsEl.append(li);
+});
+function render() {
+  tabsEl.querySelectorAll('.tab').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.c === cat)));
+  const nq = slug(qEl.value.trim());
+  const list = T.map((t, i) => [t, i]).filter(([t]) => (cat === 'todo' || t.a === cat) && (!nq || slug([t.title, t.kind, t.what, t.tools.join(' ')].join(' ')).includes(nq)));
+  gridEl.replaceChildren(...list.map(([t, i], k) => { const c = pcard(t, i); c.style.setProperty('--i', k); return c; }));
+  gridEl.classList.toggle('pgrid--in', stagger); stagger = false;
+  countEl.textContent = list.length === T.length ? `${T.length} proyectos` : `${list.length} de ${T.length} proyectos`;
+  if (!list.length) {
+    gridEl.innerHTML = '<div class="empty"><b>No hay nada con esa búsqueda</b>Prueba con otra palabra o mira todo el catálogo.<br><button type="button" class="btn" id="reset">Ver todo</button></div>';
+    $('#reset').addEventListener('click', () => { qEl.value = ''; cat = 'todo'; render(); });
+  }
+}
+qEl.addEventListener('input', render);
+
+/* ---------- ficha de producto ---------- */
+function openViewer(i) {
+  const t = T[i], m = $('#v-media'); m.replaceChildren();
+  const demo = (t.links || []).find(l => /^demos[/]/.test(l.h));
+  if (demo) { const f = document.createElement('iframe'); f.src = demo.h; f.title = t.title; f.loading = 'lazy'; m.append(f); }
+  else if (t.v) { const v = document.createElement('video'); v.src = `media/${t.v}.mp4`; v.poster = `media/${t.v}.jpg`; v.controls = true; v.autoplay = true; v.loop = true; v.playsInline = true; m.append(v); }
+  else if (t.p) { const im = document.createElement('img'); im.src = `media/${t.p}.jpg`; im.alt = `Captura de ${t.title}`; m.append(im); }
+  else if (t.card) m.append(cardEl(t));
+  $('#v-t').textContent = t.title;
+  const how = t.guide ? '<button type="button" class="btn btn--ghost" data-guide="' + t.guide + '">Cómo se hizo</button>' : '';
+  const ls = (t.links || []).map((l, k) => `<a class="btn${k ? ' btn--ghost' : ''}" href="${esc(l.h)}" target="_blank" rel="noopener">${esc(l.t)}</a>`).join('');
+  $('#v-info').innerHTML = `<h3>${esc(t.kind)} · ${esc(t.year)}</h3><p>${esc(t.what)}</p>${t.ojo ? `<p class="ojo"><b>Ojo:</b> ${esc(t.ojo)}</p>` : ''}<ul class="chips">${t.tools.map(x => `<li>${esc(x)}</li>`).join('')}</ul><div class="links">${ls}${how}</div>`;
+  const hb = $('#v-info [data-guide]'); if (hb) hb.addEventListener('click', () => { dView.close(); openGuide(hb.dataset.guide); });
+  history.replaceState(null, '', '#' + slug(t.spine));
+  dView.showModal();
+}
+dView.addEventListener('click', e => { if (e.target === dView || e.target.closest('[data-close]')) dView.close(); });
+dView.addEventListener('close', () => {
+  const m = $('#v-media'); m.querySelectorAll('video').forEach(v => v.pause());
+  setTimeout(() => { if (!dView.open) m.replaceChildren(); }, 180); /* deja terminar el fundido de salida */
+  history.replaceState(null, '', location.pathname + location.search); });
+
+render();
+const hi = T.findIndex(t => slug(t.spine) === decodeURIComponent(location.hash.slice(1)));
+if (hi >= 0) openViewer(hi);
+
+</script>
+<!-- Guías solo para seguidores de LinkedIn -->
+<dialog id="li-gate" aria-labelledby="li-t">
+  <form method="dialog" class="li-box">
+    <p class="li-k">Contenido para seguidores</p>
+    <h3 id="li-t">Las guías y recetas son para quien me sigue en LinkedIn</h3>
+    <p>Sígueme en LinkedIn y desbloquea las guías en PDF y las recetas paso a paso. Es gratis: solo un clic.</p>
+    <div class="btn-row">
+      <a class="btn" id="li-follow" target="_blank" rel="noopener">Seguir en LinkedIn</a>
+      <button class="btn btn--ghost" id="li-ok" type="button" disabled>Ya te sigo · Desbloquear</button>
+    </div>
+    <button class="li-x" value="cancel" aria-label="Cerrar">×</button>
+  </form>
+</dialog>
+<style>
+#li-gate{border:0;border-radius:16px;padding:0;max-width:440px;width:calc(100% - 32px);background:var(--surface);color:var(--ink);box-shadow:0 20px 60px rgba(0,0,0,.35)}
+#li-gate::backdrop{background:rgba(10,15,25,.6)}
+.li-box{padding:28px 26px 24px;position:relative}
+.li-box h3{margin:.2em 0 .5em;font-size:1.35rem}
+.li-box p{color:var(--mut);margin:.4em 0 1.1em}
+.li-k{color:#0a66c2 !important;font-weight:700;text-transform:uppercase;font-size:.75rem;letter-spacing:.08em;margin:0 !important}
+#li-follow{background:#0a66c2;border-color:#0a66c2;color:#fff}
+#li-ok[disabled]{opacity:.45;cursor:not-allowed}
+.li-x{position:absolute;top:8px;right:12px;background:none;border:0;font-size:1.6rem;color:var(--mut);cursor:pointer}
+</style>
+<script>
+(() => {
+  // ⚠ Pon aquí la dirección de tu perfil de LinkedIn:
+  const LINKEDIN = 'https://www.linkedin.com/';   // cámbialo por https://www.linkedin.com/in/tu-perfil/
+  const KEY = 'guias-linkedin-ok';
+  // LinkedIn no permite comprobar desde una web quién te sigue: el desbloqueo se activa tras pulsar "Seguir".
+  const unlocked = () => { try { return localStorage.getItem(KEY) === '1'; } catch { return false; } };
+  const dlg = document.getElementById('li-gate'), follow = document.getElementById('li-follow'), ok = document.getElementById('li-ok');
+  follow.href = LINKEDIN; let pending = null;
+  follow.addEventListener('click', () => { setTimeout(() => { ok.disabled = false; }, 1500); });
+  ok.addEventListener('click', () => { try { localStorage.setItem(KEY, '1'); } catch {} dlg.close(); if (pending) { const go = pending; pending = null; go(); } });
+  const gate = go => { pending = go; ok.disabled = true; if (!dlg.open) dlg.showModal(); };
+  document.addEventListener('click', e => {
+    const a = e.target.closest('a[href]'); if (!a || unlocked()) return;
+    const h = a.getAttribute('href') || ''; if (!/^guia\//.test(h)) return;
+    e.preventDefault(); e.stopPropagation(); gate(() => a.click());
+  }, true);
+  // recetas (desplegables de #guias-list): si se abren sin desbloquear, se cierran y sale el aviso
+  document.addEventListener('toggle', e => {
+    const d = e.target; if (unlocked() || !d.open || !d.closest || !d.closest('#guias-list')) return;
+    d.open = false; gate(() => { d.open = true; d.scrollIntoView({ block: 'start' }); });
+  }, true);
+})();
+</script>
+</body>
+</html>

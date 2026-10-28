@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Alain Corporative: oficina de agentes</title>
+<style>
+:root{--bg:#0d1420;--panel:#141d2c;--line:#243249;--ink:#e8eef8;--mut:#98a7bd;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif}
+header{padding:28px clamp(16px,4vw,48px) 8px;display:flex;flex-wrap:wrap;gap:6px 24px;align-items:baseline;justify-content:space-between}
+h1{margin:0;font-size:clamp(24px,3vw,34px);letter-spacing:-.02em}
+header p{margin:0;color:var(--mut)}
+main{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;padding:16px clamp(16px,4vw,48px) 40px;align-items:start}
+.bar{display:flex;flex-wrap:wrap;align-items:center;gap:10px 16px;margin:0 0 12px}
+.bar p{margin:0;color:var(--mut);font-size:13.5px}
+.btn{border:0;background:#f1f1f1;color:#0d1420;font:600 14px/1 inherit;padding:12px 16px;border-radius:9px;cursor:pointer;transition:transform .16s var(--ease),background-color .15s}
+.btn:active{transform:scale(.97)}
+@media (hover:hover){.btn:hover{background:#fff}}
+.btn[disabled]{opacity:.5;cursor:default}
+.stage{position:relative;aspect-ratio:16/10;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#cfd8e3 url(scene/office.png) center/cover}
+.stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block;opacity:0;transition:opacity .6s var(--ease)}
+.stage.ready canvas{opacity:1}
+.tag{position:absolute;left:0;top:0;transform:translate(-50%,-100%);display:flex;flex-direction:column;align-items:center;gap:4px;pointer-events:none;will-change:transform}
+.tag button{pointer-events:auto;border:0;border-radius:999px;padding:4px 10px;font:600 12px/1.2 inherit;background:rgba(13,20,32,.82);color:#fff;cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.25);border-left:4px solid var(--c)}
+.tag button[aria-pressed=true]{background:#fff;color:#0d1420}
+.tag .say{background:#fff;color:#0d1420;font:600 12px/1.25 inherit;padding:5px 9px;border-radius:8px;box-shadow:0 4px 14px rgba(0,0,0,.25);white-space:nowrap;opacity:0;transform:translateY(4px);transition:opacity .2s,transform .25s var(--ease)}
+.tag .say.show{opacity:1;transform:none}
+.hint{position:absolute;right:10px;bottom:10px;font-size:12px;color:#0d1420;background:rgba(255,255,255,.75);padding:4px 8px;border-radius:6px}
+aside{position:sticky;top:16px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px;min-height:200px}
+aside h2{margin:0 0 2px;font-size:20px}
+aside .t{color:var(--mut);margin:0 0 14px}
+aside h3{margin:14px 0 6px;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
+aside ul{margin:0;padding:0;list-style:none;display:flex;flex-wrap:wrap;gap:6px}
+aside li{background:#0f1826;border:1px solid var(--line);border-radius:6px;padding:3px 8px;font-size:12.5px}
+aside p{margin:0}
+aside code{font-size:12.5px;color:#8fb4ec}
+.routines{margin-top:18px}
+.routines h2{font-size:15px;margin:0 0 8px}
+.routines ol{margin:0;padding:0;list-style:none;display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+.routines li{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;font-size:13.5px;color:var(--mut)}
+.routines b{color:var(--ink)} .routines time{font:700 13px ui-monospace,monospace;color:#f5b84a;margin-right:6px}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}}
+aside.pop{animation:rise .3s var(--ease)}
+@media (max-width:900px){main{grid-template-columns:1fr}aside{position:static}.stage{aspect-ratio:4/5}}
+@media (prefers-reduced-motion:reduce){aside.pop{animation:none}.btn,.tag .say,.stage canvas{transition:none}}
+:focus-visible{outline:2px solid #fff;outline-offset:2px}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+</head><body>
+<header><h1>Alain Corporative</h1><p>Oficina de Alain Garzón Pérez · 11 agentes · 6 departamentos</p></header>
+<main>
+  <div>
+    <div class="bar">
+      <button class="btn" id="send" type="button">Mandar un encargo</button>
+      <p>Alain entra con el encargo, Marina lo recibe en el mostrador y lo lleva al agente que toca. Arrastra para girar la oficina; rueda para acercar.</p>
+    </div>
+    <div class="stage" id="stage"><div id="tags"></div><span class="hint">Modelo hecho en Blender</span></div>
+    <section class="routines"><h2>Rutinas diarias</h2><ol id="rt"></ol></section>
+  </div>
+  <aside id="card" aria-live="polite"><p style="color:var(--mut)">Elige un agente de la oficina para ver su ficha.</p></aside>
+</main>
+<script type="module">
+import * as THREE from 'three';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+
+const O={"depts":[{"id":"recepcion","title":"Recepción","color":"#8fb4ec","doc":"Punto único de entrada. Recibe cada encargo por Telegram o terminal, decide a qué departamento va y avisa al terminar o cuando necesita aprobación. Nunca ejecuta trabajo pesado: delega."},{"id":"video","title":"Estudio de vídeo","color":"#f5b84a","doc":"Shorts/Reels verticales 9:16 hechos con código (HyperFrames, Three.js, ffmpeg). Flujo: idea, guion por escenas, montaje, revisión. Fuente de método: la guía PDF del portfolio."},{"id":"apps","title":"Apps y producto","color":"#5fd0a5","doc":"Webs, apps y juegos propios (Basket Legend, Party Challenge, Ontzi, Liga Añil 3D). Código, bugs, despliegue y diseño de interfaz."},{"id":"auto","title":"Automatización y datos","color":"#e8627c","doc":"Flujos en n8n y Power Automate, dashboards en Power BI, bases de datos en Supabase. Todo lo repetitivo que se pueda convertir en flujo."},{"id":"contenido","title":"Contenido y outreach","color":"#b48cf0","doc":"Newsletter diaria de IA, portfolio, redes y mensajes a recruiters y clientes. Todo lo que sale hacia fuera pasa por aprobación de Alain."},{"id":"admin","title":"Administración","color":"#9aa7b8","doc":"Agenda, prioridades, informe diario de las 9:15 y ordenar archivos. Acceso de solo lectura a calendario y correo."}],"agents":[{"id":"marina","name":"Marina","dept":"recepcion","role":"secretaria","title":"Recepción","triggers":["cualquier encargo sin dueño claro","estado de tareas","qué hay pendiente"],"skills":["planning"],"tools":"Read, Grep, Glob, Agent","does":"Lee el encargo, elige agente por triggers (tabla de CLAUDE.md), lo delega y devuelve a Alain un resumen corto. Si dos agentes encajan, pregunta una sola vez.","access":["Telegram (reply)","lectura de cerebro/"]},{"id":"leo","name":"Leo","dept":"video","role":"manager","title":"Director del estudio de vídeo","triggers":["vídeo","short","reel","montaje","render"],"skills":["hyperframes","video-gratis-pro","fabrica-video"],"tools":"Read, Write, Edit, Bash, Grep, Glob, Agent","does":"Coordina a Nora y Tomás, decide formato y duración, comprueba que el vídeo final cumple 9:15 vertical y subtítulos. Marca como sintético cualquier material generado por IA.","access":["carpeta de proyectos de vídeo","ffmpeg"]},{"id":"nora","name":"Nora","dept":"video","role":"especialista","title":"Ideas y guion","triggers":["idea","guion","escenas","subtítulos"],"skills":["fabrica-ideas","fabrica-guion"],"tools":"Read, Write, Edit, Grep, Glob","does":"Genera 20 ideas, filtra con rúbrica, entrega el top 5 y convierte la ganadora en guion por escenas con diálogos y sonidos.","access":["solo ficheros del estudio"]},{"id":"tomas","name":"Tomás","dept":"video","role":"especialista","title":"Montaje","triggers":["renderiza","monta","ffmpeg","hyperframes","three.js a mp4"],"skills":["hyperframes","hyperframes-cli","media-use"],"tools":"Read, Write, Edit, Bash, Grep, Glob","does":"Monta el vídeo con HyperFrames o Three.js + ffmpeg, extrae póster y lo deja en la carpeta del portfolio.","access":["ffmpeg","Playwright"]},{"id":"bruno","name":"Bruno","dept":"apps","role":"manager","title":"Responsable de producto","triggers":["app","bug","código","web","despliegue","juego"],"skills":["impeccable","game-development","simplify"],"tools":"Read, Write, Edit, Bash, Grep, Glob, Agent","does":"Revisa código y bugs de las apps propias, prioriza arreglos y coordina a Irene en lo visual. Mínimo cambio que funcione; deja una comprobación ejecutable.","access":["repos locales en Documents y Downloads","Supabase (proyectos propios)"]},{"id":"irene","name":"Irene","dept":"apps","role":"especialista","title":"Interfaz y movimiento","triggers":["diseño","interfaz","animación","responsive","pulir"],"skills":["impeccable","emil-design-eng","find-animation-opportunities"],"tools":"Read, Write, Edit, Bash, Grep, Glob","does":"Diseño y pulido de interfaces: jerarquía, tipografía, movimiento con propósito, adaptación a móvil.","access":["carpeta del proyecto indicado"]},{"id":"sara","name":"Sara","dept":"auto","role":"manager","title":"Responsable de automatización","triggers":["flujo","n8n","power automate","automatiza","webhook"],"skills":["power-automate:build-flow","power-automate:debug-flow"],"tools":"Read, Write, Edit, Bash, Grep, Glob, Agent","does":"Convierte una tarea repetitiva en un flujo, lo prueba con datos de ejemplo y documenta qué dispara qué. No activa flujos que envíen mensajes sin aprobación.","access":["Power Automate (MCP)","n8n"]},{"id":"pablo","name":"Pablo","dept":"auto","role":"especialista","title":"Datos y dashboards","triggers":["dashboard","power bi","dax","supabase","sql","datos"],"skills":["dataviz"],"tools":"Read, Write, Edit, Bash, Grep, Glob","does":"Modelos y medidas DAX, consultas SQL de solo lectura por defecto y gráficos legibles. Cualquier escritura en base de datos se pide antes.","access":["Power BI modeling (MCP)","Supabase (lectura)"]},{"id":"berto","name":"Berto","dept":"contenido","role":"especialista","title":"Periodista: newsletter diaria de IA","triggers":["newsletter","noticias de ia","novedades"],"skills":["content-creator"],"tools":"Read, Write, WebSearch, WebFetch, Grep, Glob","does":"Busca cada día las novedades de IA del día anterior y redacta la newsletter en castellano llana. Cita fuente y fecha. Solo lectura en redes: nunca publica.","access":["web pública","sin cuentas de redes"]},{"id":"lucia","name":"Lucía","dept":"contenido","role":"especialista","title":"Outreach y portfolio","triggers":["recruiter","cliente","mensaje","linkedin","portfolio","cv"],"skills":["executive-resume-writer","marketing-strategy-pmm"],"tools":"Read, Write, Edit, Grep, Glob","does":"Redacta borradores de mensajes y mantiene el portfolio. Solo prepara borradores; enviar es siempre decisión de Alain.","access":["borradores en cerebro/outreach/"]},{"id":"elena","name":"Elena","dept":"admin","role":"manager","title":"Agenda e informe diario","triggers":["agenda","prioridades","informe","qué tengo hoy","ordena"],"skills":["productivity:task-management"],"tools":"Read, Write, Grep, Glob","does":"Mantiene cerebro/prioridades.md y entrega el informe de las 9:15: qué hicieron los agentes, qué espera aprobación, qué tiene Alain hoy.","access":["calendario y correo en solo lectura"]}],"routines":[{"time":"09:00","title":"Reunión diaria","who":"todos","does":"Cada manager lee cerebro/ y el log de ayer, anota aprendizajes en su departamento y propone prioridades."},{"time":"09:15","title":"Informe a Alain","who":"elena","does":"Resumen por Telegram: hecho ayer, pendiente de aprobación, agenda de hoy."},{"time":"09:30","title":"Newsletter de IA","who":"berto","does":"Novedades del día anterior, borrador en cerebro/contenido/newsletter-hoy.md para aprobar."}]};
+const reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const stage=document.getElementById('stage'),tagsEl=document.getElementById('tags'),card=document.getElementById('card'),sendBtn=document.getElementById('send');
+const D=Object.fromEntries(O.depts.map(d=>[d.id,d]));
+const STATUS={recepcion:['clasificando el encargo'],video:['montando escenas','revisando el guion','renderizando'],apps:['buscando un bug','puliendo la interfaz'],auto:['probando un flujo','ajustando una medida'],contenido:['redactando un borrador','leyendo noticias de IA'],admin:['ordenando prioridades']};
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const wait=ms=>new Promise(r=>setTimeout(r,reduced?0:ms));
+
+document.getElementById('rt').innerHTML=O.routines.map(r=>'<li><time>'+esc(r.time)+'</time><b>'+esc(r.title)+'</b> · '+esc(r.who)+'<br>'+esc(r.does)+'</li>').join('');
+
+/* ---- escena ---- */
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+renderer.outputColorSpace=THREE.SRGBColorSpace;
+renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;
+renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+stage.prepend(renderer.domElement);
+const scene=new THREE.Scene();scene.background=new THREE.Color('#cfd8e3');
+const camera=new THREE.PerspectiveCamera(36,1,.1,200);camera.position.set(0,12.5,13.5);
+const controls=new OrbitControls(camera,renderer.domElement);
+controls.target.set(0,-.6,.6);controls.enableDamping=true;controls.maxPolarAngle=1.25;controls.minDistance=6;controls.maxDistance=34;
+controls.autoRotate=!reduced;controls.autoRotateSpeed=.25;
+controls.addEventListener('start',()=>controls.autoRotate=false);
+scene.add(new THREE.HemisphereLight('#ffffff','#b9a48c',1.4));
+const sun=new THREE.DirectionalLight('#fff4e6',2.2);sun.position.set(8,16,6);sun.castShadow=true;
+sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-12,right:12,top:12,bottom:-12});sun.shadow.bias=-.0004;
+scene.add(sun);
+
+function resize(){const w=stage.clientWidth,h=stage.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix()}
+new ResizeObserver(resize).observe(stage);resize();
+
+/* ---- etiquetas y fichas ---- */
+const spots={};
+function addTag(id,label,color,onClick){
+  const t=document.createElement('div');t.className='tag';t.style.setProperty('--c',color);
+  const say=document.createElement('span');say.className='say';
+  const b=document.createElement('button');b.type='button';b.textContent=label;b.setAttribute('aria-pressed','false');
+  if(onClick)b.addEventListener('click',onClick);else b.disabled=true;
+  t.append(say,b);tagsEl.append(t);return {t,say,b,timer:0};
+}
+function show(a){
+  const d=D[a.dept];
+  Object.values(spots).forEach(s=>s.b.setAttribute('aria-pressed',String(s.id===a.id)));
+  const li=l=>'<ul>'+l.map(x=>'<li>'+esc(x)+'</li>').join('')+'</ul>';
+  card.innerHTML='<h2>'+esc(a.name)+'</h2><p class="t">'+esc(a.title)+' · '+esc(d.title)+'</p><p>'+esc(a.does)+'</p><h3>Se activa con</h3>'+li(a.triggers)+'<h3>Skills</h3>'+li(a.skills)+'<h3>Accesos</h3>'+li(a.access)+'<h3>Archivo</h3><p><code>.claude/agents/'+esc(a.id)+'.md</code></p>';
+  card.classList.remove('pop');void card.offsetWidth;card.classList.add('pop');
+}
+function say(id,text,ms){const s=spots[id];clearTimeout(s.timer);s.say.textContent=text;s.say.classList.add('show');s.timer=setTimeout(()=>s.say.classList.remove('show'),ms)}
+
+/* ---- sobre del encargo ---- */
+const env=new THREE.Group();
+const envMat=new THREE.MeshStandardMaterial({color:'#f5b84a',roughness:.4,emissive:'#f5b84a',emissiveIntensity:.35});
+env.add(new THREE.Mesh(new THREE.BoxGeometry(.42,.04,.3),envMat));
+env.visible=false;scene.add(env);
+let tween=null;
+function fly(from,to,ms,color){
+  envMat.color.set(color||'#f5b84a');envMat.emissive.set(color||'#f5b84a');
+  if(reduced)return Promise.resolve();
+  env.visible=true;
+  return new Promise(res=>{tween={a:new THREE.Vector3(...from),b:new THREE.Vector3(...to),t0:performance.now(),ms,res}});
+}
+const ease=t=>1-Math.pow(1-t,3);
+
+let busy=false;
+async function dispatch(id){
+  if(busy||!spots.marina)return;busy=true;sendBtn.disabled=true;
+  const m=spots.marina.pos,s=spots[id],al=spots.alain.pos;
+  await fly(al.stop,m.stop,1100);
+  say('marina','Recibido, lo reparto',1600);await wait(700);
+  await fly(m.stop,s.pos.stop,1500);
+  env.visible=false;s.working=true;say(id,pick(STATUS[s.agent.dept]),2400);await wait(2600);
+  s.working=false;say(id,'Listo, aviso a Alain',1800);
+  await fly(s.pos.stop,al.stop,1500,'#3ea6ff');
+  env.visible=false;busy=false;sendBtn.disabled=false;
+}
+const others=O.agents.filter(a=>a.id!=='marina').map(a=>a.id);
+let last='';const next=()=>{let i;do{i=pick(others)}while(i===last);return last=i};
+sendBtn.addEventListener('click',()=>dispatch(next()));
+sendBtn.disabled=true;
+
+/* ---- carga ---- */
+const [gltf,POS]=await Promise.all([new GLTFLoader().loadAsync('scene/office.glb'),fetch('scene/positions.json').then(r=>r.json())]);
+gltf.scene.traverse(o=>{if(o.isMesh){o.castShadow=!/suelo|alfombra|pasillo/.test(o.name);o.receiveShadow=true;
+  if(o.material.transparent){o.material.depthWrite=false;o.castShadow=false}}});
+scene.add(gltf.scene);
+O.agents.forEach(a=>{
+  const sp=addTag(a.id,a.name,D[a.dept].color,()=>show(a));
+  const screen=gltf.scene.getObjectByName('pantalla_'+a.id);
+  spots[a.id]=Object.assign(sp,{id:a.id,agent:a,pos:POS[a.id],screen,working:false,base:screen?screen.material.emissiveIntensity:1});
+  if(screen)screen.material=screen.material.clone();
+});
+spots.alain=Object.assign(addTag('alain','Alain','#f1f1f1'),{id:'alain',pos:POS.alain});
+stage.classList.add('ready');sendBtn.disabled=false;
+
+const v=new THREE.Vector3();
+renderer.setAnimationLoop(now=>{
+  controls.update();
+  if(tween){const k=Math.min(1,(now-tween.t0)/tween.ms),e=ease(k);
+    env.position.lerpVectors(tween.a,tween.b,e);env.position.y+=Math.sin(e*Math.PI)*1.2;env.rotation.y=e*Math.PI*2;
+    if(k===1){const r=tween.res;tween=null;r()}}
+  const w=stage.clientWidth,h=stage.clientHeight;
+  for(const s of Object.values(spots)){
+    if(s.screen)s.screen.material.emissiveIntensity=s.working?s.base*(1+Math.sin(now/60)*.6):s.base;
+    v.set(...s.pos.head).project(camera);
+    const vis=v.z<1;s.t.style.visibility=vis?'visible':'hidden';
+    s.t.style.transform='translate('+((v.x+1)/2*w)+'px,'+((1-v.y)/2*h)+'px) translate(-50%,-100%)';
+  }
+  renderer.render(scene,camera);
+});
+if(!reduced){setTimeout(()=>dispatch(next()),1500);(function loop(){setTimeout(()=>{if(!document.hidden)dispatch(next());loop()},9000)})();}
+</script></body></html>

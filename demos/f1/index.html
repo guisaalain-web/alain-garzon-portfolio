@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1 Strategy Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🏎️ F1 Strategy Simulator</h1>
+            <p class="subtitle">Simula estrategias de carrera sin conexión</p>
+        </header>
+
+        <nav class="tabs">
+            <button class="tab-btn active" data-tab="simulator">Simulador</button>
+            <button class="tab-btn" data-tab="history">Historial</button>
+        </nav>
+
+        <!-- Tab: Simulador -->
+        <div id="simulator-tab" class="tab-content active">
+            <form id="strategy-form">
+                <div class="form-group">
+                    <label for="circuit">Circuito</label>
+                    <select id="circuit" required>
+                        <option value="">Selecciona un circuito</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="driver">Piloto</label>
+                    <select id="driver" required>
+                        <option value="">Selecciona un piloto</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="weather">Condiciones Meteorológicas</label>
+                    <select id="weather" required>
+                        <option value="soleado">Soleado</option>
+                        <option value="lluvia">Lluvia</option>
+                        <option value="variable">Variable</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="laps">Número de Vueltas</label>
+                    <input type="number" id="laps" min="1" max="100" value="50" required>
+                </div>
+
+                <div class="stints-section">
+                    <h3>Estrategia de Paradas (máximo 3)</h3>
+                    
+                    <div class="stint" data-stint="0">
+                        <h4>Stint 1 (Salida)</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Neumático</label>
+                                <select class="tyre-type" required>
+                                    <option value="soft">Soft (Blando)</option>
+                                    <option value="medium">Medium (Medio)</option>
+                                    <option value="hard">Hard (Duro)</option>
+                                    <option value="wet">Wet (Lluvia)</option>
+                                    <option value="intermediate">Intermediate (Intermedio)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Vueltas</label>
+                                <input type="number" class="stint-laps" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stint" data-stint="1" style="display: none;">
+                        <h4>Stint 2</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Neumático</label>
+                                <select class="tyre-type" required>
+                                    <option value="soft">Soft (Blando)</option>
+                                    <option value="medium">Medium (Medio)</option>
+                                    <option value="hard">Hard (Duro)</option>
+                                    <option value="wet">Wet (Lluvia)</option>
+                                    <option value="intermediate">Intermediate (Intermedio)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Vueltas</label>
+                                <input type="number" class="stint-laps" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stint" data-stint="2" style="display: none;">
+                        <h4>Stint 3</h4>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Neumático</label>
+                                <select class="tyre-type" required>
+                                    <option value="soft">Soft (Blando)</option>
+                                    <option value="medium">Medium (Medio)</option>
+                                    <option value="hard">Hard (Duro)</option>
+                                    <option value="wet">Wet (Lluvia)</option>
+                                    <option value="intermediate">Intermediate (Intermedio)</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label>Vueltas</label>
+                                <input type="number" class="stint-laps" min="1" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="button" id="add-stint-btn" class="btn-secondary">+ Añadir Parada</button>
+                </div>
+
+                <button type="submit" class="btn-primary">Simular Estrategia</button>
+            </form>
+
+            <div id="result" class="result-container" style="display: none;">
+                <h3>Resultado de la Simulación</h3>
+                <div id="result-content"></div>
+                <button type="button" id="save-result-btn" class="btn-secondary">Guardar en Historial</button>
+            </div>
+        </div>
+
+        <!-- Tab: Historial -->
+        <div id="history-tab" class="tab-content">
+            <div id="history-list" class="history-list">
+                <p class="empty-message">No hay simulaciones guardadas</p>
+            </div>
+            <button type="button" id="clear-history-btn" class="btn-danger" style="display: none;">Limpiar Historial</button>
+        </div>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
+

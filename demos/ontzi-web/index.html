@@ -1,0 +1,469 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EnvaseYa</title>
+<meta name="description" content="Dona tus envases con depósito a quien los recoge en tu barrio. Para bares: registro de depósitos, cuadre de caja y avisos de recogida.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://dljmsdmmpxdayuowgpze.supabase.co" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
+<style>
+:root{color-scheme:light dark;--bg:#f3f7f1;--ink:#12293b;--card:#fff;--navy:#19486A;--blue:#0A97D9;--blueS:#e4f4fb;--orange:#FD9D24;--orangeS:#fff1de;--green:#3F7E44;--mut:#4b6070;--line:#d6e1d8;--bad:#b3261e;--ease-out:cubic-bezier(.23,1,.32,1)}
+@media(prefers-color-scheme:dark){:root{--bg:#0d1d2b;--ink:#eef4f0;--card:#14293b;--blueS:#12384d;--orangeS:#3d2c14;--mut:#a8bccb;--line:#25405a;--bad:#ff8a80}}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.55 system-ui,-apple-system,"Segoe UI",sans-serif;-webkit-font-smoothing:antialiased;-webkit-tap-highlight-color:transparent}
+h1,h2,h3,.logo{font-family:"Bricolage Grotesque",system-ui,sans-serif}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+td,.big{font-variant-numeric:tabular-nums}
+.mut{color:var(--mut)}
+.ods{display:flex;height:6px}.ods i{flex:1}
+.ods i:nth-child(1){background:#BF8B2E}.ods i:nth-child(2){background:#FD9D24}.ods i:nth-child(3){background:#3F7E44}.ods i:nth-child(4){background:#0A97D9}.ods i:nth-child(5){background:#19486A}
+
+/* controls */
+.btn,button.btn{display:inline-block;padding:12px 18px;border:0;border-radius:10px;background:var(--navy);color:var(--bg);font:700 .95rem system-ui,sans-serif;cursor:pointer;text-decoration:none;white-space:nowrap;transition:transform 160ms var(--ease-out),filter 160ms ease,background-color 160ms ease}
+.btn:active{transform:scale(.97)}
+@media(hover:hover) and (pointer:fine){.btn:hover{filter:brightness(1.08)}}
+.btn.sun{background:var(--orange);color:#19486A}
+.btn.green{background:var(--green);color:#fff}
+.btn.dark{background:#19486A;color:#fff}
+.btn.ghost{background:none;color:var(--ink);border:1px solid var(--line)}
+.btn.sm{padding:8px 12px;font-size:.85rem}
+.btn[disabled]{opacity:.5;cursor:wait}
+input,select{width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;font:inherit;font-size:1rem;background:var(--card);color:var(--ink);margin:4px 0 10px;transition:border-color 150ms ease,box-shadow 150ms ease}
+input:focus,select:focus{outline:none;border-color:var(--blue);box-shadow:0 0 0 3px color-mix(in srgb,var(--blue) 30%,transparent)}
+label{font-weight:600;font-size:.9rem}
+.msg{font:600 .9rem system-ui;margin-top:8px;min-height:1.3em}.msg.err{color:var(--bad)}
+.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--line);border-radius:12px;background:var(--card);color:var(--ink)}
+.item small{display:block;color:var(--mut)}
+.list{display:grid;gap:10px;margin-top:14px}
+.list .item{animation:rise 260ms var(--ease-out) both}
+.list .item:nth-child(2){animation-delay:40ms}.list .item:nth-child(3){animation-delay:80ms}.list .item:nth-child(4){animation-delay:120ms}.list .item:nth-child(5){animation-delay:160ms}.list .item:nth-child(n+6){animation-delay:200ms}
+#mine .item{animation:none}
+@keyframes rise{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0}to{opacity:1}}
+
+/* nav over hero */
+nav{position:absolute;top:6px;left:0;right:0;z-index:5;display:flex;align-items:center;gap:22px;padding:18px 32px;font-size:.9rem;font-weight:700}
+nav .logo{font-size:1.45rem;font-weight:800;text-decoration:none;color:#fff;margin-right:8px}
+nav .logo span{color:var(--orange)}
+nav a.l{color:#fff;text-decoration:none;opacity:.9}
+nav a.l:hover{opacity:1}
+nav .sp{flex:1}
+nav .cta{background:#19486A;color:#fff;text-decoration:none;padding:9px 16px;border-radius:99px}
+
+/* split hero */
+.halves{display:grid;grid-template-columns:1.25fr 1fr;min-height:92vh}
+.half{position:relative;overflow:hidden;padding:128px 48px 56px}
+.half>*{position:relative;z-index:1}
+.half.l{background:#19486A;color:#fff}
+.half.r{background:#FD9D24;color:#19486A}
+.half h1,.half h2{margin:0 0 18px;font-size:clamp(1.9rem,3.4vw,2.7rem);line-height:1.1;letter-spacing:-.02em;text-wrap:balance;font-weight:800}
+.half p{margin:0 0 18px;max-width:46ch}
+.half input{background:#fff;color:#12293b;border:0}
+.half .item{background:#fff;color:#12293b;border:0}
+.half .item small{color:#4b6070}
+.half.l .msg{color:#cfe6f5}
+.half.r .msg{color:#19486A}.half.r .msg.err{color:#8a1c14}
+.half .chk{display:flex;gap:8px;align-items:flex-start;font-size:.85rem;font-weight:500;margin-bottom:12px}
+.half .chk input{width:auto;margin:3px 0 0}
+.half h3{margin:30px 0 4px;font-size:1.15rem}
+.art{position:absolute!important;z-index:0!important;pointer-events:none;width:300px;fill:none;stroke-width:4;stroke-linecap:round;stroke-linejoin:round;opacity:.18}
+.half.l .art{right:-30px;bottom:-40px;stroke:#fff}
+.half.r .art{right:-30px;bottom:-30px;stroke:#19486A}
+.search{display:flex;gap:8px;max-width:560px}.search input{margin:0}
+.half h1,.half p,.half .search{animation:rise 300ms var(--ease-out) both}
+.half p{animation-delay:50ms}.half .search{animation-delay:100ms}
+
+/* bares */
+.bares-sec{background:#3F7E44;color:#fff;padding:64px 20px}
+.bares-sec .in{max-width:900px;margin:0 auto}
+.bares-sec h2{font-size:clamp(1.8rem,4vw,2.5rem);line-height:1.1;margin:0 0 12px;text-wrap:balance}
+.bares-sec .lead{max-width:60ch;margin:0 0 24px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin:20px 0 28px}
+.grid3>div{padding-top:12px;border-top:1px solid rgba(255,255,255,.4)}
+.price{display:inline-block;background:#FD9D24;color:#19486A;border-radius:99px;padding:3px 12px;font-weight:800;font-size:.9rem}
+.card{background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:16px;padding:20px;margin:16px 0}
+.tabs{display:flex;gap:8px;margin:16px 0}
+.tabs button{flex:1;padding:11px;border:1px solid var(--line);background:var(--card);color:var(--ink);border-radius:10px;font-weight:700;cursor:pointer;transition:background-color 150ms ease,color 150ms ease,border-color 150ms ease,transform 160ms var(--ease-out)}
+.tabs button:active{transform:scale(.97)}
+.tabs button.on{background:var(--green);border-color:var(--green);color:#fff}
+.pane{display:none}.pane.on{display:block;animation:rise 200ms var(--ease-out)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+table{width:100%;border-collapse:collapse;font-size:.92rem}
+th,td{text-align:left;padding:8px 6px;border-bottom:1px solid var(--line)}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px}
+.kpis>div{background:var(--blueS);border-radius:12px;padding:14px}.kpis>div:nth-child(3){background:var(--orangeS)}
+.big{font:800 1.9rem "Bricolage Grotesque",system-ui,sans-serif}
+.badge{display:inline-block;border-radius:99px;padding:2px 10px;font-size:.8rem;font-weight:700;background:var(--orange);color:#19486A}
+.hide{display:none!important}
+.bares-sec .top{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}
+.bares-sec .small{font-size:.8rem;opacity:.9}
+
+/* info */
+.info{max-width:900px;margin:0 auto;padding:56px 20px 24px}
+.info h2{font-size:1.6rem;margin:0 0 14px;text-wrap:balance}
+.how{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-bottom:40px}
+.how div{padding-top:12px;border-top:1px solid var(--line)}
+.how b{font-family:"Bricolage Grotesque",system-ui,sans-serif;font-size:1.15rem}
+details{border-bottom:1px solid var(--line);padding:12px 0}
+summary{cursor:pointer;font-weight:700}
+details p{color:var(--mut);margin:8px 0 0}
+footer{max-width:900px;margin:0 auto;padding:24px 20px 48px;color:var(--mut);font:.85rem system-ui;border-top:1px solid var(--line)}
+
+@media(max-width:860px){
+  nav{position:static;flex-wrap:wrap;background:#19486A;padding:14px 16px;gap:12px}
+  nav .sp{display:none}
+  .halves{grid-template-columns:1fr;min-height:0}
+  .half{padding:36px 20px}
+  .grid3,.how,.row2{grid-template-columns:1fr}
+}
+@media(pointer:coarse){.btn{min-height:44px}.btn.sm{min-height:40px}input,select{min-height:44px}}
+@media(prefers-reduced-motion:reduce){.list .item,.pane.on,.half h1,.half p,.half .search{animation:fade 200ms ease both}.btn:active,.tabs button:active{transform:none}}
+</style>
+</head>
+<body>
+<div class="ods" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i></div>
+<nav>
+  <a class="logo" href="#top">Envase<span>Ya</span></a>
+  <a class="l" href="#como">Cómo funciona</a>
+  <a class="l" href="#bares">Para bares</a>
+  <a class="l" href="#faq">Preguntas</a>
+  <span class="sp"></span>
+  <a class="cta" href="#bares">Soy un bar</a>
+</nav>
+
+<div class="halves" id="top">
+  <div class="half l">
+    <svg class="art" viewBox="0 0 120 200" aria-hidden="true"><path d="M48 10h24v34c0 12 22 20 22 44v96c0 8-6 12-14 12H40c-8 0-14-4-14-12V88c0-24 22-32 22-44z"/><path d="M26 110h68M26 150h68"/></svg>
+    <h1>¿Tienes envases con depósito?</h1>
+    <p>Busca a alguien de tu barrio que los recoja. Tú te los quitas de casa, ellos recuperan el depósito.</p>
+    <form id="sf" class="search">
+      <input id="q" placeholder="Ciudad o barrio" aria-label="Ciudad o barrio">
+      <button class="btn sun">Buscar</button>
+    </form>
+    <div class="msg" id="smsg"></div>
+    <div class="list" id="res"></div>
+    <h3>Bares con envases para recoger</h3>
+    <div class="list" id="alerts"></div>
+  </div>
+  <div class="half r">
+    <svg class="art" viewBox="0 0 120 200" aria-hidden="true"><rect x="30" y="40" width="60" height="130" rx="10"/><path d="M30 70h60M30 140h60M45 20h30"/></svg>
+    <h2>¿Recoges envases?</h2>
+    <p>Apúntate en tu zona y recibe mensajes de quien quiera donar.</p>
+    <form id="rf">
+      <input id="n" placeholder="Nombre" maxlength="30" required>
+      <input id="t" type="tel" inputmode="tel" placeholder="Teléfono (WhatsApp)" pattern="[0-9+ ]{9,15}" required>
+      <input id="c" placeholder="Ciudad" maxlength="40" required>
+      <input id="b" placeholder="Barrio / distrito" maxlength="40" required>
+      <label class="chk"><input type="checkbox" required> Acepto que mi nombre y teléfono sean visibles para quien busque en mi zona.</label>
+      <button class="btn dark" id="rb">Apuntarme</button>
+    </form>
+    <div class="msg" id="rmsg"></div>
+    <div class="list" id="mine"></div>
+  </div>
+</div>
+
+<section class="bares-sec" id="bares">
+<div class="in">
+
+  <div id="auth">
+    <h2>¿Tienes un bar? Controla los depósitos <span class="price">5 € al mes</span></h2>
+    <p class="lead">Registra los envases con depósito, cuadra la caja del día y avisa a los recogedores de tu barrio. 14 días de prueba gratis.</p>
+    <div class="grid3">
+      <div><b>Registro</b><br>Depósitos cobrados, devueltos y envases retirados.</div>
+      <div><b>Cuadre de caja</b><br>Resumen diario y export a CSV para tu gestor.</div>
+      <div><b>Avisos de recogida</b><br>Los recogedores de tu zona ven que tienes envases.</div>
+    </div>
+    <div class="card">
+      <div class="tabs"><button id="ta-in" class="on">Entrar</button><button id="ta-up">Crear cuenta</button></div>
+      <form id="af">
+        <label>Email<input id="em" type="email" autocomplete="email" required></label>
+        <label>Contraseña (mínimo 8)<input id="pw" type="password" minlength="8" autocomplete="current-password" required></label>
+        <button class="btn green" id="ab">Entrar</button>
+      </form>
+      <div class="msg" id="amsg"></div>
+    </div>
+  </div>
+
+  <div id="profile" class="hide">
+    <h2>Datos de tu local</h2>
+    <div class="card">
+      <form id="pf">
+        <label>Nombre del bar<input id="pn" maxlength="60" required></label>
+        <div class="row2">
+          <label>Ciudad<input id="pc" maxlength="40" required></label>
+          <label>Barrio<input id="pb" maxlength="40" required></label>
+        </div>
+        <label>Teléfono (se mostrará a los recogedores en tus avisos)<input id="pp" type="tel" pattern="[0-9+ ]{9,15}" required></label>
+        <button class="btn green">Guardar y empezar</button>
+      </form>
+      <div class="msg" id="pmsg"></div>
+    </div>
+  </div>
+
+  <div id="app" class="hide">
+    <div class="top">
+      <h2 style="margin:0"><span id="bname"></span> <span class="badge" id="plan"></span></h2>
+      <div><button class="btn sun sm" id="edit">Editar local</button> <button class="btn sun sm" id="out">Salir</button></div>
+    </div>
+    <div class="card hide" id="paybox">
+      <b>Tu prueba ha terminado.</b> Para seguir registrando, suscríbete por 5 €/mes.
+      <div style="margin-top:10px"><a class="btn sun" id="paylink" target="_blank" rel="noopener">Suscribirme 5 €/mes</a></div>
+      <div class="mut" style="font-size:.85rem;margin-top:6px">Puedes consultar y exportar tus datos aunque no estés suscrito.</div>
+    </div>
+
+    <div class="tabs" id="apptabs">
+      <button data-t="reg" class="on">Registro</button>
+      <button data-t="cuadre">Cuadre</button>
+      <button data-t="avisos">Avisos</button>
+    </div>
+
+    <div class="pane on" id="p-reg">
+      <div class="card">
+        <form id="ef">
+          <div class="row2">
+            <label>Tipo
+              <select id="ek">
+                <option value="cobrado">Depósito cobrado a cliente</option>
+                <option value="devuelto">Depósito devuelto a cliente</option>
+                <option value="retirado">Envases retirados del local</option>
+              </select></label>
+            <label>Fecha<input id="ed" type="date" required></label>
+          </div>
+          <div class="row2">
+            <label>Nº de envases<input id="eq" type="number" min="1" max="10000" required></label>
+            <label>Depósito por envase (€)<input id="eu" type="number" min="0" max="10" step="0.01" value="0.10" required></label>
+          </div>
+          <label>Nota (opcional)<input id="en" maxlength="100"></label>
+          <button class="btn green" id="eb">Añadir</button>
+        </form>
+        <div class="msg" id="emsg"></div>
+      </div>
+      <div class="card"><b>Últimos movimientos</b>
+        <table><thead><tr><th>Fecha</th><th>Tipo</th><th>Envases</th><th>Importe</th><th></th></tr></thead><tbody id="elist"></tbody></table>
+      </div>
+    </div>
+
+    <div class="pane" id="p-cuadre">
+      <div class="card">
+        <label>Día<input id="cd" type="date"></label>
+        <div class="kpis" id="kpi"></div>
+        <p class="mut" style="font-size:.85rem">Caja de depósitos = cobrado − devuelto. Envases en el local = devueltos por clientes − retirados (histórico).</p>
+        <button class="btn green" id="csv">Exportar todo a CSV</button>
+      </div>
+    </div>
+
+    <div class="pane" id="p-avisos">
+      <div class="card">
+        <b>Avisar a recogedores</b>
+        <p class="mut" style="margin:4px 0 10px">Se mostrará tu bar, barrio y teléfono en la parte superior de esta página.</p>
+        <form id="af2">
+          <div class="row2">
+            <label>Nº de envases a recoger<input id="aq" type="number" min="1" max="10000" required></label>
+            <label>Nota (horario, etc.)<input id="an" maxlength="100"></label>
+          </div>
+          <button class="btn green" id="ab2">Publicar aviso</button>
+        </form>
+        <div class="msg" id="a2msg"></div>
+      </div>
+      <div class="card"><b>Tus avisos</b>
+        <table><thead><tr><th>Fecha</th><th>Envases</th><th>Estado</th><th></th></tr></thead><tbody id="alist"></tbody></table>
+      </div>
+    </div>
+    <p class="small">Herramienta de registro interno. No sustituye tu contabilidad ni el sistema oficial de depósito (SDDR), cuyas reglas pueden cambiar.</p>
+  </div>
+
+</div>
+</section>
+
+<section class="info" id="como">
+  <h2>Cómo funciona</h2>
+  <div class="how">
+    <div><b>1. Busca</b><br>Pon tu ciudad o barrio y mira quién recoge cerca.</div>
+    <div><b>2. Escribe</b><br>Habla por WhatsApp y acordad hora y lugar.</div>
+    <div><b>3. Entrega</b><br>Hacedlo en un sitio público. Es gratis.</div>
+  </div>
+  <h2 id="faq">Preguntas</h2>
+  <details><summary>¿Cuánto vale cada envase?</summary><p>Depende del sistema de depósito (SDDR). Se prevé un mínimo de 10 céntimos por envase, pendiente de que entre en vigor.</p></details>
+  <details><summary>¿Es seguro?</summary><p>Quedad en lugares públicos y no des tu dirección exacta. Los teléfonos de quien recoge son públicos solo porque aceptan mostrarlos.</p></details>
+  <details><summary>¿Cuesta algo?</summary><p>Para vecinos y recogedores es gratis. Los bares pagan 5 € al mes tras 14 días de prueba.</p></details>
+  <details><summary>¿Cómo me doy de baja como recogedor?</summary><p>Desde el mismo navegador donde te apuntaste, en "Darme de baja". Si cambias de dispositivo, escríbenos.</p></details>
+</section>
+<footer>Paleta inspirada en los colores de los ODS de la Agenda 2030. EnvaseYa · Proyecto en pruebas · hola@envaseya.example (provisional)</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+const SUPA="https://dljmsdmmpxdayuowgpze.supabase.co";
+const API=SUPA+"/rest/v1";
+const KEY="sb_publishable_zW7YU-iP5Y5nOclLVvfMxQ_QJBnQPyQ";
+const STRIPE_LINK=""; // pega aquí tu Payment Link de Stripe de 5 €/mes
+const H={apikey:KEY,"Content-Type":"application/json"};
+const db=supabase.createClient(SUPA,KEY);
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const eur=c=>(c/100).toLocaleString("es-ES",{style:"currency",currency:"EUR"});
+const today=()=>new Date().toISOString().slice(0,10);
+const say=(id,t,err)=>{const m=$(id);m.textContent=t;m.className="msg"+(err?" err":"")};
+const waUrl=(phone,text)=>"https://wa.me/34"+phone.replace(/\D/g,"").replace(/^34/,"")+"?text="+encodeURIComponent(text);
+
+/* ===== vecinos y recogedores ===== */
+const LS="envaseya.mine";
+const myCollectors=()=>{try{return JSON.parse(localStorage[LS]||"[]")}catch{return[]}};
+const setCollectors=a=>{try{localStorage[LS]=JSON.stringify(a)}catch{}};
+
+async function search(q){
+  const clean=q.replace(/[,()*%\\]/g," ").trim();
+  let url=`${API}/collectors?select=id,name,phone,city,barrio&order=created_at.desc&limit=50`;
+  if(clean) url+=`&or=(city.ilike.*${encodeURIComponent(clean)}*,barrio.ilike.*${encodeURIComponent(clean)}*)`;
+  const r=await fetch(url,{headers:H});
+  if(!r.ok) throw new Error("search");
+  return r.json();
+}
+$("#sf").onsubmit=async e=>{
+  e.preventDefault();say("#smsg","Buscando…");
+  try{
+    const rows=await search($("#q").value);
+    say("#smsg",rows.length?`${rows.length} resultado(s)`:"Nadie en esa zona todavía. Prueba otra o apúntate tú.");
+    $("#res").innerHTML=rows.map(p=>`<div class="item"><div><b>${esc(p.name)}</b><small>${esc(p.barrio)}, ${esc(p.city)}</small></div><a class="btn sm sun" target="_blank" rel="noopener" href="${waUrl(p.phone,`Hola ${p.name}, te escribo desde EnvaseYa: tengo envases para donar en ${p.barrio}.`)}">WhatsApp</a></div>`).join("");
+  }catch{say("#smsg","No se pudo buscar. Inténtalo de nuevo.",true)}
+};
+$("#rf").onsubmit=async e=>{
+  e.preventDefault();
+  const b=$("#rb");b.disabled=true;say("#rmsg","Guardando…");
+  const body={p_name:$("#n").value,p_phone:$("#t").value,p_city:$("#c").value,p_barrio:$("#b").value};
+  try{
+    const r=await fetch(`${API}/rpc/add_collector`,{method:"POST",headers:H,body:JSON.stringify(body)});
+    if(!r.ok){const t=await r.text();throw new Error(/already/.test(t)?"Ese teléfono ya está apuntado.":"No se pudo guardar. Revisa los datos.")}
+    const [row]=await r.json();
+    setCollectors([...myCollectors(),{id:row.id,token:row.delete_token,name:body.p_name,city:body.p_city,barrio:body.p_barrio}]);
+    e.target.reset();say("#rmsg","¡Listo! Ya apareces en las búsquedas.");showCollectors();
+  }catch(err){say("#rmsg",err.message,true)}
+  b.disabled=false;
+};
+function showCollectors(){
+  $("#mine").innerHTML=myCollectors().map(p=>`<div class="item"><div><b>${esc(p.name)}</b><small>${esc(p.barrio)}, ${esc(p.city)}</small></div><button class="btn sm dark" data-unreg="${esc(p.id)}">Darme de baja</button></div>`).join("");
+}
+async function loadPublicAlerts(){
+  try{
+    const r=await fetch(`${API}/pickup_alerts?select=id,bar_name,city,barrio,phone,qty,note&status=eq.abierto&order=created_at.desc&limit=20`,{headers:H});
+    const rows=r.ok?await r.json():[];
+    $("#alerts").innerHTML=rows.map(a=>`<div class="item"><div><b>${esc(a.bar_name)}</b> · ${a.qty} envases<small>${esc(a.barrio)}, ${esc(a.city)}${a.note?" · "+esc(a.note):""}</small></div><a class="btn sm sun" target="_blank" rel="noopener" href="${waUrl(a.phone,"Hola, vi en EnvaseYa que tenéis envases para recoger en "+a.bar_name+". ¿Cuándo puedo pasar?")}">WhatsApp</a></div>`).join("")||`<p style="opacity:.85;margin:0">Ahora mismo no hay avisos.</p>`;
+  }catch{}
+}
+
+/* ===== bares ===== */
+let bar=null,entries=[],signup=false;
+const showB=id=>{["auth","profile","app"].forEach(s=>$("#"+s).classList.toggle("hide",s!==id))};
+$("#ta-in").onclick=()=>setMode(false);$("#ta-up").onclick=()=>setMode(true);
+function setMode(up){signup=up;$("#ta-in").classList.toggle("on",!up);$("#ta-up").classList.toggle("on",up);$("#ab").textContent=up?"Crear cuenta":"Entrar";$("#pw").autocomplete=up?"new-password":"current-password"}
+$("#af").onsubmit=async e=>{
+  e.preventDefault();const b=$("#ab");b.disabled=true;say("#amsg","…");
+  const cred={email:$("#em").value.trim(),password:$("#pw").value};
+  const {data,error}=signup?await db.auth.signUp(cred):await db.auth.signInWithPassword(cred);
+  b.disabled=false;
+  if(error) return say("#amsg",error.message,true);
+  if(signup&&!data.session) return say("#amsg","Te hemos enviado un email: confírmalo y luego entra.");
+  start();
+};
+$("#out").onclick=async()=>{await db.auth.signOut();bar=null;showB("auth")};
+async function loadBar(){const {data}=await db.from("bars").select("*").maybeSingle();bar=data;return data}
+$("#pf").onsubmit=async e=>{
+  e.preventDefault();
+  const row={name:$("#pn").value.trim(),city:$("#pc").value.trim(),barrio:$("#pb").value.trim(),phone:$("#pp").value.trim()};
+  const {data:{user}}=await db.auth.getUser();
+  const {error}=bar?await db.from("bars").update(row).eq("id",user.id):await db.from("bars").insert({id:user.id,...row});
+  if(error) return say("#pmsg","No se pudo guardar. Revisa los datos.",true);
+  start();
+};
+$("#edit").onclick=()=>{$("#pn").value=bar.name;$("#pc").value=bar.city;$("#pb").value=bar.barrio;$("#pp").value=bar.phone;showB("profile")};
+function active(){return new Date(bar.trial_ends_at)>new Date()||(bar.paid_until&&new Date(bar.paid_until)>new Date())}
+async function start(){
+  const {data:{session}}=await db.auth.getSession();
+  if(!session) return showB("auth");
+  if(!await loadBar()) return showB("profile");
+  $("#bname").textContent=bar.name;
+  const paid=bar.paid_until&&new Date(bar.paid_until)>new Date();
+  const days=Math.ceil((new Date(bar.trial_ends_at)-new Date())/864e5);
+  $("#plan").textContent=paid?"Plan activo":active()?`Prueba: ${days} día(s)`:"Prueba terminada";
+  $("#paybox").classList.toggle("hide",active());
+  const pl=$("#paylink");if(STRIPE_LINK){pl.href=STRIPE_LINK}else{pl.href="mailto:hola@envaseya.example?subject=Suscripci%C3%B3n";pl.textContent="Suscribirme 5 €/mes (contactar)"}
+  $("#ed").value=today();$("#cd").value=today();
+  showB("app");await Promise.all([loadEntries(),loadMyAlerts()]);
+}
+document.querySelectorAll("#apptabs [data-t]").forEach(b=>b.onclick=()=>{
+  document.querySelectorAll("#apptabs [data-t]").forEach(x=>x.classList.toggle("on",x===b));
+  document.querySelectorAll("#app .pane").forEach(p=>p.classList.toggle("on",p.id==="p-"+b.dataset.t));
+});
+const KIND={cobrado:"Cobrado",devuelto:"Devuelto a cliente",retirado:"Retirado"};
+async function loadEntries(){
+  const {data,error}=await db.from("deposit_entries").select("*").order("day",{ascending:false}).order("created_at",{ascending:false}).limit(2000);
+  entries=error?[]:data;renderEntries();renderCuadre();
+}
+function renderEntries(){
+  $("#elist").innerHTML=entries.slice(0,50).map(x=>`<tr><td>${esc(x.day)}</td><td>${esc(KIND[x.kind])}${x.note?`<br><small class="mut">${esc(x.note)}</small>`:""}</td><td>${x.qty}</td><td>${x.kind==="retirado"?"—":eur(x.qty*x.unit_cents)}</td><td><button class="btn ghost sm" data-del="${esc(x.id)}">Borrar</button></td></tr>`).join("")||`<tr><td colspan="5" class="mut">Sin movimientos todavía.</td></tr>`;
+}
+$("#ef").onsubmit=async e=>{
+  e.preventDefault();const b=$("#eb");b.disabled=true;
+  const row={day:$("#ed").value,kind:$("#ek").value,qty:parseInt($("#eq").value,10),unit_cents:Math.round(parseFloat($("#eu").value)*100),note:$("#en").value.trim()||null};
+  const {error}=await db.from("deposit_entries").insert(row);
+  b.disabled=false;
+  if(error) return say("#emsg",active()?"No se pudo guardar.":"Prueba terminada: suscríbete para seguir.",true);
+  e.target.reset();$("#ed").value=today();$("#eu").value="0.10";say("#emsg","Añadido.");loadEntries();
+};
+const sum=(list,kind)=>list.filter(x=>x.kind===kind).reduce((a,x)=>({q:a.q+x.qty,c:a.c+x.qty*x.unit_cents}),{q:0,c:0});
+function renderCuadre(){
+  const d=$("#cd").value||today(),day=entries.filter(x=>x.day===d);
+  const co=sum(day,"cobrado"),de=sum(day,"devuelto");
+  const enLocal=sum(entries,"devuelto").q-sum(entries,"retirado").q;
+  const k=(t,v,s)=>`<div><div class="mut">${t}</div><div class="big">${v}</div>${s?`<small class="mut">${s}</small>`:""}</div>`;
+  $("#kpi").innerHTML=k("Cobrado",eur(co.c),co.q+" envases")+k("Devuelto a clientes",eur(de.c),de.q+" envases")+k("Caja de depósitos",eur(co.c-de.c),"cobrado − devuelto")+k("Envases en el local",enLocal,"pendientes de retirar");
+}
+$("#cd").onchange=renderCuadre;
+const safe=s=>/^[=+\-@\t\r]/.test(s)?"'"+s:s;
+$("#csv").onclick=()=>{
+  const q=v=>'"'+String(v).replace(/"/g,'""')+'"';
+  const rows=[["fecha","tipo","envases","deposito_eur","importe_eur","nota"],...entries.map(x=>[x.day,x.kind,x.qty,(x.unit_cents/100).toFixed(2),(x.qty*x.unit_cents/100).toFixed(2),safe(x.note||"")])];
+  const blob=new Blob(["﻿"+rows.map(r=>r.map(q).join(";")).join("\n")],{type:"text/csv"});
+  const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download=`envaseya-${today()}.csv`;a.click();
+};
+async function loadMyAlerts(){
+  const {data}=await db.from("pickup_alerts").select("id,qty,note,status,created_at,bar_id").eq("bar_id",bar.id).order("created_at",{ascending:false}).limit(30);
+  $("#alist").innerHTML=(data||[]).map(a=>`<tr><td>${esc(a.created_at.slice(0,10))}</td><td>${a.qty}${a.note?`<br><small class="mut">${esc(a.note)}</small>`:""}</td><td>${esc(a.status)}</td><td>${a.status==="abierto"?`<button class="btn sm green" data-done="${esc(a.id)}">Recogido</button>`:""}</td></tr>`).join("")||`<tr><td colspan="4" class="mut">Sin avisos.</td></tr>`;
+}
+$("#af2").onsubmit=async e=>{
+  e.preventDefault();const b=$("#ab2");b.disabled=true;
+  const {error}=await db.from("pickup_alerts").insert({qty:parseInt($("#aq").value,10),note:$("#an").value.trim()||null});
+  b.disabled=false;
+  if(error) return say("#a2msg",active()?"No se pudo publicar.":"Prueba terminada: suscríbete para seguir.",true);
+  e.target.reset();say("#a2msg","Aviso publicado.");loadMyAlerts();loadPublicAlerts();
+};
+
+/* ===== clics delegados ===== */
+document.addEventListener("click",async e=>{
+  const d=e.target.dataset||{};
+  if(d.unreg){
+    const p=myCollectors().find(x=>x.id===d.unreg);if(!p) return;
+    e.target.disabled=true;
+    try{
+      const r=await fetch(`${API}/rpc/remove_collector`,{method:"POST",headers:H,body:JSON.stringify({p_id:p.id,p_token:p.token})});
+      if(!r.ok) throw 0;
+      setCollectors(myCollectors().filter(x=>x.id!==d.unreg));showCollectors();
+    }catch{e.target.disabled=false;say("#rmsg","No se pudo dar de baja.",true)}
+  }
+  if(d.del){
+    if(!confirm("¿Borrar este movimiento?")) return;
+    await db.from("deposit_entries").delete().eq("id",d.del);loadEntries();
+  }
+  if(d.done){
+    await db.from("pickup_alerts").update({status:"recogido"}).eq("id",d.done);loadMyAlerts();loadPublicAlerts();
+  }
+});
+
+showCollectors();loadPublicAlerts();start();
+</script>
+</body>
+</html>

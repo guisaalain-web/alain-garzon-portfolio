@@ -1,0 +1,143 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fábrica de agentes · demo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Barlow:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#13151a;--panel:#1b1e25;--panel2:#22262e;--line:#2d323c;--ink:#ece8de;--mut:#9aa1ad;
+  --idle:#5d6573;--work:#ffb020;--rev:#4aa3ff;--done:#3ddc84;--err:#ff5a4d;
+  --ease:cubic-bezier(.16,1,.3,1)
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.45 Barlow,system-ui,sans-serif;padding:0 16px 40px}
+.wrap{max-width:1180px;margin:auto}
+/* barra superior */
+header{display:flex;align-items:center;gap:20px;padding:22px 0 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.tower{display:flex;flex-direction:column;gap:4px;padding:6px;background:var(--panel2);border-radius:8px;border:1px solid var(--line)}
+.tower i{width:16px;height:16px;border-radius:50%;background:#2a2e37;display:block}
+.tower i.on.r{background:var(--err);box-shadow:0 0 14px var(--err)}.tower i.on.y{background:var(--work);box-shadow:0 0 14px var(--work)}.tower i.on.g{background:var(--done);box-shadow:0 0 14px var(--done)}
+h1{font:700 44px/1 'Barlow Condensed',sans-serif;letter-spacing:.02em;text-transform:uppercase;margin:0}
+.sum{margin-left:auto;display:flex;gap:22px}
+.sum div{text-align:right}.sum b{display:block;font:700 34px/1 'Barlow Condensed',sans-serif}.sum span{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.08em}
+/* línea de producción */
+.line{display:grid;grid-template-columns:230px 1fr 280px;gap:0;background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-top:18px;overflow:hidden}
+.id{padding:18px;border-right:1px solid var(--line);display:flex;flex-direction:column;gap:10px}
+.idh{display:flex;align-items:center;gap:10px}
+.idh svg{width:30px;height:30px;stroke:var(--ink);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+.nm{font:700 26px/1 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.02em}
+.ag{color:var(--mut);font-size:13px}
+.state{display:inline-flex;align-items:center;gap:8px;font:600 14px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.1em;color:var(--c)}
+.state i{width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 0 0 var(--c)}
+.idle{--c:var(--idle)}.working{--c:var(--work)}.review{--c:var(--rev)}.done{--c:var(--done)}.error{--c:var(--err)}
+.working .state i{animation:pulse 1.4s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,var(--c) 60%,transparent)}100%{box-shadow:0 0 0 10px transparent}}
+.order{display:flex;gap:6px;margin-top:auto}
+input{flex:1;min-width:0;padding:9px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font:inherit}
+input:focus{outline:2px solid var(--rev);outline-offset:1px}
+button{padding:9px 13px;border:0;border-radius:8px;background:var(--work);color:#1b1300;font:700 14px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.08em;cursor:pointer;transition:transform .2s var(--ease)}
+button:hover{transform:translateY(-1px)}button:active{transform:translateY(1px)}button.alt{background:var(--panel2);color:var(--ink);border:1px solid var(--line)}
+/* cinta con estaciones */
+.belt{position:relative;padding:26px 18px;display:flex;align-items:center}
+.track{position:absolute;left:0;right:0;top:50%;height:10px;transform:translateY(-50%);background:repeating-linear-gradient(90deg,#2d323c 0 14px,#262a32 14px 28px)}
+.working .track{animation:run .8s linear infinite}
+@keyframes run{to{background-position:28px 0}}
+.crate{position:absolute;top:calc(50% - 22px);width:18px;height:18px;background:var(--work);border-radius:3px;left:-20px;opacity:0}
+.working .crate{animation:ship 4.5s linear infinite;opacity:1}.working .crate:nth-of-type(2){animation-delay:1.5s}.working .crate:nth-of-type(3){animation-delay:3s}
+@keyframes ship{to{left:100%}}
+.sts{position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:10px;width:100%}
+.st{background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:10px 8px 12px;min-height:92px;display:flex;flex-direction:column;justify-content:space-between;gap:10px;font-weight:500;font-size:13px;line-height:1.2;transition:border-color .4s,background .4s}
+.st em{font:700 13px 'Barlow Condensed',sans-serif;font-style:normal;color:var(--mut);letter-spacing:.1em}
+.st .lamp{width:10px;height:10px;border-radius:50%;background:#333943}
+.st.done{border-color:color-mix(in srgb,var(--done) 55%,var(--line))}.st.done .lamp{background:var(--done)}
+.st.cur{border-color:var(--work);background:color-mix(in srgb,var(--work) 12%,var(--panel2))}.st.cur .lamp{background:var(--work);box-shadow:0 0 12px var(--work)}
+.rev .st.cur,.review .st.cur{border-color:var(--rev);background:color-mix(in srgb,var(--rev) 12%,var(--panel2))}.review .st.cur .lamp{background:var(--rev);box-shadow:0 0 12px var(--rev)}
+.error .st.cur{border-color:var(--err)}.error .st.cur .lamp{background:var(--err)}
+.stt{display:flex;justify-content:space-between;align-items:center}
+/* bahía de entrega */
+.bay{padding:18px;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:10px;background:var(--panel2)}
+.lab{font:600 12px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.14em;color:var(--mut)}
+.inp{font-weight:500}.out{white-space:pre-wrap;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px;max-height:150px;overflow:auto;font-size:14px}
+.empty{color:var(--mut);font-size:14px}
+.bay .order{margin-top:auto}
+/* actividad */
+h2{font:700 22px 'Barlow Condensed',sans-serif;text-transform:uppercase;letter-spacing:.06em;margin:30px 0 10px}
+.log div{display:flex;gap:12px;font-size:14px;color:var(--mut);padding:7px 0;border-bottom:1px solid var(--line)}
+.log time{font-variant-numeric:tabular-nums;flex:none}.log b{color:var(--ink);font-weight:500;flex:none;width:60px}
+@media(max-width:900px){.line{grid-template-columns:1fr}.id,.bay{border:0}.bay{border-top:1px solid var(--line)}.belt{padding:22px 12px}.sts{grid-template-columns:repeat(5,minmax(96px,1fr));overflow-x:auto;padding-bottom:4px}.sum{margin-left:0;width:100%;justify-content:space-between}.sum div{text-align:left}h1{font-size:36px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style></head><body>
+<!-- THESIS: tablero andon de planta; la fábrica se lee como líneas de montaje reales, no como tarjetas. OWN-WORLD: grafito + luces de estado (ámbar trabaja, azul revisa, verde entrega, rojo falla), cintas animadas, Barlow Condensed de rotulación industrial. STORY: ver de un vistazo qué línea trabaja, en qué estación y qué espera tu revisión. FIRST VIEWPORT: torre de luz + contadores arriba, tres líneas apiladas (orden | cinta con 5 estaciones | bahía de entrega). FORM: andon board, elegido a mano (concept-seed no devolvió salida). FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="i-ideas" viewBox="0 0 24 24"><path d="M9 18h6M10 21h4M12 3a6 6 0 0 0-4 10.5c.7.7 1 1.5 1 2.5h6c0-1 .3-1.8 1-2.5A6 6 0 0 0 12 3z"/></symbol>
+<symbol id="i-guion" viewBox="0 0 24 24"><path d="M7 3h7l4 4v14H7zM14 3v4h4M10 12h5M10 16h5"/></symbol>
+<symbol id="i-video" viewBox="0 0 24 24"><path d="M4 5h16v14H4zM8 5v14M16 5v14M4 9h4M4 15h4M16 9h4M16 15h4"/></symbol>
+</defs></svg>
+<div class="wrap">
+<header><div class="tower"><i class="r" id="tr"></i><i class="y" id="ty"></i><i class="g" id="tg"></i></div><h1>Fábrica</h1>
+<div class="sum" id="sum"></div></header><div style="margin:14px 0 0;padding:10px 14px;border:1px solid #2d323c;border-left:4px solid #4aa3ff;border-radius:8px;background:#1b1e25;color:#9aa1ad;font-size:14px"><b style="color:#ece8de">Demo simulada.</b> Escribe una orden en cualquier línea y pulsa «Pedir»: verás cómo avanza por las 5 estaciones. No hay agentes reales detrás; en la fábrica real el panel lo alimentan agentes de Claude desde Telegram.</div>
+<main id="g"></main>
+<h2>Actividad</h2><div class="log" id="log"></div>
+</div>
+<script>
+/* DEMO SIMULADA: no hay agentes ni servidor; este "servidor" vive en la página y reproduce el avance de una orden. */
+(() => {
+  const FACT = {"ideas": {"name": "Fábrica de Ideas", "agent": "Ideas", "steps": ["Materiales", "Generar 20 ideas", "Filtrar con rúbrica", "Simular público", "Top 5"]}, "guion": {"name": "Fábrica de Guiones", "agent": "Guion", "steps": ["Idea ganadora", "Escenas y diálogos", "Subtítulos y sonidos", "Puntuar", "Entrega"]}, "video": {"name": "Sala de Montaje", "agent": "Vídeo", "steps": ["Recibe guion", "Imágenes", "Voz", "Montar", "Revisión"]}};
+  const state = { factories: {}, log: [] };
+  for (const [id, f] of Object.entries(FACT)) state.factories[id] = { status: 'idle', step: 0, input: '', output: '', comments: [], ...f };
+  const log = (factory, msg) => { state.log.unshift({ t: new Date().toISOString(), factory, msg }); state.log.length = Math.min(state.log.length, 40); };
+  const out = {
+    ideas: t => `Top 5 (ejemplo) para «${t}»:\n1. El reto de 7 días: ${t} sin gastar de más\n2. Lo que nadie te cuenta de ${t}\n3. ${t}: 3 errores que se repiten\n4. Antes y después: ${t} en 30 días\n5. ${t} explicado en 20 segundos`,
+    guion: t => `Guion de ejemplo (6 escenas) sobre «${t}»:\nEsc. 1 · Gancho: una pregunta directa a cámara (3 s)\nEsc. 2 · El problema con un dato concreto\nEsc. 3 · Primera solución, con texto en pantalla\nEsc. 4 · Segunda solución\nEsc. 5 · Resultado\nEsc. 6 · Llamada a la acción: «Comenta la palabra»`,
+    video: t => `Entrega de ejemplo: short vertical 9:16 de 25 s sobre «${t}», con voz, subtítulos palabra a palabra y música suave. (Simulado: en la fábrica real aquí llega el MP4 al chat de Telegram.)`
+  };
+  const timers = {};
+  const run = (id, text) => {
+    const f = state.factories[id]; clearInterval(timers[id]);
+    f.status = 'working'; f.step = 1; f.input = text; f.output = '';
+    log(id, `pedido: ${text}`); log(id, `paso 1: ${f.steps[0]}`);
+    timers[id] = setInterval(() => {
+      if (f.step < f.steps.length) { f.step++; log(id, `paso ${f.step}: ${f.steps[f.step - 1]}`); }
+      else { clearInterval(timers[id]); f.status = 'review'; f.output = out[id](text); log(id, 'listo para revisar'); }
+    }, 1600);
+  };
+  const real = window.fetch.bind(window);
+  window.fetch = async (u, o = {}) => {
+    const body = () => { try { return JSON.parse(o.body || '{}'); } catch { return {}; } };
+    const ok = d => new Response(JSON.stringify(d), { headers: { 'Content-Type': 'application/json' } });
+    if (u === '/api/state') return ok(state);
+    if (u === '/api/task') { const b = body(); if (state.factories[b.factory] && b.text) run(b.factory, String(b.text).slice(0, 120)); return ok({ ok: true }); }
+    if (u === '/api/comment') { const b = body(), f = state.factories[b.factory]; if (f && b.text) { f.comments.unshift({ t: new Date().toISOString(), text: b.text }); log(b.factory, `comentario: ${b.text}`); } return ok({ ok: true }); }
+    return real(u, o);
+  };
+})();
+</script>
+<script>
+const L={idle:'En espera',working:'Trabajando',review:'Para revisar',done:'Entregado',error:'Fallo'};
+const esc=s=>String(s??'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+let typing=false,last='';
+async function draw(){
+  if(typing)return;
+  const raw=await (await fetch('/api/state')).text();
+  if(raw===last)return;last=raw;
+  const s=JSON.parse(raw),F=Object.entries(s.factories),n=k=>F.filter(([,f])=>f.status===k).length;
+  tr.classList.toggle('on',n('error')>0);ty.classList.toggle('on',n('working')>0);tg.classList.toggle('on',n('review')+n('done')>0);
+  sum.innerHTML=[['working','Trabajando'],['review','Por revisar'],['done','Entregadas'],['error','Fallos']].map(([k,t])=>`<div><b style="color:var(--${k==='working'?'work':k==='review'?'rev':k})">${n(k)}</b><span>${t}</span></div>`).join('');
+  g.innerHTML=F.map(([id,f])=>{
+    const cur=f.status==='done'?f.steps.length:f.step;
+    return `<section class="line ${f.status}">
+    <div class="id"><div class="idh"><svg><use href="#i-${id}"/></svg><div><div class="nm">${esc(f.name)}</div><div class="ag">Agente ${esc(f.agent)}</div></div></div>
+      <div class="state"><i></i>${L[f.status]}${f.step?` · ${Math.min(f.step,f.steps.length)}/${f.steps.length}`:''}</div>
+      <div class="order"><input id="t-${id}" placeholder="Orden de trabajo…" onfocus="typing=true" onblur="typing=false" onkeydown="if(event.key==='Enter')ask('${id}')"><button onclick="ask('${id}')">Pedir</button></div></div>
+    <div class="belt"><div class="track"></div><div class="crate"></div><div class="crate"></div><div class="crate"></div>
+      <div class="sts">${f.steps.map((t,i)=>`<div class="st ${i<cur-1||f.status==='done'?'done':i===cur-1?'cur':''}"><div class="stt"><em>${i+1}</em><span class="lamp"></span></div>${esc(t)}</div>`).join('')}</div></div>
+    <div class="bay"><div class="lab">Entra</div><div class="inp">${esc(f.input)||'<span class="empty">Sin pedido</span>'}</div>
+      <div class="lab">Sale</div>${f.output?`<div class="out">${esc(f.output)}</div>`:'<div class="empty">Nada entregado todavía</div>'}
+      <div class="order"><input id="c-${id}" placeholder="Comentario de revisión…" onfocus="typing=true" onblur="typing=false" onkeydown="if(event.key==='Enter')com('${id}')"><button class="alt" onclick="com('${id}')">Enviar</button></div></div>
+    </section>`}).join('');
+  log.innerHTML=s.log.slice(0,25).map(l=>`<div><time>${new Date(l.t).toLocaleTimeString()}</time><b>${esc(l.factory)}</b><span>${esc(l.msg)}</span></div>`).join('');
+}
+async function post(u,b){typing=false;last='';await fetch(u,{method:'POST',body:JSON.stringify(b)});draw();}
+function ask(id){const v=document.getElementById('t-'+id).value.trim();if(v)post('/api/task',{factory:id,text:v});}
+function com(id){const v=document.getElementById('c-'+id).value.trim();if(v)post('/api/comment',{factory:id,text:v});}
+draw();setInterval(draw,2000);
+</script></body></html>

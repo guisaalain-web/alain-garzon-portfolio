@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Fábrica de coches</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#0c1511;display:grid;place-items:center}
+  canvas{display:block}
+</style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"}}</script>
+</head><body>
+<script type="module">
+import * as THREE from 'three';
+
+const LOOP = 30;                        // segundos del bucle
+const TAU = Math.PI * 2;
+const C = { green:0x0b6b47, gold:0xc9a24b, black:0x15181a, silver:0xc4c9cc, grey:0x8a9094, floor:0xe9e7df, bg:0xd9e0da };
+const LEN = 22, X0 = -11;               // recorrido de la línea (los extremos quedan dentro de las naves)
+
+const renderer = new THREE.WebGLRenderer({ antialias:true });
+renderer.shadowMap.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(C.bg);
+scene.add(new THREE.HemisphereLight(0xffffff, 0xcfd8d2, 1.6));
+const sun = new THREE.DirectionalLight(0xfff1d6, 1.5);
+sun.position.set(10, 18, 8); sun.castShadow = true;
+sun.shadow.mapSize.set(2048, 2048);
+Object.assign(sun.shadow.camera, { left:-18, right:18, top:18, bottom:-18, far:60 });
+scene.add(sun);
+
+const cam = new THREE.OrthographicCamera();
+function resize() {
+  const h = Math.min(innerHeight, innerWidth * 16 / 9), w = h * 9 / 16;   // 9:16
+  renderer.setSize(w, h); renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  const half = 10, a = w / h;                                              // ancho fijo de 20 unidades
+  Object.assign(cam, { left:-half, right:half, top:half / a, bottom:-half / a, near:-80, far:120 });
+  cam.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+const mats = {};
+const mat = (c, extra = {}) => new THREE.MeshStandardMaterial({ color:c, roughness:.5, metalness:.15, ...extra });
+function box(w, h, d, c, x = 0, y = 0, z = 0, parent = scene) {
+  const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), c.isMaterial ? c : mat(c));
+  m.position.set(x, y + h / 2, z); m.castShadow = m.receiveShadow = true; parent.add(m); return m;
+}
+function cyl(r, h, c, x = 0, y = 0, z = 0, parent = scene) {
+  const m = new THREE.Mesh(new THREE.CylinderGeometry(r, r, h, 24), mat(c));
+  m.position.set(x, y + h / 2, z); m.castShadow = true; parent.add(m); return m;
+}
+
+// plataforma
+box(27, .5, 27, C.floor, 0, -.5, 0);
+box(27.2, .12, 27.2, C.gold, 0, -.5, 0);                           // filo dorado
+box(26.6, .52, 26.6, C.floor, 0, -.5, 0);
+
+// ---------- coches ----------
+const grey = new THREE.Color(C.grey), green = new THREE.Color(C.green);
+const wheelGeo = new THREE.CylinderGeometry(.34, .34, .25, 20);
+function makeCar() {
+  const g = new THREE.Group(), paint = mat(C.grey, { metalness:.55, roughness:.3 });
+  box(3, .25, 1.5, C.black, 0, .25, 0, g);                              // chasis
+  g.body = box(3, .5, 1.5, paint, 0, .5, 0, g);
+  g.cabin = box(1.55, .5, 1.3, paint, -.2, 1.0, 0, g);
+  const glass = mat(0x0b1a22, { metalness:.8, roughness:.1 });
+  g.glass = box(1.58, .3, 1.32, glass, -.2, 1.1, 0, g);
+  g.parts = [g.body, g.cabin];
+  g.wheels = [];
+  [-.95, .95].forEach(x => [-.8, .8].forEach(z => {
+    const w = new THREE.Mesh(wheelGeo, mat(0x0d0d0d)); w.rotation.x = Math.PI / 2;
+    w.position.set(x, .34, z); w.castShadow = true; g.add(w); g.wheels.push(w);
+  }));
+  g.lights = [-.5, .5].map(z => box(.1, .14, .3, mat(0xfff0b8, { emissive:0xffd978, emissiveIntensity:1.4 }), 1.52, .65, z, g));
+  g.stripe = box(1, .02, .22, C.gold, 1.0, 1.0, 0, g);
+  g.paint = paint;
+  return g;
+}
+
+// ---------- naves de entrada/salida (ocultan el salto del bucle) ----------
+function lane(z, dir, k) {
+  box(4, 3.2, 3.4, 0x2c3235, X0 + 2, 0, z); box(4.1, .25, 3.5, C.gold, X0 + 2, 3.2, z);
+  box(4, 3.2, 3.4, 0x2c3235, -X0 - 2, 0, z); box(4.1, .25, 3.5, C.gold, -X0 - 2, 3.2, z);
+  box(LEN - 8, .35, 2.2, 0x2a2f31, 0, 0, z);                            // cinta
+  const stripes = [];
+  for (let i = 0; i < 10; i++) stripes.push(box(.35, .02, 2, 0x3b4245, 0, .35, z));
+  const cars = [];
+  for (let i = 0; i < 5; i++) { const c = makeCar(); c.userData.phase = i / 5; scene.add(c); cars.push(c); }
+  const robots = [-3.5, -.5, 2.5].flatMap((x, j) => [-1, 1].map(side => makeRobot(x, z + side * 2.6, side, j + k)));
+  return { z, dir, stripes, cars, robots };
+}
+function makeRobot(x, z, side, seed) {
+  const r = new THREE.Group(); r.position.set(x, 0, z); r.rotation.y = side > 0 ? 0 : Math.PI;   // mira hacia la línea
+  cyl(.5, .35, C.black, 0, 0, 0, r);
+  cyl(.28, 1.1, C.silver, 0, .35, 0, r);
+  const up = new THREE.Group(); up.position.set(0, 1.55, 0); r.add(up);
+  box(.3, .3, 1.5, C.green, 0, -.15, -.7, up);
+  const fore = new THREE.Group(); fore.position.set(0, 0, -1.45); up.add(fore);
+  box(.24, .24, 1.2, C.gold, 0, -.12, -.55, fore);
+  const tip = new THREE.Mesh(new THREE.SphereGeometry(.18, 12, 12), mat(0xffe6a0, { emissive:0xffb830, emissiveIntensity:2 }));
+  tip.position.set(0, 0, -1.2); fore.add(tip);
+  scene.add(r);
+  return { up, fore, tip, seed };
+}
+const lanes = [lane(-4.2, 1, 0), lane(4.2, -1, 3)];
+
+// ---------- grúa puente ----------
+const crane = new THREE.Group(); scene.add(crane);
+[-8.5, 8.5].forEach(z => box(.4, 5.2, .4, C.gold, 0, 0, z, crane));
+box(.5, .45, 17.4, C.green, 0, 5.2, 0, crane);
+const hook = box(.12, 1.8, .12, C.silver, 0, 3.4, 0, crane);
+const hookHead = box(.7, .25, .7, C.black, 0, 3.2, 0, crane);
+
+// ---------- chispas / pintura ----------
+const sparks = new THREE.Group(); scene.add(sparks);
+const sparkMat = mat(0xffd36a, { emissive:0xffa11c, emissiveIntensity:2 });
+const sparkMeshes = Array.from({ length:24 }, () => { const m = new THREE.Mesh(new THREE.SphereGeometry(.07, 6, 6), sparkMat); sparks.add(m); return m; });
+
+function draw(sec) {
+  const t = sec % LOOP, u = t / LOOP;
+
+  // cintas: rayas que avanzan a la misma velocidad que los coches
+  lanes.forEach(L => {
+    L.stripes.forEach((s, i) => {
+      const k = ((i / 10 + u * 10) % 1);                                // 10 rayas de paso en el bucle
+      s.position.x = (L.dir > 0 ? -7 + k * 14 : 7 - k * 14);
+    });
+    L.cars.forEach(c => {
+      const k = (u + c.userData.phase) % 1, x = X0 + k * LEN;
+      c.position.set(L.dir > 0 ? x : -x, 0, L.z);
+      c.rotation.y = L.dir > 0 ? 0 : Math.PI;
+      const px = x;                                                     // posición a lo largo de la línea
+      const s1 = THREE.MathUtils.clamp((px + 4.5) / 1.2, 0, 1);         // carrocería
+      const s2 = THREE.MathUtils.clamp((px + 1.5) / 1.2, 0, 1);         // techo
+      const p = THREE.MathUtils.clamp((px - 1.5) / 3, 0, 1);            // pintura
+      c.body.scale.y = Math.max(s1, .001); c.cabin.scale.y = Math.max(s2, .001);
+      c.body.position.y = .5 + .25 * s1; c.cabin.position.y = 1.0 + .25 * s2; c.glass.visible = s2 > .95;
+      c.paint.color.copy(grey).lerp(green, p);
+      c.lights.forEach(l => l.visible = px > 5);
+      c.stripe.visible = px > 5.5;
+    });
+    L.robots.forEach((r, i) => {
+      const ph = TAU * (u * 15 + r.seed * .37);                         // 15 ciclos exactos por bucle
+      r.up.rotation.x = .55 + .35 * Math.sin(ph);
+      r.fore.rotation.x = -.9 + .5 * Math.sin(ph + 1.3);
+      r.tip.scale.setScalar(.6 + .6 * Math.abs(Math.sin(TAU * u * 90 + r.seed)));
+    });
+  });
+
+  // grúa: va y viene a lo largo de la línea
+  crane.position.x = Math.sin(u * TAU * 2) * 7;
+  const drop = .6 + .6 * Math.sin(u * TAU * 4);
+  hook.position.y = 3.4 - drop; hookHead.position.y = 3.2 - drop;
+
+  // chispas alrededor de la estación de soldadura (-3.5)
+  sparkMeshes.forEach((m, i) => {
+    const a = TAU * (u * 40 + i / 24), s = (u * 60 + i * .41) % 1;
+    const L = lanes[i % 2];
+    m.position.set(-3.5 + Math.cos(a * 3 + i) * s * .9, 1.1 + Math.sin(a) * .3 + s * .6, L.z + Math.sin(a * 3 + i) * s * .9);
+    m.scale.setScalar(1 - s);
+  });
+  // la segunda línea va en sentido contrario: sus chispas se reflejan en x
+  sparkMeshes.forEach((m, i) => { if (i % 2) m.position.x *= -1; });
+
+  // órbita lenta: una vuelta completa en 30 s
+  const ang = Math.PI / 4 + u * TAU, r = 30;
+  cam.position.set(Math.cos(ang) * r, 20, Math.sin(ang) * r);
+  cam.lookAt(0, 0, 0);
+
+  renderer.render(scene, cam);
+}
+window.draw = draw;                      // usado para exportar MP4 fotograma a fotograma
+const loop = ms => { draw(ms / 1000); requestAnimationFrame(loop); };
+if (!location.hash.includes('export')) requestAnimationFrame(loop);
+</script>
+</body></html>
