@@ -5,31 +5,59 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="FitBattle Gym - Aplicación gamificada de entrenamiento">
-    <title>FitBattle Gym - Gamifica tu Entrenamiento</title>
+    <meta name="theme-color" content="#0b2a6f">
+    <title>FitBattle Gym · Entrena, suma puntos, sube de nivel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/styles.css">
     <link rel="icon"
-        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏋️</text></svg>">
+        href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230047ff'/><path d='M18 5 9 18h6l-1 9 9-13h-6z' fill='white'/></svg>">
 </head>
 
 <body>
+    <!-- Iconos (trazo 2 px, mismo estilo en toda la app) -->
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+        <defs>
+            <symbol id="i-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7z" fill="currentColor" stroke="none"/></symbol>
+            <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+            <symbol id="i-save" viewBox="0 0 24 24"><path d="M5 12l5 5 9-10"/></symbol>
+            <symbol id="i-menu" viewBox="0 0 24 24"><path d="M4 7h16M4 12h16M4 17h16"/></symbol>
+            <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></symbol>
+            <symbol id="i-users" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20c.6-3.6 3.3-5.5 6.5-5.5s5.9 1.9 6.5 5.5"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8M18.5 14.8c1.7.8 2.8 2.5 3 5.2"/></symbol>
+            <symbol id="i-dumbbell" viewBox="0 0 24 24"><path d="M6.5 6.5v11M17.5 6.5v11M3.5 9v6M20.5 9v6M6.5 12h11"/></symbol>
+            <symbol id="i-chart" viewBox="0 0 24 24"><path d="M4 20V4M4 20h16M8 16v-4M12 16V8M16 16v-6"/></symbol>
+            <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></symbol>
+            <symbol id="i-flame" viewBox="0 0 24 24"><path d="M12 21c4 0 7-2.7 7-6.6 0-3.4-2.2-5.4-3.9-7.4-.5 2-1.6 3.1-2.9 3.6.3-3.4-1-6.3-3.7-8.6.2 3.7-1.8 5.6-3.2 7.5A7.6 7.6 0 0 0 5 14.4C5 18.3 8 21 12 21Z"/></symbol>
+            <symbol id="i-star" viewBox="0 0 24 24"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></symbol>
+            <symbol id="i-medal" viewBox="0 0 24 24"><path d="M8 3h8l-2 6h-4z"/><circle cx="12" cy="15" r="6"/><path d="m12 12 .9 1.9 2 .3-1.5 1.4.4 2-1.8-1-1.8 1 .4-2-1.5-1.4 2-.3z"/></symbol>
+            <symbol id="i-lock" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></symbol>
+            <symbol id="i-play" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m10 8.5 5.5 3.5-5.5 3.5z"/></symbol>
+            <symbol id="i-check" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/></symbol>
+            <symbol id="i-alert" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7.5v5.5M12 16.5v.01"/></symbol>
+            <symbol id="i-close" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></symbol>
+        </defs>
+    </svg>
+
     <!-- Contenedor de Notificaciones Toast -->
-    <div class="toast-container" id="toast-container"></div>
+    <div class="toast-container" id="toast-container" aria-live="polite"></div>
 
     <!-- Barra de Navegación -->
     <nav class="navbar">
         <div class="nav-container">
-            <div class="logo">
-                <span class="logo-icon">⚡</span>
-                <span class="logo-text">FitBattle</span>
-            </div>
+            <a class="logo" href="#home" data-goto="home" aria-label="FitBattle Gym, inicio">
+                <span class="logo-icon"><svg class="ic"><use href="#i-bolt"/></svg></span>
+                <span class="logo-text">FitBattle<b>Gym</b></span>
+            </a>
             <ul class="nav-menu" id="nav-menu">
                 <li><a href="#home" class="nav-link active" data-section="home">Inicio</a></li>
-                <li><a href="#usuarios" class="nav-link" data-section="usuarios">Usuarios</a></li>
+                <li><a href="#usuarios" class="nav-link" data-section="usuarios">Socios</a></li>
                 <li><a href="#entrenamiento" class="nav-link" data-section="entrenamiento">Entrenar</a></li>
                 <li><a href="#ejercicios" class="nav-link" data-section="ejercicios">Ejercicios</a></li>
                 <li><a href="#progreso" class="nav-link" data-section="progreso">Progreso</a></li>
             </ul>
-            <button class="nav-toggle" id="nav-toggle">☰</button>
+            <a href="#entrenamiento" class="btn btn-primary btn-sm nav-cta" data-goto="entrenamiento">Registrar sesión</a>
+            <button class="nav-toggle" id="nav-toggle" aria-label="Abrir menú"><svg class="ic"><use href="#i-menu"/></svg></button>
         </div>
     </nav>
 
@@ -37,25 +65,38 @@
     <main class="main-content">
         <!-- Sección Inicio -->
         <section id="home" class="section active">
-            <div class="container">
-                <div class="hero">
-                    <h1 class="hero-title">FitBattle Gym</h1>
-                    <p class="hero-subtitle">Transforma tu entrenamiento en una aventura épica</p>
-                    <div class="hero-stats">
-                        <div class="stat-card">
-                            <div class="stat-number" id="total-usuarios">0</div>
-                            <div class="stat-label">Usuarios Activos</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="total-sesiones">0</div>
-                            <div class="stat-label">Sesiones Realizadas</div>
-                        </div>
-                        <div class="stat-card">
-                            <div class="stat-number" id="total-ejercicios">0</div>
-                            <div class="stat-label">Ejercicios Disponibles</div>
+            <div class="hero">
+                <div class="container hero-grid">
+                    <div class="hero-copy">
+                        <h1 class="hero-title">Entrena.<br>Suma puntos.<br><span>Sube de nivel.</span></h1>
+                        <p class="hero-subtitle">Cada sesión que registras en el gimnasio suma puntos, desbloquea logros y te acerca al siguiente nivel: de Principiante a Leyenda.</p>
+                        <div class="hero-actions">
+                            <a href="#entrenamiento" class="btn btn-light btn-large" data-goto="entrenamiento">Registrar sesión <svg class="ic"><use href="#i-arrow"/></svg></a>
+                            <a href="#progreso" class="btn btn-outline-light btn-large" data-goto="progreso">Ver mi progreso</a>
                         </div>
                     </div>
+                    <ol class="hero-steps" aria-label="Cómo funciona">
+                        <li><svg class="ic"><use href="#i-users"/></svg><div><b>Date de alta</b><span>Crea tu ficha de socio con tu bono.</span></div></li>
+                        <li><svg class="ic"><use href="#i-dumbbell"/></svg><div><b>Entrena y registra</b><span>Duración, calorías y ejercicios de cada sesión.</span></div></li>
+                        <li><svg class="ic"><use href="#i-medal"/></svg><div><b>Gana logros</b><span>Puntos, siete niveles y medallas por constancia.</span></div></li>
+                    </ol>
                 </div>
+            </div>
+            <div class="container">
+                <dl class="hero-stats">
+                    <div class="stat-card">
+                        <dt class="stat-label">Socios activos</dt>
+                        <dd class="stat-number" id="total-usuarios">0</dd>
+                    </div>
+                    <div class="stat-card">
+                        <dt class="stat-label">Sesiones registradas</dt>
+                        <dd class="stat-number" id="total-sesiones">0</dd>
+                    </div>
+                    <div class="stat-card">
+                        <dt class="stat-label">Ejercicios en catálogo</dt>
+                        <dd class="stat-number" id="total-ejercicios">0</dd>
+                    </div>
+                </dl>
             </div>
         </section>
 
@@ -63,9 +104,12 @@
         <section id="usuarios" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Gestión de Usuarios</h2>
+                    <div>
+                        <h2>Socios</h2>
+                        <p class="section-sub">Fichas, bono y nivel de cada socio.</p>
+                    </div>
                     <button class="btn btn-primary" id="btn-nuevo-usuario">
-                        <span>➕</span> Nuevo Usuario
+                        <svg class="ic"><use href="#i-plus"/></svg> Nuevo socio
                     </button>
                 </div>
 
@@ -79,42 +123,47 @@
         <section id="entrenamiento" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Registrar Sesión</h2>
+                    <div>
+                        <h2>Registrar sesión</h2>
+                        <p class="section-sub">Apunta el entrenamiento de hoy y suma tus puntos.</p>
+                    </div>
                 </div>
 
                 <div class="entrenamiento-form">
                     <div class="form-group">
-                        <label for="select-usuario">Seleccionar Usuario:</label>
+                        <label for="select-usuario">Socio</label>
                         <select id="select-usuario" class="form-control" required>
-                            <option value="">-- Selecciona un usuario --</option>
+                            <option value="">Selecciona un socio</option>
                         </select>
                     </div>
 
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="fecha-sesion">Fecha:</label>
+                            <label for="fecha-sesion">Fecha y hora</label>
                             <input type="datetime-local" id="fecha-sesion" class="form-control" required>
                         </div>
                         <div class="form-group">
-                            <label for="duracion-sesion">Duración (min):</label>
+                            <label for="duracion-sesion">Duración (min)</label>
                             <input type="number" id="duracion-sesion" class="form-control" min="1" required>
                         </div>
                         <div class="form-group">
-                            <label for="calorias-sesion">Calorías:</label>
+                            <label for="calorias-sesion">Calorías</label>
                             <input type="number" id="calorias-sesion" class="form-control" min="0" required>
                         </div>
                     </div>
 
                     <div class="ejercicios-container">
-                        <h3>Ejercicios de la Sesión</h3>
+                        <div class="ejercicios-container-head">
+                            <h3>Ejercicios de la sesión</h3>
+                            <button type="button" class="btn btn-secondary btn-sm" id="btn-agregar-ejercicio">
+                                <svg class="ic"><use href="#i-plus"/></svg> Añadir ejercicio
+                            </button>
+                        </div>
                         <div id="ejercicios-sesion"></div>
-                        <button type="button" class="btn btn-secondary" id="btn-agregar-ejercicio">
-                            <span>➕</span> Agregar Ejercicio
-                        </button>
                     </div>
 
                     <button type="button" class="btn btn-primary btn-large" id="btn-guardar-sesion">
-                        <span>💾</span> Guardar Sesión
+                        <svg class="ic"><use href="#i-save"/></svg> Guardar sesión
                     </button>
                 </div>
             </div>
@@ -124,9 +173,12 @@
         <section id="ejercicios" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Catálogo de Ejercicios</h2>
+                    <div>
+                        <h2>Catálogo de ejercicios</h2>
+                        <p class="section-sub">Fuerza, cardio, flexibilidad y resistencia.</p>
+                    </div>
                     <button class="btn btn-primary" id="btn-nuevo-ejercicio">
-                        <span>➕</span> Nuevo Ejercicio
+                        <svg class="ic"><use href="#i-plus"/></svg> Nuevo ejercicio
                     </button>
                 </div>
 
@@ -140,14 +192,17 @@
         <section id="progreso" class="section">
             <div class="container">
                 <div class="section-header">
-                    <h2>Progreso y Gamificación</h2>
+                    <div>
+                        <h2>Progreso y logros</h2>
+                        <p class="section-sub">Nivel, puntos, medallas e historial de sesiones.</p>
+                    </div>
                 </div>
 
                 <div class="progreso-container">
                     <div class="select-usuario-progreso">
-                        <label for="select-usuario-progreso">Seleccionar Usuario:</label>
+                        <label for="select-usuario-progreso">Socio</label>
                         <select id="select-usuario-progreso" class="form-control">
-                            <option value="">-- Selecciona un usuario --</option>
+                            <option value="">Selecciona un socio</option>
                         </select>
                     </div>
 
@@ -161,48 +216,53 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <h3>⚡ FitBattle Gym</h3>
-        <p>Entrena. Sube de nivel. Conviértete en leyenda.</p>
+        <div class="container footer-in">
+            <span class="logo"><span class="logo-icon"><svg class="ic"><use href="#i-bolt"/></svg></span><span class="logo-text">FitBattle<b>Gym</b></span></span>
+            <p>Entrena. Sube de nivel. Conviértete en leyenda.</p>
+            <small>Demo: los datos se guardan solo en este navegador.</small>
+        </div>
     </footer>
 
     <!-- Modales -->
 
     <!-- Modal Nuevo Usuario -->
     <div class="modal" id="modal-usuario">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2 id="modal-usuario-titulo">Nuevo Usuario</h2>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-usuario-titulo">
+            <button type="button" class="modal-close" aria-label="Cerrar"><svg class="ic"><use href="#i-close"/></svg></button>
+            <h2 id="modal-usuario-titulo">Nuevo socio</h2>
             <form id="form-usuario">
                 <input type="hidden" id="usuario-id">
                 <div class="form-group">
-                    <label for="nombre-completo">Nombre Completo:</label>
-                    <input type="text" id="nombre-completo" class="form-control" required>
+                    <label for="nombre-completo">Nombre completo</label>
+                    <input type="text" id="nombre-completo" class="form-control" autocomplete="name" required>
+                </div>
+                <div class="form-row form-row-2">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="email" class="form-control" autocomplete="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="telefono">Teléfono</label>
+                        <input type="tel" id="telefono" class="form-control" autocomplete="tel" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="telefono">Teléfono:</label>
-                    <input type="tel" id="telefono" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="fecha-nacimiento">Fecha de Nacimiento:</label>
+                    <label for="fecha-nacimiento">Fecha de nacimiento</label>
                     <input type="date" id="fecha-nacimiento" class="form-control" required>
                 </div>
                 <div class="form-group">
-                    <label for="foto-perfil">Foto de Perfil (URL):</label>
+                    <label for="foto-perfil">Foto de perfil (URL, opcional)</label>
                     <input type="url" id="foto-perfil" class="form-control" placeholder="https://ejemplo.com/foto.jpg">
                 </div>
                 <div class="form-group">
                     <label class="checkbox-label">
                         <input type="checkbox" id="bono-activo">
-                        <span>Bono Activo</span>
+                        <span>Bono activo</span>
                     </label>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="btn-cancelar-usuario">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary">Guardar socio</button>
                 </div>
             </form>
         </div>
@@ -210,37 +270,39 @@
 
     <!-- Modal Nuevo Ejercicio -->
     <div class="modal" id="modal-ejercicio">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2 id="modal-ejercicio-titulo">Nuevo Ejercicio</h2>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-ejercicio-titulo">
+            <button type="button" class="modal-close" aria-label="Cerrar"><svg class="ic"><use href="#i-close"/></svg></button>
+            <h2 id="modal-ejercicio-titulo">Nuevo ejercicio</h2>
             <form id="form-ejercicio">
                 <input type="hidden" id="ejercicio-id">
                 <div class="form-group">
-                    <label for="nombre-ejercicio">Nombre del Ejercicio:</label>
+                    <label for="nombre-ejercicio">Nombre del ejercicio</label>
                     <input type="text" id="nombre-ejercicio" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label for="tipo-ejercicio">Tipo:</label>
-                    <select id="tipo-ejercicio" class="form-control" required>
-                        <option value="">-- Selecciona --</option>
-                        <option value="Fuerza">Fuerza</option>
-                        <option value="Cardio">Cardio</option>
-                        <option value="Flexibilidad">Flexibilidad</option>
-                        <option value="Resistencia">Resistencia</option>
-                    </select>
+                <div class="form-row form-row-2">
+                    <div class="form-group">
+                        <label for="tipo-ejercicio">Tipo</label>
+                        <select id="tipo-ejercicio" class="form-control" required>
+                            <option value="">Selecciona</option>
+                            <option value="Fuerza">Fuerza</option>
+                            <option value="Cardio">Cardio</option>
+                            <option value="Flexibilidad">Flexibilidad</option>
+                            <option value="Resistencia">Resistencia</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="musculo-principal">Músculo principal</label>
+                        <input type="text" id="musculo-principal" class="form-control" required>
+                    </div>
                 </div>
                 <div class="form-group">
-                    <label for="musculo-principal">Músculo Principal:</label>
-                    <input type="text" id="musculo-principal" class="form-control" required>
-                </div>
-                <div class="form-group">
-                    <label for="video-tutorial">Video Tutorial (URL):</label>
+                    <label for="video-tutorial">Vídeo tutorial (URL, opcional)</label>
                     <input type="url" id="video-tutorial" class="form-control"
                         placeholder="https://youtube.com/watch?v=...">
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="btn-cancelar-ejercicio">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Guardar</button>
+                    <button type="submit" class="btn btn-primary">Guardar ejercicio</button>
                 </div>
             </form>
         </div>
@@ -248,33 +310,33 @@
 
     <!-- Modal Agregar Ejercicio a Sesión -->
     <div class="modal" id="modal-ejercicio-sesion">
-        <div class="modal-content">
-            <span class="modal-close">&times;</span>
-            <h2>Agregar Ejercicio</h2>
+        <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="modal-es-titulo">
+            <button type="button" class="modal-close" aria-label="Cerrar"><svg class="ic"><use href="#i-close"/></svg></button>
+            <h2 id="modal-es-titulo">Añadir ejercicio</h2>
             <form id="form-ejercicio-sesion">
                 <div class="form-group">
-                    <label for="select-ejercicio-sesion">Ejercicio:</label>
+                    <label for="select-ejercicio-sesion">Ejercicio</label>
                     <select id="select-ejercicio-sesion" class="form-control" required>
-                        <option value="">-- Selecciona un ejercicio --</option>
+                        <option value="">Selecciona un ejercicio</option>
                     </select>
                 </div>
                 <div class="form-row">
                     <div class="form-group">
-                        <label for="repeticiones">Repeticiones:</label>
+                        <label for="repeticiones">Repeticiones</label>
                         <input type="number" id="repeticiones" class="form-control" min="0">
                     </div>
                     <div class="form-group">
-                        <label for="peso-kg">Peso (kg):</label>
+                        <label for="peso-kg">Peso (kg)</label>
                         <input type="number" id="peso-kg" class="form-control" min="0" step="0.5">
                     </div>
                     <div class="form-group">
-                        <label for="minutos">Minutos:</label>
+                        <label for="minutos">Minutos</label>
                         <input type="number" id="minutos" class="form-control" min="0">
                     </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" class="btn btn-secondary" id="btn-cancelar-ejercicio-sesion">Cancelar</button>
-                    <button type="submit" class="btn btn-primary">Agregar</button>
+                    <button type="submit" class="btn btn-primary">Añadir</button>
                 </div>
             </form>
         </div>

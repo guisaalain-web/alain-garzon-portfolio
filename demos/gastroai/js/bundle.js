@@ -844,63 +844,61 @@ Asistente (responde directo):`;
 
             // Último recurso
             if (top3.length === 0) {
-                return `<p class="text-gray-200">Dime qué tipo de comida te apetece (sushi, burger, pizza...) y te recomiendo algo bueno. 👨‍🍳</p>`;
+                return `<p>Dime qué tipo de comida te apetece (sushi, burger, pizza…) y te recomiendo algo bueno.</p>`;
             }
 
             // Header personalizado según intención
             let header;
             if (intent.occasion === 'romántico') {
-                header = `💕 Para tu <b>cita romántica</b>:`;
+                header = `Para tu <b>cita romántica</b>:`;
             } else if (intent.occasion === 'amigos') {
-                header = `🎉 Para <b>quedar con amigos</b>:`;
+                header = `Para <b>quedar con amigos</b>:`;
             } else if (intent.occasion === 'familia') {
-                header = `👨‍👩‍👧‍👦 <b>Para toda la familia</b>:`;
+                header = `<b>Para toda la familia</b>:`;
             } else if (intent.occasion === 'rápido') {
-                header = `⚡ <b>Rápido y bueno</b>:`;
+                header = `<b>Rápido y bueno</b>:`;
             } else if (intent.cuisineLabel) {
-                header = `🏆 Lo mejor de <b>${intent.cuisineLabel}</b>:`;
+                header = `Lo mejor de <b>${intent.cuisineLabel}</b>:`;
             } else {
-                header = `🏆 <b>Mi recomendación</b>:`;
+                header = `<b>Mi recomendación</b>:`;
             }
 
             // Construir tarjetas
             const cardsHtml = top3.map((r, i) => {
                 const info = this.classifyVenue(r);
-                const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉';
-                const highlight = i === 0 ? 'border-yellow-400' : 'border-purple-500';
+                const medal = `<span class="w-6 h-6 shrink-0 rounded-full ${i === 0 ? 'bg-brand text-white' : 'bg-neutral-200 text-ink'} text-xs font-bold grid place-items-center">${i + 1}</span>`;
                 // Para OSM: buscar nombre del restaurante cerca de las coordenadas para mostrar ficha real
                 const city = window.App?.location?.city || '';
                 const mapsUrl = (r.source === 'osm' && r.lat && r.lon)
                     ? `https://www.google.com/maps/search/${encodeURIComponent(r.name)}/@${r.lat},${r.lon},17z`
                     : `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name + ' restaurante ' + city)}`;
                 return `
-                <div class="chat-card glass-light p-3 rounded-2xl mb-3 cursor-pointer hover-lift border-l-4 ${highlight} transition-all duration-300" onclick="window.open('${mapsUrl}','_blank')">
-                    <div class="flex justify-between items-start mb-2">
-                        <div class="font-bold text-white text-base">${medal} ${r.name}</div>
-                        <div class="text-[10px] font-bold text-yellow-400 bg-yellow-400/10 border border-yellow-400/20 px-2 py-0.5 rounded-full backdrop-blur-md">
-                            ${Math.round(r.distance * 1000)}m
-                        </div>
+                <a href="${mapsUrl}" target="_blank" rel="noopener" class="block p-3 rounded-xl mb-2 bg-neutral-50 hover:bg-brand-50 border border-neutral-200 transition-colors">
+                    <div class="flex items-center gap-2">
+                        ${medal}
+                        <div class="font-semibold text-ink text-[15px] truncate flex-1">${r.name}</div>
+                        <div class="text-xs font-semibold text-neutral-600">${Math.round(r.distance * 1000)} m</div>
                     </div>
-                    <div class="text-xs text-gray-400 italic mb-2">${info.ideal} · ${info.vibe}</div>
-                    <div class="flex items-center gap-3 text-[11px]">
-                        <span class="text-gray-300 flex items-center gap-1">📍 ${r.address}</span>
-                        <span class="text-yellow-400 font-bold flex items-center gap-1">★ ${parseFloat(r.rating).toFixed(1)}</span>
-                        <span class="text-green-400 font-medium">${'€'.repeat(r.priceLevel || 1)}</span>
+                    <div class="text-xs text-neutral-600 mt-1">${info.ideal} · ${info.vibe}</div>
+                    <div class="flex items-center gap-3 text-xs mt-1 text-neutral-600">
+                        <span class="truncate">${r.address}</span>
+                        <span class="font-semibold text-ink">${parseFloat(r.rating).toFixed(1)}</span>
+                        <span>${'€'.repeat(r.priceLevel || 1)}</span>
                     </div>
-                </div>`;
+                </a>`;
             }).join('');
 
             // Tip experto
             let tipHtml = '';
             if (intent.cuisineLabel) {
-                tipHtml = `<p class="text-xs text-yellow-200/80 mt-2 bg-yellow-500/5 p-2 rounded">💡 ${this.getExpertTip(intent.cuisineLabel)}</p>`;
+                tipHtml = `<p class="text-xs text-brand-600 mt-2 bg-brand-50 p-2.5 rounded-lg"><b>Consejo:</b> ${this.getExpertTip(intent.cuisineLabel)}</p>`;
             }
 
             return `
                 <div class="space-y-2">
-                    <p class="text-gray-200">${header}</p>
+                    <p>${header}</p>
                     ${cardsHtml}
-                    <p class="text-xs text-gray-400">👆 Toca para abrir en Maps</p>
+                    <p class="text-xs text-neutral-500">Toca uno para abrirlo en Maps.</p>
                     ${tipHtml}
                 </div>
             `;
@@ -968,47 +966,52 @@ Asistente (responde directo):`;
     };
 
     const UI = {
-        init() { this.grid = document.getElementById('restaurant-grid'); this.msg = document.getElementById('chat-messages'); },
+        init() {
+            this.grid = document.getElementById('restaurant-grid'); this.msg = document.getElementById('chat-messages');
+            // esqueleto mientras carga
+            if (this.grid) this.grid.innerHTML = Array.from({ length: 8 }, () => `
+                <div><div class="skeleton aspect-[16/10] rounded-xl"></div><div class="skeleton h-4 w-2/3 rounded mt-3"></div><div class="skeleton h-3 w-1/2 rounded mt-2"></div></div>`).join('');
+        },
         async paint(data) {
             if (!this.grid) return;
-            this.grid.innerHTML = (await Promise.all(data.map(async (r, i) => {
-                const isFav = await FavoritesService.isFavorite(r.id);
+            const count = document.getElementById('grid-count');
+            if (count) count.textContent = data.length ? `${data.length} sitios` : '';
+            if (!data.length) {
+                this.grid.innerHTML = `<div class="col-span-full py-16 text-center">
+                    <p class="font-display font-bold text-2xl">No hay nada por aquí</p>
+                    <p class="text-neutral-600 mt-2">Prueba otra categoría o borra la búsqueda.</p></div>`;
+                this.updateFavoritesCount();
+                return;
+            }
+            const favs = await FavoritesService.load();
+            this.grid.innerHTML = data.map((r, i) => {
+                const isFav = favs.some(f => f.id === r.id);
+                const dist = r.distance < 1 ? Math.round(r.distance * 1000) + ' m' : String(r.distance).replace('.', ',') + ' km';
+                const mins = Math.max(5, Math.round(r.distance * 12) + 4);
+                const price = '€'.repeat(r.priceLevel || 1);
+                const open = r.isOpen !== false;
+                const maps = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name + ' ' + r.address)}`;
                 return `
-            <div class="card-glow card-hover glass-premium rounded-2xl overflow-hidden animate-slide-up group" style="animation-delay:${i * 0.05}s">
-                <div class="relative h-56 overflow-hidden">
-                    <img src="${r.image}" onerror="this.src='${CONFIG.defaultImage}'" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700">
-                    <div class="card-image-overlay"></div>
-                    <div class="absolute top-3 right-3 glass-light px-2.5 py-1 rounded-full text-[10px] font-bold text-white backdrop-blur-md border border-white/10">
-                        ${r.distance < 1 ? Math.round(r.distance * 1000) + 'm' : r.distance + 'km'}
+            <article class="rcard group relative">
+                <a href="${maps}" target="_blank" rel="noopener" class="block" aria-label="${r.name}, abrir en Maps">
+                    <div class="relative aspect-[16/10] rounded-xl overflow-hidden bg-neutral-100">
+                        <img src="${r.image}" alt="" loading="lazy" onerror="this.src='${CONFIG.defaultImage}'" class="w-full h-full object-cover ${open ? '' : 'grayscale opacity-70'}">
+                        ${open ? '' : '<span class="absolute inset-0 grid place-items-center"><span class="bg-ink text-white text-xs font-semibold px-3 py-1.5 rounded-full">Cerrado ahora</span></span>'}
+                        ${i < 3 && open ? '<span class="absolute top-3 left-3 bg-brand text-white text-xs font-semibold px-2.5 py-1 rounded-full">Más cerca</span>' : ''}
                     </div>
-                    <div class="absolute bottom-3 left-3 flex gap-1">
-                        <span class="badge badge-success text-[10px]">Abierto</span>
-                        <span class="badge badge-info text-[10px]">${r.cuisine}</span>
+                    <div class="mt-3 flex items-start justify-between gap-3">
+                        <h3 class="font-semibold text-[16px] leading-snug truncate">${r.name}</h3>
+                        <span class="shrink-0 min-w-[34px] h-[26px] px-2 rounded-full bg-neutral-100 text-[13px] font-semibold grid place-items-center" title="Valoración">${parseFloat(r.rating).toFixed(1)}</span>
                     </div>
-                </div>
-                <div class="p-5">
-                    <div class="flex justify-between items-start mb-1">
-                        <div class="font-bold text-white text-xl leading-tight group-hover:text-purple-300 transition-colors">${r.name}</div>
-                        <div class="flex text-yellow-400 text-xs">
-                            ${'★'.repeat(Math.round(r.rating))}
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-400 mb-4 line-clamp-1 flex items-center gap-1">
-                        <svg class="w-3 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path></svg>
-                        ${r.address}
-                    </p>
-                    <div class="flex gap-2">
-                        <a href="https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(r.name + ' ' + r.address)}" target="_blank" 
-                           class="flex-1 text-center btn-primary py-3 rounded-xl text-sm font-bold shadow-lg shadow-purple-500/20">
-                           Reservar Mesa
-                        </a>
-                        <button onclick="window.App.toggleFavorite('${r.id}')" class="p-3 glass-light rounded-xl hover:bg-pink-500/20 ${isFav ? 'text-pink-500 bg-pink-500/10' : 'text-pink-400'} transition-all">
-                            <svg class="w-5 h-5" fill="${isFav ? 'currentColor' : 'none'}" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
-                        </button>
-                    </div>
-                </div>
-            </div>`;
-            }))).join('');
+                    <p class="text-[14px] text-neutral-600 mt-0.5 truncate">${dist} · ${mins} min andando · ${r.cuisine} · ${price}</p>
+                    <p class="text-[13px] text-neutral-500 mt-0.5 truncate flex items-center gap-1"><svg class="ic w-4 h-4" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg> ${r.address}</p>
+                </a>
+                <button onclick="window.App.toggleFavorite('${r.id}')" aria-pressed="${isFav}" aria-label="${isFav ? 'Quitar de favoritos' : 'Guardar en favoritos'}"
+                    class="fav absolute top-3 right-3 w-10 h-10 grid place-items-center rounded-full bg-white/95 shadow-sm ${isFav ? 'text-brand' : 'text-ink'} hover:bg-white">
+                    <svg class="ic w-5 h-5" fill="${isFav ? 'currentColor' : 'none'}" viewBox="0 0 24 24"><path d="M12 20.4 4.3 12.7a4.6 4.6 0 0 1 6.5-6.5l1.2 1.2 1.2-1.2a4.6 4.6 0 0 1 6.5 6.5Z"/></svg>
+                </button>
+            </article>`;
+            }).join('');
             this.updateFavoritesCount();
         },
 
@@ -1025,20 +1028,13 @@ Asistente (responde directo):`;
         updateHero(city, weather) {
             const heroSub = document.getElementById('hero-subtitle');
             const badge = document.getElementById('city-badge');
-
-            let weatherHtml = '';
-            if (weather) {
-                weatherHtml = `<span class="ml-2 px-2 py-1 bg-white/20 rounded-lg text-sm font-normal backdrop-blur-sm shadow-sm inline-flex items-center gap-1 animate-pulse-slow" title="Clima actual">
-                ${weather.icon} ${weather.temp}°C
-            </span>`;
-            }
-
-            if (heroSub) heroSub.innerHTML = `Cerca de <span class="gradient-text font-bold">${city}</span>`;
-            if (badge) badge.innerHTML = `<span>📍 ${city}</span> ${weatherHtml}`;
+            const temp = weather ? `<span class="text-neutral-500 font-medium">· ${weather.temp}°C</span>` : '';
+            if (heroSub) heroSub.innerHTML = `Restaurantes cerca de <b class="text-white">${city}</b>, elegidos con IA.`;
+            if (badge) badge.innerHTML = `<svg class="ic w-4 h-4" viewBox="0 0 24 24"><path d="M12 21s-7-6.1-7-11.5A7 7 0 0 1 19 9.5C19 14.9 12 21 12 21Z"/><circle cx="12" cy="9.5" r="2.5"/></svg><span>${city}</span> ${temp}`;
         },
         addMsg(txt, isUser) {
             const d = document.createElement('div'); d.className = `flex ${isUser ? 'justify-end' : 'justify-start'} mb-2`;
-            d.innerHTML = `<div class="px-4 py-2 rounded-xl max-w-[85%] text-sm ${isUser ? 'bg-purple-600' : 'glass-light'}">${txt}</div>`;
+            d.innerHTML = `<div class="px-4 py-2.5 rounded-2xl max-w-[85%] text-[14px] leading-relaxed ${isUser ? 'bg-brand text-white rounded-br-md' : 'bg-white text-ink border border-neutral-200 rounded-bl-md'}">${txt}</div>`;
             this.msg.appendChild(d); this.msg.scrollTop = this.msg.scrollHeight;
             return d; // Devolver elemento para poder actualizarlo
         }
@@ -1056,15 +1052,23 @@ Asistente (responde directo):`;
             document.getElementById('chat-toggle')?.addEventListener('click', () => {
                 const w = document.getElementById('chat-widget');
                 w.classList.toggle('hidden');
+                document.getElementById('floating-chat-btn')?.classList.toggle('hidden', !w.classList.contains('hidden'));
                 if (!w.classList.contains('hidden')) document.getElementById('chat-input')?.focus();
             });
             document.getElementById('chat-close')?.addEventListener('click', () => document.getElementById('chat-widget').classList.add('hidden'));
+
+            // Buscador de la cabecera
+            document.getElementById('search-input')?.addEventListener('input', (e) => { this.q = e.target.value; this.applyFilters(); });
 
             document.getElementById('chat-send')?.addEventListener('click', this.sendChat.bind(this));
             document.getElementById('chat-input')?.addEventListener('keypress', (e) => { if (e.key === 'Enter') this.sendChat(); });
 
             // Button "Ver Todos"
             document.getElementById('show-all-btn')?.addEventListener('click', () => {
+                this.cat = 'Todo'; this.q = '';
+                const si = document.getElementById('search-input'); if (si) si.value = '';
+                document.getElementById('grid-title').textContent = 'Restaurantes cerca de ti';
+                this.renderFilters();
                 UI.paint(this.restaurants);
                 window.scrollTo({ top: document.querySelector('main').offsetTop - 100, behavior: 'smooth' });
             });
@@ -1073,7 +1077,7 @@ Asistente (responde directo):`;
             document.getElementById('favorites-btn')?.addEventListener('click', async () => {
                 const favs = await FavoritesService.load();
                 UI.paint(favs);
-                document.getElementById('hero-title').innerHTML = '<span class="gradient-text">Tus</span> Favoritos';
+                document.getElementById('grid-title').textContent = 'Tus favoritos';
                 window.scrollTo({ top: document.querySelector('main').offsetTop - 100, behavior: 'smooth' });
             });
 
@@ -1094,7 +1098,7 @@ Asistente (responde directo):`;
                 await this.load(loc);
 
                 // Welcome message in chat
-                UI.addMsg(`¡Hola! Soy tu guía local en <b>${loc.city}</b>. Pregúntame por cualquier tipo de cocina: asiática, japonesa, mexicana, italiana... 🍽️`, false);
+                UI.addMsg(`¡Hola! Soy tu guía local en <b>${loc.city}</b>. Pregúntame por cualquier cocina, plan u ocasión: asiática, italiana, una cena romántica…`, false);
 
             } catch (e) {
                 console.error('Init error, using fallback:', e);
@@ -1103,7 +1107,7 @@ Asistente (responde directo):`;
                 this.location = fallbackLoc;
                 UI.updateHero(fallbackLoc.city, null);
                 await this.load(fallbackLoc);
-                UI.addMsg('¡Hola! Pregúntame por cualquier tipo de cocina 🍽️', false);
+                UI.addMsg('¡Hola! Pregúntame por cualquier tipo de cocina.', false);
             }
         },
 
@@ -1111,7 +1115,11 @@ Asistente (responde directo):`;
             if (!loc) loc = { lat: 40.4168, lng: -3.7038, city: 'Tu Ciudad' };
 
             try {
-                this.restaurants = await PlacesService.fetchRestaurants(loc.lat, loc.lng);
+                // OpenStreetMap a veces tarda o falla: máximo 7 s y después datos de ejemplo
+                this.restaurants = await Promise.race([
+                    PlacesService.fetchRestaurants(loc.lat, loc.lng),
+                    new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 7000))
+                ]);
             } catch (e) {
                 console.log('PlacesService failed, generating fallback');
                 this.restaurants = DataRepository.generateRestaurants(loc.city, loc.lat, loc.lng, 30);
@@ -1124,7 +1132,36 @@ Asistente (responde directo):`;
             }
 
             console.log('✅ Restaurantes cargados:', this.restaurants.length);
+            this.renderFilters();
             UI.paint(this.restaurants);
+        },
+
+        cat: 'Todo',
+        q: '',
+
+        // Fila de categorías: las cocinas que hay cerca, de más a menos sitios
+        renderFilters() {
+            const box = document.getElementById('filters-container');
+            if (!box) return;
+            const counts = {};
+            this.restaurants.forEach(r => { if (r.cuisine) counts[r.cuisine] = (counts[r.cuisine] || 0) + 1; });
+            const cats = ['Todo', ...Object.keys(counts).sort((a, b) => counts[b] - counts[a]).slice(0, 12)];
+            box.innerHTML = cats.map(c => `<button type="button" class="cat shrink-0 h-10 px-4 rounded-full bg-neutral-100 hover:bg-neutral-200 text-[14px] font-semibold transition-colors" aria-pressed="${c === this.cat}" data-cat="${c}">${c}${c === 'Todo' ? '' : ` <span class="opacity-60 font-medium">${counts[c]}</span>`}</button>`).join('');
+            box.querySelectorAll('.cat').forEach(b => b.addEventListener('click', () => {
+                this.cat = b.dataset.cat;
+                box.querySelectorAll('.cat').forEach(x => x.setAttribute('aria-pressed', String(x === b)));
+                document.getElementById('grid-title').textContent = this.cat === 'Todo' ? 'Restaurantes cerca de ti' : `Cocina ${this.cat.toLowerCase()}`;
+                this.applyFilters();
+            }));
+        },
+
+        applyFilters() {
+            const norm = t => (t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+            const q = norm(this.q.trim());
+            const list = this.restaurants.filter(r =>
+                (this.cat === 'Todo' || r.cuisine === this.cat) &&
+                (!q || norm([r.name, r.cuisine, r.address, (r.tags || []).join(' ')].join(' ')).includes(q)));
+            UI.paint(list);
         },
 
         async sendChat() {
@@ -1134,7 +1171,7 @@ Asistente (responde directo):`;
                 UI.addMsg(t, true);
                 i.value = '';
                 // Mostrar indicador de "escribiendo..."
-                UI.addMsg('<span class="animate-pulse">✨ Pensando...</span>', false);
+                UI.addMsg('<span class="animate-pulse text-neutral-500">Pensando…</span>', false);
                 try {
                     const response = await ChatService.getResponse(t);
                     // Remover el mensaje de "pensando"
@@ -1145,7 +1182,7 @@ Asistente (responde directo):`;
                     console.error('Chat error:', error);
                     const msgs = document.getElementById('chat-messages');
                     if (msgs && msgs.lastChild) msgs.removeChild(msgs.lastChild);
-                    UI.addMsg('⚠️ Error. Intentando respuesta local...', false);
+                    UI.addMsg('No he podido conectar. Te respondo con lo que sé de la zona.', false);
                 }
             }
         },
@@ -1154,7 +1191,7 @@ Asistente (responde directo):`;
             const r = this.restaurants.find(res => res.id === id);
             if (!r) return;
             await FavoritesService.toggle(r);
-            UI.paint(this.restaurants); // Repintar para actualizar estado visual del corazón
+            this.applyFilters(); // Repintar para actualizar estado visual del corazón
         }
     };
 

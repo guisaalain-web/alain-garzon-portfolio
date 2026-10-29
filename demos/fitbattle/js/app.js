@@ -40,10 +40,10 @@ class FitBattleApp {
         if (!container) return;
 
         const icons = {
-            success: '✅',
-            error: '❌',
-            info: 'ℹ️',
-            warning: '⚠️'
+            success: '<svg class="ic"><use href="#i-check"/></svg>',
+            error: '<svg class="ic"><use href="#i-alert"/></svg>',
+            info: '<svg class="ic"><use href="#i-alert"/></svg>',
+            warning: '<svg class="ic"><use href="#i-alert"/></svg>'
         };
 
         const toast = document.createElement('div');
@@ -51,7 +51,7 @@ class FitBattleApp {
         toast.innerHTML = `
             <span class="toast-icon">${icons[type] || icons.info}</span>
             <span class="toast-message">${message}</span>
-            <button class="toast-close" onclick="this.parentElement.remove()">×</button>
+            <button class="toast-close" aria-label="Cerrar" onclick="this.parentElement.remove()"><svg class="ic"><use href="#i-close"/></svg></button>
         `;
 
         container.appendChild(toast);
@@ -95,6 +95,16 @@ class FitBattleApp {
                 // Cerrar menú móvil
                 const navMenu = document.getElementById('nav-menu');
                 navMenu.classList.remove('active');
+            });
+        });
+
+        // Botones que llevan a una sección (portada, logo, botón de la barra)
+        document.querySelectorAll('[data-goto]').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.preventDefault();
+                const link = document.querySelector(`.nav-link[data-section="${btn.dataset.goto}"]`);
+                if (link) link.click();
+                window.scrollTo({ top: 0, behavior: 'smooth' });
             });
         });
 
@@ -146,6 +156,11 @@ class FitBattleApp {
                     modal.classList.remove('active');
                 });
             }
+
+            // Cerrar con Escape
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') modal.classList.remove('active');
+            });
 
             // Cerrar al hacer click fuera
             modal.addEventListener('click', (e) => {
@@ -206,7 +221,7 @@ class FitBattleApp {
         if (!grid) return;
 
         if (usuarios.length === 0) {
-            grid.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1/-1;">No hay usuarios registrados. Crea uno nuevo para comenzar.</p>';
+            grid.innerHTML = '<div class="empty"><b>Aún no hay socios</b><span>Da de alta al primero con «Nuevo socio».</span></div>';
             return;
         }
 
@@ -217,10 +232,10 @@ class FitBattleApp {
             return `
                 <div class="usuario-card">
                     <div class="usuario-header">
-                        <img src="${usuario.fotoPerfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=random`}" 
+                        <img src="${usuario.fotoPerfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=0b2a6f&color=fff&bold=true`}" 
                              alt="${usuario.nombreCompleto}" 
                              class="usuario-foto"
-                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=random'">
+                             onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=0b2a6f&color=fff&bold=true'">
                         <div class="usuario-info">
                             <h3>${usuario.nombreCompleto}</h3>
                             <p>${usuario.email}</p>
@@ -243,7 +258,7 @@ class FitBattleApp {
 
     nuevoUsuario() {
         this.editandoUsuarioId = null;
-        document.getElementById('modal-usuario-titulo').textContent = 'Nuevo Usuario';
+        document.getElementById('modal-usuario-titulo').textContent = 'Nuevo socio';
         document.getElementById('form-usuario').reset();
         document.getElementById('usuario-id').value = '';
         this.openModal('modal-usuario');
@@ -254,7 +269,7 @@ class FitBattleApp {
         if (!usuario) return;
 
         this.editandoUsuarioId = idUsuario;
-        document.getElementById('modal-usuario-titulo').textContent = 'Editar Usuario';
+        document.getElementById('modal-usuario-titulo').textContent = 'Editar socio';
         document.getElementById('usuario-id').value = usuario.idUsuario;
         document.getElementById('nombre-completo').value = usuario.nombreCompleto;
         document.getElementById('email').value = usuario.email;
@@ -301,16 +316,16 @@ class FitBattleApp {
         this.renderUsuarios();
         this.updateUsuariosSelect();
         this.updateStats();
-        this.showSuccess(this.editandoUsuarioId ? 'Usuario actualizado correctamente' : 'Usuario creado correctamente');
+        this.showSuccess(this.editandoUsuarioId ? 'Socio actualizado' : 'Socio dado de alta');
     }
 
     eliminarUsuario(idUsuario) {
-        if (confirm('¿Estás seguro de eliminar este usuario? También se eliminarán todas sus sesiones.')) {
+        if (confirm('¿Dar de baja a este socio? También se borrarán todas sus sesiones.')) {
             database.deleteUsuario(idUsuario);
             this.renderUsuarios();
             this.updateUsuariosSelect();
             this.updateStats();
-            this.showSuccess('Usuario eliminado correctamente');
+            this.showSuccess('Socio dado de baja');
         }
     }
 
@@ -324,7 +339,7 @@ class FitBattleApp {
         selects.forEach(select => {
             if (!select) return;
             const currentValue = select.value;
-            select.innerHTML = '<option value="">-- Selecciona un usuario --</option>' +
+            select.innerHTML = '<option value="">Selecciona un socio</option>' +
                 usuarios.map(u => `<option value="${u.idUsuario}">${u.nombreCompleto}</option>`).join('');
             if (currentValue) {
                 select.value = currentValue;
@@ -342,7 +357,7 @@ class FitBattleApp {
         if (!grid) return;
 
         if (ejercicios.length === 0) {
-            grid.innerHTML = '<p style="text-align: center; color: var(--text-secondary); grid-column: 1/-1;">No hay ejercicios en el catálogo. Crea uno nuevo.</p>';
+            grid.innerHTML = '<div class="empty"><b>El catálogo está vacío</b><span>Añade el primer ejercicio con «Nuevo ejercicio».</span></div>';
             return;
         }
 
@@ -353,12 +368,12 @@ class FitBattleApp {
                         <h3>${ejercicio.nombreEjercicio}</h3>
                     </div>
                     <div class="ejercicio-meta">
-                        <span><strong>Tipo:</strong> ${ejercicio.tipo}</span>
-                        <span><strong>Músculo:</strong> ${ejercicio.musculoPrincipal}</span>
+                        <span class="tipo tipo-${(ejercicio.tipo || '').toLowerCase()}">${ejercicio.tipo}</span>
+                        <span>${ejercicio.musculoPrincipal}</span>
                     </div>
                     ${ejercicio.videoTutorial ? `
-                        <a href="${ejercicio.videoTutorial}" target="_blank" class="btn btn-secondary btn-sm" style="margin-top: 1rem;">
-                            📹 Ver Tutorial
+                        <a href="${ejercicio.videoTutorial}" target="_blank" rel="noopener" class="link-video">
+                            <svg class="ic"><use href="#i-play"/></svg> Ver tutorial
                         </a>
                     ` : ''}
                     <div class="card-actions">
@@ -372,7 +387,7 @@ class FitBattleApp {
 
     nuevoEjercicio() {
         this.editandoEjercicioId = null;
-        document.getElementById('modal-ejercicio-titulo').textContent = 'Nuevo Ejercicio';
+        document.getElementById('modal-ejercicio-titulo').textContent = 'Nuevo ejercicio';
         document.getElementById('form-ejercicio').reset();
         document.getElementById('ejercicio-id').value = '';
         this.openModal('modal-ejercicio');
@@ -383,7 +398,7 @@ class FitBattleApp {
         if (!ejercicio) return;
 
         this.editandoEjercicioId = idEjercicio;
-        document.getElementById('modal-ejercicio-titulo').textContent = 'Editar Ejercicio';
+        document.getElementById('modal-ejercicio-titulo').textContent = 'Editar ejercicio';
         document.getElementById('ejercicio-id').value = ejercicio.idEjercicio;
         document.getElementById('nombre-ejercicio').value = ejercicio.nombreEjercicio;
         document.getElementById('tipo-ejercicio').value = ejercicio.tipo;
@@ -438,7 +453,7 @@ class FitBattleApp {
         const select = document.getElementById('select-ejercicio-sesion');
         if (!select) return;
 
-        select.innerHTML = '<option value="">-- Selecciona un ejercicio --</option>' +
+        select.innerHTML = '<option value="">Selecciona un ejercicio</option>' +
             ejercicios.map(e => `<option value="${e.idEjercicio}">${e.nombreEjercicio} (${e.tipo})</option>`).join('');
     }
 
@@ -459,7 +474,7 @@ class FitBattleApp {
         const minutos = parseInt(document.getElementById('minutos').value) || 0;
 
         if (!idEjercicio) {
-            alert('Selecciona un ejercicio');
+            this.showError('Selecciona un ejercicio');
             return;
         }
 
@@ -489,7 +504,7 @@ class FitBattleApp {
         if (!container) return;
 
         if (this.currentSesionEjercicios.length === 0) {
-            container.innerHTML = '<p style="color: var(--text-secondary);">No hay ejercicios agregados a la sesión.</p>';
+            container.innerHTML = '<p class="muted">Todavía no has añadido ejercicios a esta sesión.</p>';
             return;
         }
 
@@ -520,12 +535,12 @@ class FitBattleApp {
         const calorias = parseInt(document.getElementById('calorias-sesion').value);
 
         if (!idUsuario) {
-            alert('Selecciona un usuario');
+            this.showError('Selecciona un socio');
             return;
         }
 
         if (this.currentSesionEjercicios.length === 0) {
-            alert('Agrega al menos un ejercicio a la sesión');
+            this.showError('Añade al menos un ejercicio a la sesión');
             return;
         }
 
@@ -600,10 +615,10 @@ class FitBattleApp {
         container.innerHTML = `
             <div class="progreso-header">
                 <div class="progreso-usuario-info">
-                    <img src="${usuario.fotoPerfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=random`}" 
+                    <img src="${usuario.fotoPerfil || `https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=0b2a6f&color=fff&bold=true`}" 
                          alt="${usuario.nombreCompleto}" 
-                         style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid var(--primary-color);"
-                         onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=random'">
+                         class="progreso-foto"
+                         onerror="this.src='https://ui-avatars.com/api/?name=${encodeURIComponent(usuario.nombreCompleto)}&background=0b2a6f&color=fff&bold=true'">
                     <h3>${usuario.nombreCompleto}</h3>
                     <p>${usuario.email}</p>
                 </div>
@@ -625,22 +640,22 @@ class FitBattleApp {
                         </div>
                     </div>
                     ${progreso.siguienteNivel ? `
-                        <p style="color: var(--text-secondary); margin-top: 0.5rem;">
+                        <p class="muted bar-hint">
                             Te faltan ${progreso.puntosNecesarios} puntos para alcanzar: ${progreso.siguienteNivel.nombreNivel}
                         </p>
                     ` : ''}
                 </div>
             </div>
 
-            <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Logros</h3>
+            <h3 class="block-title">Logros</h3>
             <div class="logros-grid">
                 ${logros.map(logro => `
                     <div class="logro-card ${logro.desbloqueado ? 'desbloqueado' : 'bloqueado'}">
-                        <div class="logro-icon">${logro.icono}</div>
+                        <div class="logro-icon">${logro.desbloqueado ? '<svg class="ic"><use href="#i-medal"/></svg>' : '<svg class="ic"><use href="#i-lock"/></svg>'}</div>
                         <h4>${logro.nombreLogro}</h4>
                         <p>${logro.descripcion}</p>
                         ${logro.desbloqueado && logro.fechaObtencion ? `
-                            <small style="color: var(--success-color);">
+                            <small class="logro-fecha">
                                 Obtenido: ${dataModels.formatearFecha(logro.fechaObtencion)}
                             </small>
                         ` : ''}
@@ -648,9 +663,9 @@ class FitBattleApp {
                 `).join('')}
             </div>
 
-            <h3 style="margin-top: 2rem; margin-bottom: 1rem;">Historial de Sesiones</h3>
+            <h3 class="block-title">Historial de sesiones</h3>
             <div class="sesiones-list">
-                ${sesiones.length === 0 ? '<p style="color: var(--text-secondary);">No hay sesiones registradas.</p>' :
+                ${sesiones.length === 0 ? '<p class="muted">Este socio aún no ha registrado sesiones.</p>' :
                 sesiones.map(sesion => {
                     const ejercicios = database.getSesionEjerciciosBySesion(sesion.idSesion);
                     const puntos = gamification.calcularPuntosSesion(sesion, ejercicios);
@@ -660,20 +675,20 @@ class FitBattleApp {
                                 <div class="sesion-header">
                                     <div class="sesion-fecha">${dataModels.formatearFechaHora(sesion.fechaSesion)}</div>
                                     <div class="sesion-meta">
-                                        <span>⏱️ ${sesion.duracionMin} min</span>
-                                        <span>🔥 ${sesion.calorias} cal</span>
-                                        <span>⭐ ${puntos} pts</span>
+                                        <span><svg class="ic"><use href="#i-clock"/></svg> ${sesion.duracionMin} min</span>
+                                        <span><svg class="ic"><use href="#i-flame"/></svg> ${sesion.calorias} kcal</span>
+                                        <span class="pts"><svg class="ic"><use href="#i-star"/></svg> ${puntos} pts</span>
                                     </div>
                                 </div>
                                 <div class="sesion-ejercicios">
-                                    <strong>Ejercicios (${ejercicios.length}):</strong>
+                                    <strong>Ejercicios (${ejercicios.length})</strong>
                                     ${ejercicios.map(se => {
                         const ejercicio = database.getEjercicio(se.idEjercicio);
                         let detalle = [];
                         if (se.repeticiones > 0) detalle.push(`${se.repeticiones} reps`);
                         if (se.pesoKg > 0) detalle.push(`${se.pesoKg} kg`);
                         if (se.minutos > 0) detalle.push(`${se.minutos} min`);
-                        return `<span style="display: inline-block; margin: 0.25rem 0.5rem; padding: 0.25rem 0.75rem; background: var(--light-bg); border-radius: 5px;">${ejercicio.nombreEjercicio} (${detalle.join(', ')})</span>`;
+                        return `<span class="chip">${ejercicio.nombreEjercicio} <em>${detalle.join(' · ')}</em></span>`;
                     }).join('')}
                                 </div>
                             </div>
