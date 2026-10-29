@@ -3,7 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Vídeo Club Alain · Tienda de proyectos hechos con IA</title>
+<title>Alain Garzón · Portfolio</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="description" content="Portfolio de Alain Garzón Pérez: vídeos hechos con código, agentes, automatizaciones, apps y dashboards. Todo está en el catálogo, se puede ver y la guía en PDF es gratis.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -486,13 +489,13 @@ FORM: Escaparate + catálogo en rejilla de carátulas 4:5 con pestañas por cate
 
 <section class="section" id="guia" aria-labelledby="h-guia">
   <div class="pdfband">
-    <div class="cover" aria-hidden="true"><small>Guía para Claude · PDF</small><b>Vídeo con IA y Power Automate</b><span>49 páginas · vídeo con IA, agentes, n8n y automatización</span></div>
+    <div class="cover" aria-hidden="true"><small>Guía para Claude · PDF</small><b>Vídeo con IA y Power Automate</b><span>56 páginas · vídeo con IA, agentes, n8n y automatización</span></div>
     <div>
       <p class="free">Descarga gratuita</p>
       <h2 id="h-guia">La guía completa en PDF</h2>
       <p>Todo este trabajo está documentado, paso a paso y con los comandos, en una guía pensada para subirla a Claude y construir encima.</p>
       <ol>
-        <li>Anatomía de un agente de IA</li><li>Vídeo gratis con HyperFrames</li><li>Power Automate con el servidor MCP</li><li>La Fábrica de agentes</li><li>Automatizaciones propias (n8n)</li><li>Prompts de innovación y marketing</li><li>Caso FitBattle Gym</li><li>Dashboard Inditex en Power BI</li><li>Cómo hacer vídeos 3D (Three.js a MP4)</li><li>Guía de herramientas de vídeo de El Telar</li>
+        <li>Anatomía de un agente de IA</li><li>Vídeo gratis con HyperFrames</li><li>Power Automate con el servidor MCP</li><li>La Fábrica de agentes</li><li>Automatizaciones propias (n8n)</li><li>Prompts de innovación y marketing</li><li>Caso FitBattle Gym</li><li>Dashboard Inditex en Power BI</li><li>Cómo hacer vídeos 3D (Three.js a MP4)</li><li>Guía de herramientas de vídeo de El Telar</li><li>Caso Pokémon Lumier (juego web)</li><li>Agentes en Telegram</li><li>Avatar que habla con tu voz (LinkedIn)</li>
       </ol>
       <div class="btn-row">
         <a class="btn" href="guia/guia-claude-video-y-power-automate-corporativo.pdf" download>Descargar PDF</a>
@@ -511,7 +514,7 @@ FORM: Escaparate + catálogo en rejilla de carátulas 4:5 con pestañas por cate
 <section class="section" id="guias" aria-labelledby="h-guias">
   <div class="section__head">
     <h2 id="h-guias">Recetas: cómo se hace cada cosa</h2>
-    <p>Trece recetas paso a paso, con los comandos y los prompts para copiar. Son las mismas que usé para hacer lo del catálogo. Elige una.</p>
+    <p>Catorce recetas paso a paso, con los comandos y los prompts para copiar. Son las mismas que usé para hacer lo del catálogo. Elige una.</p>
   </div>
   <div class="catalog" id="guias-list"></div>
 </section>
@@ -581,6 +584,10 @@ const T = [
     what:'Anuncio vertical de 17 s para una camiseta de fútbol color crema: primeros planos del tejido y del escudo, un estadio desenfocado y la prenda colgada como plano final, con textos que aparecen palabra a palabra.',
     tools:['Clips con IA','Montaje'], links:[],
     ojo:'Generado con IA. No es un anuncio oficial de ninguna marca ni club.' },
+  { a:'codigo', c:'#2a0d10', ink:'#ff8a4c', spine:'Avatar LinkedIn', guide:'g-avatar', title:'Mi avatar con agentes (LinkedIn)', year:'2026', kind:'Vídeo con IA · 30 s', v:'avatar-linkedin',
+    what:'Un personaje voxel que se parece a mí presenta a su equipo de agentes de IA (facturas, Excel, documentación e informes) y explica cómo mejoro los procesos. Habla con mi voz clonada, los agentes brillan cuando los nombro y termina enseñando este portfolio. Hecho para un post patrocinado de LinkedIn.',
+    tools:['Higgsfield (imagen + vídeo)','Voz clonada local','Python + ffmpeg','faster-whisper'], links:[{t:'Cómo se hizo (guía PDF)',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=55'}],
+    ojo:'El personaje y la animación están generados con IA a partir de mi foto. La voz es mi clon local, no una voz de pago.' },
   { a:'codigo', c:'#c9d6ff', ink:'#141a3a', spine:'Historia Internet', title:'Historia de Internet', year:'2026', kind:'Explicador · 45 s', v:'internet',
     what:'Explicador animado de 45 s, "de conectar máquinas a conectar vidas", con línea de tiempo y títulos animados.',
     tools:['OpenMontage','Remotion'], links:[] },
@@ -612,7 +619,7 @@ const T = [
     ojo:'Pesa unos 34 MB y usa 3D: puede tardar en cargar.' },
   { a:'apps', c:'#3858c8', ink:'#fff', spine:'Pokémon Lumier', title:'Pokémon Lumier', year:'2026', kind:'Fangame · navegador y móvil', p:'shot-pokemon-lumier',
     what:'Fangame de Pokémon que se juega en el navegador, también en el móvil con mandos táctiles. Recrea Ciudad Plateada con los mapas reales de Pokémon Añil (leídos de sus archivos de RPG Maker): Centro Pokémon, tienda, casas, museo, gimnasio y Claro Secreto. Combates por turnos a nivel 100, jefes con su historia (ROLDAN, el Team Rocket de LETE, GIOVANNI) y el evento de Celebi. La partida se guarda en el navegador.',
-    tools:['JavaScript','Canvas 2D','Mapas de RPG Maker XP','GitHub Pages'], links:[{t:'Jugar',h:'https://guisaalain-web.github.io/pokemon-lumier/'},{t:'Código en GitHub',h:'https://github.com/guisaalain-web/pokemon-lumier'}],
+    tools:['JavaScript','Canvas 2D','Mapas de RPG Maker XP','esbuild'], links:[{t:'Jugar',h:'demos/pokemon-lumier/index.html'}],
     ojo:'Fangame sin ánimo de lucro: usa gráficos y música de Pokémon y de Pokémon Añil (© Nintendo / Game Freak / sus autores).' },
   { a:'apps', c:'#6f4e37', ink:'#fff', spine:'CoffeeLog', title:'CoffeeLog', year:'2025', kind:'App Android', p:'coffeelog',
     what:'App Android para llevar el diario de tus cafés: añades cada café con su foto, ves estadísticas y recibes una recomendación. Los datos se guardan en el propio móvil.',
@@ -806,6 +813,17 @@ const GUIDES = [
       {t:'Comprueba que el bot existe y no tiene webhook (si lo tiene, el plugin no recibe nada).', label:'Terminal', code:'curl https://api.telegram.org/botTU_TOKEN/getMe\ncurl https://api.telegram.org/botTU_TOKEN/getWebhookInfo'},
       {t:'En una web pública ponlo como demo privada: explica que solo responde a usuarios aprobados y deja un correo de contacto.'}],
     care:'Es una demo, no un servicio público: el bot puede controlar tu PC, así que abrirlo a todo el mundo es peligroso. Telegram admite una sola sesión por bot.' },
+
+  { id:'g-avatar', n:'14', title:'Un avatar tuyo que habla con tu voz', out:'Un vídeo vertical de 30 s con un personaje que se te parece, tu voz y subtítulos', page:55, ex:'avatar-linkedin',
+    need:['Claude Code','Una foto tuya de frente','Tu voz clonada (VoiceStudio u otra en local)','Créditos de Higgsfield (unos 50 por vídeo)','Python, ffmpeg y faster-whisper'],
+    s:[
+      {t:'Escribe el guion para 30 s (unas 70 palabras) y genera la voz con tu clon. Guarda las palabras con sus tiempos: servirán para subtítulos y para cuadrar la boca.', label:'Python', code:'from faster_whisper import WhisperModel\nm = WhisperModel("small", device="cpu", compute_type="int8")\nsegs, _ = m.transcribe("voz.wav", language="es", word_timestamps=True)\nwords = [(w.word, w.start, w.end) for s in segs for w in s.words]'},
+      {t:'Crea el personaje: sube tu foto y un fotograma del estilo que quieres, y pide una imagen 9:16 "versión voxel del hombre de la foto, con su pelo, barba y gafas" con los agentes alrededor y el tercio de arriba vacío para los títulos.', label:'Prompt', code:'3D voxel render, blocky style like the reference frame. Main character: a voxel version of the man in the photo (same hair, beard, glasses, shirt), talking to camera. Around him 4 cube robot agents with labels FACTURAS, EXCEL, DOCS, INFORMES. Keep the top third empty. 9:16.'},
+      {t:'Anímalo con tu voz: parte el audio en trozos de menos de 15 s y genera un clip por trozo con un modelo que acepte audio de referencia (en Higgsfield, MiniMax H3: imagen como referencia, no como fotograma inicial).'},
+      {t:'Cuadra la boca: transcribe el audio de cada clip, empareja sus palabras con las tuyas y remapea los fotogramas entre esas anclas. Así el vídeo sigue tu voz real aunque la IA haya cambiado el ritmo.', label:'Terminal', code:'python warp.py clipA.mp4 0 13.1 wA.mp4\npython warp.py clipB.mp4 13.1 19.6 wB.mp4'},
+      {t:'Monta encima con Python (Pillow) y ffmpeg: títulos en fuente pixel, subtítulos palabra a palabra y un cierre con tu portfolio. Mezcla la voz con música que baje cuando hablas.', label:'ffmpeg', code:'[m][voz]sidechaincompress=threshold=0.05:ratio=4[md];[voz][md]amix=inputs=2:normalize=0,loudnorm=I=-14'},
+      {t:'Revisa fotogramas sueltos y escúchalo entero antes de publicarlo. En LinkedIn pon el enlace en el texto del post y marca que el vídeo está hecho con IA.'}],
+    care:'Algunos modelos no siguen el audio al pie de la letra (inventan sílabas o cambian el ritmo): por eso el paso de cuadrar la boca. Seedance pide un plan de pago superior; consulta el coste antes de generar.' },
 ];
 
 const gHost = $('#guias-list');

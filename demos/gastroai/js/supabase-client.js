@@ -4,11 +4,13 @@
 const SUPABASE_URL = 'YOUR_SUPABASE_URL';
 const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
-let supabase = null;
+let client = null; // no 'supabase': choca con el global del CDN
 
 try {
-    if (window.supabase) {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    if (SUPABASE_URL.startsWith('YOUR_')) {
+        console.info('Supabase sin configurar: la demo usa datos de ejemplo');
+    } else if (window.supabase) {
+        client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('✅ Supabase Client Initialized');
     } else {
         console.error('❌ Supabase Library not loaded! content CDN script in index.html');
@@ -20,4 +22,4 @@ try {
 // Export for usage in other files
 window.SUPABASE_URL = SUPABASE_URL;
 window.SUPABASE_ANON_KEY = SUPABASE_ANON_KEY;
-window.supabaseClient = supabase;
+window.supabaseClient = client;

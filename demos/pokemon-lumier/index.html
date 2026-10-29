@@ -1,0 +1,37 @@
+<!doctype html><html lang="es"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="theme-color" content="#0b0d14">
+<title>Pokémon Lumier</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%2714%27 fill=%27%23fff%27 stroke=%27%23222%27 stroke-width=%272%27/%3E%3Cpath d=%27M2 16a14 14 0 0 1 28 0z%27 fill=%27%23e03030%27 stroke=%27%23222%27 stroke-width=%272%27/%3E%3Ccircle cx=%2716%27 cy=%2716%27 r=%274%27 fill=%27%23fff%27 stroke=%27%23222%27 stroke-width=%272%27/%3E%3C/svg%3E">
+<style>
+html,body{margin:0;height:100%;background:#0b0d14;display:flex;flex-direction:column;align-items:center;justify-content:center;overflow:hidden;touch-action:none;-webkit-user-select:none;user-select:none}
+canvas{image-rendering:pixelated;image-rendering:crisp-edges;box-shadow:0 0 40px #000}
+#load{position:fixed;color:#fff;font:16px monospace}
+/* mandos táctiles: solo en móvil/tablet */
+#pad{display:none;width:100%;max-width:560px;height:38vh;box-sizing:border-box;padding:12px 22px calc(12px + env(safe-area-inset-bottom));justify-content:space-between;align-items:center}
+@media (pointer:coarse){#pad{display:flex}body{justify-content:flex-start;padding-top:env(safe-area-inset-top)}}
+.dpad{position:relative;width:min(44vw,180px);aspect-ratio:1}
+.dpad b{position:absolute;width:34%;height:34%;background:#2a3040;border:2px solid #4a5470;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#cfd6e8;font:bold 22px sans-serif}
+.dpad b.on,.ab b.on{background:#4a5a80}
+.dpad .u{left:33%;top:0}.dpad .d{left:33%;bottom:0}.dpad .l{left:0;top:33%}.dpad .r{right:0;top:33%}
+.ab{display:flex;gap:16px;align-items:center;transform:rotate(-18deg)}
+.ab b{width:min(19vw,78px);aspect-ratio:1;border-radius:50%;display:flex;align-items:center;justify-content:center;font:bold 26px sans-serif;color:#fff;border:3px solid #0003}
+.ab .a{background:#d03838;margin-top:-34px}.ab .b{background:#3858c8}
+.run{position:absolute;font:12px sans-serif;color:#9aa4bc}
+</style></head>
+<body><canvas id="c" width="512" height="384"></canvas><div id="load">Cargando Pokémon Lumier...</div>
+<div id="pad">
+  <div class="dpad"><b class="u" data-k="ArrowUp">▲</b><b class="l" data-k="ArrowLeft">◀</b><b class="r" data-k="ArrowRight">▶</b><b class="d" data-k="ArrowDown">▼</b></div>
+  <div class="ab"><b class="b" data-k="Escape">B</b><b class="a" data-k="Enter">A</b></div>
+</div>
+<script>
+// botones táctiles -> teclas del juego (mantener pulsado = andar)
+document.querySelectorAll('#pad b').forEach(b => {
+  const code = b.dataset.k, ev = t => window.dispatchEvent(new KeyboardEvent(t, { code, key: code }));
+  b.addEventListener('pointerdown', e => { e.preventDefault(); b.setPointerCapture(e.pointerId); b.classList.add('on'); ev('keydown'); navigator.vibrate?.(8); });
+  const up = e => { if (!b.classList.contains('on')) return; b.classList.remove('on'); ev('keyup'); };
+  b.addEventListener('pointerup', up); b.addEventListener('pointercancel', up);
+});
+document.addEventListener('contextmenu', e => e.preventDefault());
+</script>
+<script src="dist/lumier.js?v=202610290015"></script></body></html>
