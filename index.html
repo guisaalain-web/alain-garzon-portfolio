@@ -866,7 +866,7 @@ function openGuide(id) {
   const d = document.getElementById(id); if (!d) return;
   d.open = true; d.scrollIntoView({ block: 'start', behavior: mq.matches ? 'auto' : 'smooth' });
 }
-document.getElementById('g-3d').open = true;
+/* las recetas empiezan cerradas: abrirlas pide seguir en LinkedIn */
 const esc = x => String(x).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 function cardEl(t) {
   const d = document.createElement('div'); d.className = 'tv__card';
@@ -996,11 +996,16 @@ if (hi >= 0) openViewer(hi);
   follow.addEventListener('click', () => { setTimeout(() => { ok.disabled = false; }, 1500); });
   ok.addEventListener('click', () => { try { localStorage.setItem(KEY, '1'); } catch {} dlg.close(); if (pending) { const go = pending; pending = null; go(); } });
   const gate = go => { pending = go; ok.disabled = true; if (!dlg.open) dlg.showModal(); };
-  document.addEventListener('click', e => {
+  // guías, PDF y descargas: cualquier clic (también rueda o «abrir en pestaña nueva») pide seguir
+  const gated = h => /^(guia|descargas)\//.test(h) || /\.(pdf|zip|apk|pbix)(#|$)/i.test(h);
+  const guard = e => {
     const a = e.target.closest('a[href]'); if (!a || unlocked()) return;
-    const h = a.getAttribute('href') || ''; if (!/^(guia|descargas)\//.test(h)) return;
+    const h = a.getAttribute('href') || ''; if (!gated(h)) return;
     e.preventDefault(); e.stopPropagation(); gate(() => a.click());
-  }, true);
+  };
+  document.addEventListener('click', guard, true);
+  document.addEventListener('auxclick', guard, true);
+  document.addEventListener('contextmenu', guard, true);
   // recetas (desplegables de #guias-list): si se abren sin desbloquear, se cierran y sale el aviso
   document.addEventListener('toggle', e => {
     const d = e.target; if (unlocked() || !d.open || !d.closest || !d.closest('#guias-list')) return;
