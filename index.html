@@ -651,8 +651,8 @@ const T = [
   /* ---- pasillo 4 ---- */
   { a:'datos', c:'#141414', ink:'#fff', spine:'Inditex Power BI', guide:'g-bi', title:'Dashboard financiero de Inditex', year:'2026', kind:'Power BI · PBIP', card:{bg:'#111',fg:'#fff',big:'INDITEX',small:'6 páginas · 60+ medidas DAX'},
     what:'De 85 páginas de memoria anual a un cuadro de mando que se lee en minutos: modelo con más de 60 medidas DAX y un informe de 6 páginas en blanco y negro con acento rojo. Hecho con Claude Code y el servidor MCP de modelado de Power BI.',
-    tools:['Power BI','DAX','Power Query','MCP'], links:[{t:'Descargar proyecto .pbip',h:'descargas/inditex-powerbi.zip'},{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=31'}],
-    ojo:'Descomprime el zip entero antes de abrir inditex.pbip (si lo abres desde dentro del zip, Power BI dice que falta definition.pbir). Los datos van dentro del modelo: no hay que cambiar rutas.' },
+    tools:['Power BI','DAX','Power Query','MCP'], links:[{t:'Ver el informe (PDF)',h:'descargas/Informe-Inditex.pdf'},{t:'Descargar proyecto .pbip',h:'descargas/inditex-powerbi.zip'},{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=31'}],
+    ojo:'El PDF se ve en cualquier dispositivo. Para el informe interactivo: descomprime el zip entero y abre inditex.pbip con Power BI Desktop 2025 o posterior (Windows). Los datos van dentro del modelo.' },
   { a:'datos', c:'#ffc933', ink:'#141a3a', spine:'Fábrica agentes', guide:'g-fab', title:'Fábrica de agentes', year:'2026', kind:'Agentes · Telegram', p:'shot-fabrica-panel',
     what:'Escribes "ideas" al bot de Telegram y tres agentes (Ideas, Guion, Vídeo) trabajan en paralelo. Un panel en localhost:3000 muestra en vivo qué línea trabaja y en qué paso, y el resultado vuelve al chat. Tus comentarios mejoran la siguiente tanda.',
     tools:['Claude Code','Plugin Telegram','Skills propias','Node.js'], links:[{t:'Probar el panel',h:'demos/fabrica/index.html'},{t:'Ver en la guía',h:'guia/guia-claude-video-y-power-automate-corporativo.pdf#page=13'}],
@@ -964,8 +964,8 @@ if (hi >= 0) openViewer(hi);
 <dialog id="li-gate" aria-labelledby="li-t">
   <form method="dialog" class="li-box">
     <p class="li-k">Contenido para seguidores</p>
-    <h3 id="li-t">Las guías y recetas son para quien me sigue en LinkedIn</h3>
-    <p>Sígueme en LinkedIn y desbloquea las guías en PDF y las recetas paso a paso. Es gratis: solo un clic.</p>
+    <h3 id="li-t">Las guías, recetas y descargas son para quien me sigue en LinkedIn</h3>
+    <p>Sígueme en LinkedIn y desbloquea las guías en PDF, las recetas paso a paso y las descargas (proyectos, kits y apps). Es gratis: solo un clic.</p>
     <div class="btn-row">
       <a class="btn" id="li-follow" target="_blank" rel="noopener">Seguir en LinkedIn</a>
       <button class="btn btn--ghost" id="li-ok" type="button" disabled>Ya te sigo · Desbloquear</button>
@@ -998,7 +998,7 @@ if (hi >= 0) openViewer(hi);
   const gate = go => { pending = go; ok.disabled = true; if (!dlg.open) dlg.showModal(); };
   document.addEventListener('click', e => {
     const a = e.target.closest('a[href]'); if (!a || unlocked()) return;
-    const h = a.getAttribute('href') || ''; if (!/^guia\//.test(h)) return;
+    const h = a.getAttribute('href') || ''; if (!/^(guia|descargas)\//.test(h)) return;
     e.preventDefault(); e.stopPropagation(); gate(() => a.click());
   }, true);
   // recetas (desplegables de #guias-list): si se abren sin desbloquear, se cierran y sale el aviso
