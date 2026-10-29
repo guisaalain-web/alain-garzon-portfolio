@@ -1,0 +1,252 @@
+/* ========================================
+   SKYSCANNER-STYLE REDESIGN
+   ======================================== */
+
+/* New Hero Section */
+.hero-title-new {
+    font-size: 3.5rem;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #00d9ff 0%, #8b5cf6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.hero-subtitle-new {
+    font-size: 1.25rem;
+    text-align: center;
+    color: var(--text-secondary);
+    margin-bottom: 3rem;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Search Panel (Skyscanner Style) */
+.search-panel {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 2rem;
+    max-width: 900px;
+    margin: 0 auto 2rem;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 0 0 40px rgba(0, 217, 255, 0.1);
+}
+
+/* Search Tabs */
+.search-tabs {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 1rem;
+}
+
+.search-tab {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.5rem;
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    border-radius: 12px;
+    transition: var(--transition);
+    position: relative;
+}
+
+.search-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+}
+
+.search-tab.active {
+    background: rgba(0, 217, 255, 0.1);
+    color: var(--accent-cyan);
+}
+
+.search-tab.active::after {
+    content: '';
+    position: absolute;
+    bottom: -1rem;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--accent-cyan);
+}
+
+.search-tab svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Search Box */
+.search-box {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.search-input-wrapper {
+    flex: 1;
+    position: relative;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1.25rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    pointer-events: none;
+}
+
+.search-input-main {
+    width: 100%;
+    padding: 1.25rem 1.25rem 1.25rem 3.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    color: var(--text-primary);
+    font-size: 1.125rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.search-input-main:focus {
+    outline: none;
+    border-color: var(--accent-cyan);
+    background: rgba(255, 255, 255, 0.08);
+    box-shadow: 0 0 0 4px rgba(0, 217, 255, 0.1);
+}
+
+.search-input-main::placeholder {
+    color: var(--text-muted);
+}
+
+.search-btn {
+    padding: 1.25rem 2.5rem;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    border: none;
+    border-radius: 16px;
+    color: white;
+    font-size: 1.125rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+}
+
+.search-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(0, 217, 255, 0.3);
+}
+
+.search-btn svg {
+    width: 20px;
+    height: 20px;
+}
+
+/* Current City Badge */
+.current-city-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: rgba(0, 217, 255, 0.1);
+    border: 1px solid rgba(0, 217, 255, 0.3);
+    border-radius: 50px;
+    color: var(--accent-cyan);
+    font-weight: 500;
+    margin: 0 auto 2rem;
+    width: fit-content;
+}
+
+.current-city-badge svg {
+    width: 16px;
+    height: 16px;
+}
+
+/* New Stats */
+.hero-stats-new {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.stat-item .stat-number {
+    font-size: 2rem;
+    font-weight: 700;
+    background: linear-gradient(135deg, var(--accent-cyan), var(--accent-purple));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-item .stat-label {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .hero-title-new {
+        font-size: 2.5rem;
+    }
+
+    .hero-subtitle-new {
+        font-size: 1rem;
+    }
+
+    .search-panel {
+        padding: 1.5rem;
+    }
+
+    .search-tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .search-box {
+        flex-direction: column;
+    }
+
+    .search-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .hero-stats-new {
+        gap: 1rem;
+    }
+
+    .stat-item .stat-number {
+        font-size: 1.5rem;
+    }
+}

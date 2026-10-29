@@ -1,0 +1,83 @@
+/* Smart Advisor Styles */
+
+/* Weather Badge */
+.day-weather {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.1);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.9em;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.weather-icon {
+    font-size: 1.2em;
+}
+
+/* Inter-City Transfer Card */
+.inter-city-transfer {
+    background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(34, 197, 94, 0.3);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 20px;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.transfer-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    color: #4ade80;
+    font-weight: 600;
+}
+
+.transfer-header .transfer-title {
+    text-transform: uppercase;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+}
+
+.transfer-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.transfer-route b {
+    display: block;
+    font-size: 1.1em;
+    margin-bottom: 4px;
+}
+
+.transfer-cost {
+    background: rgba(0, 0, 0, 0.3);
+    padding: 5px 10px;
+    border-radius: 8px;
+    font-family: monospace;
+    color: #fbbf24;
+}
+
+.transfer-tip {
+    font-size: 0.9em;
+    color: #94a3b8;
+    font-style: italic;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 8px;
+}
+
+/* Wiki Summary */
+.day-wiki-summary {
+    font-size: 0.9em;
+    color: #cbd5e1;
+    background: rgba(0, 0, 0, 0.2);
+    padding: 10px 15px;
+    border-radius: 8px;
+    margin-bottom: 15px;
+    line-height: 1.5;
+    border-left: 3px solid var(--accent-cyan);
+}
